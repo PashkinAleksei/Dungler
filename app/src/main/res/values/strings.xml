@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Dungler</string>
+    <string name="reagent_icon_description">Реагент</string>
+    <string name="craft_create_button_text">Создать</string>
 </resources>

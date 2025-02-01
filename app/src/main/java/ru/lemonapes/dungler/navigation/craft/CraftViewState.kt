@@ -1,6 +1,6 @@
 package ru.lemonapes.dungler.navigation.craft
 
-import com.limonapes.dungle.parent_store.State
+import ru.lemonapes.dungler.parent_store.State
 import ru.lemonapes.dungler.navigation.models.CraftItem
 
 data class CraftViewState(

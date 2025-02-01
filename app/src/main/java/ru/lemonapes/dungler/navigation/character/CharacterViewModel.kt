@@ -1,8 +1,7 @@
 package ru.lemonapes.dungler.navigation.character
 
-import com.limonapes.dungle.parent_store.ViewModelStore
+import ru.lemonapes.dungler.parent_store.ViewModelStore
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.SupervisorJob
 
 interface CharAction {
     fun actionStart()
