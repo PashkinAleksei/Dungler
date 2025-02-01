@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Dungler</string>
     <string name="reagent_icon_description">Реагент</string>
+    <string name="gear_icon_description">Снаряжение</string>
     <string name="craft_create_button_text">Создать</string>
 
     <string name="green_knight_helm_name">Шлем Зеленого Рыцаря</string>
