@@ -37,7 +37,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import ru.lemonapes.dungler.R
+import ru.lemonapes.dungler.navigation.ktor.IMAGES_GEAR_PATH
+import ru.lemonapes.dungler.navigation.ktor.IMAGES_REAGENTS_PATH
 import ru.lemonapes.dungler.navigation.models.CraftItem
+import ru.lemonapes.dungler.ui.ImageView
 
 @Composable
 fun CraftView(craftState: CraftViewState) {
@@ -123,12 +126,12 @@ private fun CraftPanel(
 @Composable
 private fun ReagentItem(reagentName: String, countRequired: Int, countInBag: Int) {
     Column(modifier = Modifier.width(65.dp)) {
-        Image(
+        ImageView(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(62.dp)
                 .padding(3.dp),
-            painter = painterResource(R.drawable.ic_launcher_foreground),
+            url = IMAGES_REAGENTS_PATH + reagentName,
             contentDescription = stringResource(id = R.string.reagent_icon_description),
         )
         Text(
@@ -158,10 +161,10 @@ private fun CraftItem.CraftItemInfo() {
             /*if (countOrLevel > 0) {
                 CraftImageWithCounter(modifier = Modifier.size(75.dp))
             } else {*/
-            Image(
+            ImageView(
                 modifier = Modifier.size(75.dp),
-                painter = painterResource(R.drawable.shield_disabled),
-                contentDescription = null
+                url = IMAGES_GEAR_PATH + gearData.gearId,
+                contentDescription = stringResource(id = R.string.gear_icon_description),
             )
             //}
         }
