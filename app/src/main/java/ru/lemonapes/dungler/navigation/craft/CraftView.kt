@@ -168,7 +168,8 @@ private fun CraftItem.CraftItemInfo() {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp), text = gearId,
+                .padding(horizontal = 12.dp),
+            text = stringResource(gearData.gearName),
             fontSize = 22.sp,
             //color = primaryTextColor,
             maxLines = 3
@@ -214,7 +215,7 @@ private fun CraftList(
 @Composable
 private fun CraftCardView(item: CraftItem, isSelected: Boolean, click: () -> Unit) {
     Text(
-        text = item.gearId,
+        text = stringResource(item.gearData.gearName),
         color = if (isSelected) Color.Red else Color.Green,//MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary,
         fontSize = 24.sp,
         modifier = Modifier

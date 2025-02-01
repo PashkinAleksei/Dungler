@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CraftItem(
     @SerialName("gear_id")
-    val gearId: String,
+    val gearData: GearData,
     @SerialName("gear_type")
-    val gearType: String,
+    val gearType: GearType,
     val stats: Map<String, Int>,
     val reagents: HashMap<String, Int>
 )

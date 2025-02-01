@@ -2,4 +2,12 @@
     <string name="app_name">Dungler</string>
     <string name="reagent_icon_description">Реагент</string>
     <string name="craft_create_button_text">Создать</string>
+
+    <string name="green_knight_helm_name">Шлем Зеленого Рыцаря</string>
+    <string name="green_knight_shoulders_name">Наплечники Зеленого Рыцаря</string>
+    <string name="green_knight_chest_name">Нагрудник Зеленого Рыцаря</string>
+    <string name="green_knight_gloves_name">Перчатки Зеленого Рыцаря</string>
+    <string name="green_knight_legs_name">Поножи Зеленого Рыцаря</string>
+    <string name="green_knight_boots_name">Сапоги Зеленого Рыцаря</string>
+    <string name="green_knight_sword_name">Меч Зеленого Рыцаря</string>
 </resources>
