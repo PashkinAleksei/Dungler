@@ -13,14 +13,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ru.lemonapes.dungler.screens.CharacterScreen
-import ru.lemonapes.dungler.screens.CraftScreen
-import ru.lemonapes.dungler.screens.DungeonsScreen
-import ru.lemonapes.dungler.screens.InventoryScreen
-import ru.lemonapes.dungler.screens.Screen.Character
-import ru.lemonapes.dungler.screens.Screen.Inventory
-import ru.lemonapes.dungler.screens.Screen.Craft
-import ru.lemonapes.dungler.screens.Screen.Dungeons
+import ru.lemonapes.dungler.navigation.Dungeons.DungeonsScreen
+import ru.lemonapes.dungler.navigation.Screens.Character
+import ru.lemonapes.dungler.navigation.Screens.Dungeons
+import ru.lemonapes.dungler.navigation.Screens.Inventory
+import ru.lemonapes.dungler.navigation.character.characterNavigation
+import ru.lemonapes.dungler.navigation.craft.craftNavigation
+import ru.lemonapes.dungler.navigation.inventory.InventoryScreen
+import ru.lemonapes.dungler.navigation.ktor.HttpClientProvider
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +36,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //HttpClientProvider.close()
     }
 }
 
@@ -53,9 +58,9 @@ fun MainView(modifier: Modifier = Modifier) {
             startDestination = Character,
             modifier = modifier.padding(innerPadding)
         ) {
-            composable<Character> { CharacterScreen() }
+            characterNavigation(navController)
+            craftNavigation(navController)
             composable<Inventory> { InventoryScreen() }
-            composable<Craft> { CraftScreen() }
             composable<Dungeons> { DungeonsScreen() }
         }
     }
