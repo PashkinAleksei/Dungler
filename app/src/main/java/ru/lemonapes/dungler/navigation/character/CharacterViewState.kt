@@ -1,6 +1,6 @@
 package ru.lemonapes.dungler.navigation.character
 
-import com.limonapes.dungle.parent_store.State
+import ru.lemonapes.dungler.parent_store.State
 
 data class CharacterViewState(
     val error: Throwable? = null

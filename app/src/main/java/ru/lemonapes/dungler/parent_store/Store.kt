@@ -1,4 +1,4 @@
-package com.limonapes.dungle.parent_store
+package ru.lemonapes.dungler.parent_store
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
