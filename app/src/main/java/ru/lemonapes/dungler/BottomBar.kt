@@ -1,31 +1,30 @@
 package ru.lemonapes.dungler
 
-import androidx.compose.foundation.Indication
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import ru.lemonapes.dungler.screens.Screen
+import ru.lemonapes.dungler.navigation.Screens
+
+data class TopLevelRoute<T : Any>(val route: T, val icon: Int)
 
 val topLevelRoutes = listOf(
-    Screen.Character,
-    Screen.Inventory,
-    Screen.Craft,
-    Screen.Dungeons
+    TopLevelRoute(Screens.Character, R.drawable.ic_helm),
+    TopLevelRoute(Screens.Inventory, R.drawable.ic_backpack),
+    TopLevelRoute(Screens.Craft, R.drawable.ic_blacksmith),
+    TopLevelRoute(Screens.Dungeons, R.drawable.ic_cave),
 )
 
 @Composable
@@ -43,12 +42,14 @@ fun BottomBar(navController: NavController) {
                             .size(64.dp)
                             .padding(6.dp),
                         painter = painterResource(id = topLevelRoute.icon),
-                        contentDescription = topLevelRoute.label
+                        contentDescription = topLevelRoute.route.label,
                     )
                 },
-                selected = currentDestination?.hierarchy?.any { it.route == topLevelRoute.route } == true,
+                selected = currentDestination?.hierarchy?.any {
+                    it.hasRoute(topLevelRoute.route::class)
+                } == true,
                 onClick = {
-                    navController.navigate(topLevelRoute) {
+                    navController.navigate(topLevelRoute.route) {
                         popUpTo(navController.graph.startDestinationRoute ?: "") {
                             saveState = true
                         }
