@@ -13,21 +13,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ru.lemonapes.dungler.navigation.dungeons.DungeonsScreen
+import ru.lemonapes.dungler.ui.theme.ComposeTheme
 import ru.lemonapes.dungler.navigation.Screens.Character
 import ru.lemonapes.dungler.navigation.Screens.Dungeons
 import ru.lemonapes.dungler.navigation.Screens.Inventory
 import ru.lemonapes.dungler.navigation.character.characterNavigation
 import ru.lemonapes.dungler.navigation.craft.craftNavigation
+import ru.lemonapes.dungler.navigation.dungeons.DungeonsScreen
 import ru.lemonapes.dungler.navigation.inventory.InventoryScreen
-import ru.lemonapes.dungler.ui.theme.DunglerTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            DunglerTheme {
+            ComposeTheme(darkTheme = true) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MainView(
                         modifier = Modifier.padding(innerPadding)
@@ -68,7 +68,7 @@ fun MainView(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    DunglerTheme {
+    ComposeTheme(darkTheme = true) {
         MainView()
     }
 }
