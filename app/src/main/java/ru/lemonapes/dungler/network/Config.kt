@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.ktor
+package ru.lemonapes.dungler.network
 
 const val ENDPOINT = "http://192.168.36.60:8080"
 const val IMAGES_PATH = "http://192.168.36.60:9191/static/images"

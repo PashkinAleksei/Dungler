@@ -3,9 +3,9 @@ package ru.lemonapes.dungler.navigation.craft
 import ru.lemonapes.dungler.parent_store.ViewModelStore
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import ru.lemonapes.dungler.navigation.ktor.loadCraftItems
+import ru.lemonapes.dungler.navigation.craft.mappers.CraftItemResponseMapper
+import ru.lemonapes.dungler.network.endpoints.loadCraftItems
 
 interface CraftAction {
     fun actionStart()
@@ -13,7 +13,7 @@ interface CraftAction {
     fun actionClearError()
 }
 
-class CraftViewModel() :
+class CraftViewModel :
     ViewModelStore<CraftViewState>(CraftViewState.getEmpty()), CraftAction {
 
     override val ceh = CoroutineExceptionHandler { coroutineContext, throwable ->
@@ -26,11 +26,11 @@ class CraftViewModel() :
 
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
-            val craftItemsResponse = loadCraftItems()
+            val (items, reagents) = CraftItemResponseMapper(loadCraftItems())
             updateState { state ->
                 state.copy(
-                    items = craftItemsResponse.items,
-                    reagents = craftItemsResponse.reagents
+                    items = items,
+                    reagents = reagents
                 )
             }
         }

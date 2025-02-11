@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.ktor
+package ru.lemonapes.dungler.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO

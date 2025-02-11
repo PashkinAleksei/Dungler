@@ -13,14 +13,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ru.lemonapes.dungler.navigation.Dungeons.DungeonsScreen
+import ru.lemonapes.dungler.navigation.dungeons.DungeonsScreen
 import ru.lemonapes.dungler.navigation.Screens.Character
 import ru.lemonapes.dungler.navigation.Screens.Dungeons
 import ru.lemonapes.dungler.navigation.Screens.Inventory
 import ru.lemonapes.dungler.navigation.character.characterNavigation
 import ru.lemonapes.dungler.navigation.craft.craftNavigation
 import ru.lemonapes.dungler.navigation.inventory.InventoryScreen
-import ru.lemonapes.dungler.navigation.ktor.HttpClientProvider
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 
 class MainActivity : ComponentActivity() {

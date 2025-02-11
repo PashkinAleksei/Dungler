@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.Dungeons
+package ru.lemonapes.dungler.navigation.dungeons
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

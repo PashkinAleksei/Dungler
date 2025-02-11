@@ -1,6 +1,8 @@
 package ru.lemonapes.dungler.navigation.craft
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,10 +37,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import ru.lemonapes.dungler.R
-import ru.lemonapes.dungler.navigation.ktor.IMAGES_GEAR_PATH
-import ru.lemonapes.dungler.navigation.ktor.IMAGES_REAGENTS_PATH
-import ru.lemonapes.dungler.navigation.models.CraftItem
+import ru.lemonapes.dungler.navigation.domain_models.DomainCraftItem
+import ru.lemonapes.dungler.network.IMAGES_GEAR_PATH
+import ru.lemonapes.dungler.network.IMAGES_REAGENTS_PATH
+import ru.lemonapes.dungler.network.models.CraftItem
 import ru.lemonapes.dungler.ui.ImageView
 
 @Composable
@@ -93,7 +96,7 @@ private fun CraftViewState.HandleError(viewEvent: (CraftViewEvent) -> Unit) {
 
 @Composable
 private fun CraftPanel(
-    craftItem: CraftItem,
+    craftItem: DomainCraftItem,
     reagentMap: Map<String, Int>,
     craftItemFun: () -> Unit,
 ) {
@@ -146,7 +149,7 @@ private fun ReagentItem(reagentName: String, countRequired: Int, countInBag: Int
 }
 
 @Composable
-private fun CraftItem.CraftItemInfo() {
+private fun DomainCraftItem.CraftItemInfo() {
     Row(
         Modifier
             .fillMaxWidth()
@@ -161,9 +164,14 @@ private fun CraftItem.CraftItemInfo() {
             /*if (countOrLevel > 0) {
                 CraftImageWithCounter(modifier = Modifier.size(75.dp))
             } else {*/
-            ImageView(
-                modifier = Modifier.size(75.dp),
-                url = IMAGES_GEAR_PATH + gearData.gearId,
+            Image(
+                modifier = Modifier
+                    .border(2.dp, Color.Gray)
+                    .border(3.dp, Color.LightGray)
+                    .size(120.dp)
+                    .background(Color.Black)
+                    .padding(4.dp),
+                painter = painterResource(gearData.image),
                 contentDescription = stringResource(id = R.string.gear_icon_description),
             )
             //}
@@ -172,7 +180,7 @@ private fun CraftItem.CraftItemInfo() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
-            text = stringResource(gearData.gearName),
+            text = stringResource(gearData.name),
             fontSize = 22.sp,
             //color = primaryTextColor,
             maxLines = 3
@@ -181,7 +189,7 @@ private fun CraftItem.CraftItemInfo() {
 }
 
 @Composable
-private fun ReagentList(item: CraftItem, reagentMap: Map<String, Int>) {
+private fun ReagentList(item: DomainCraftItem, reagentMap: Map<String, Int>) {
     LazyVerticalGrid(
         GridCells.Fixed(3),
         Modifier
@@ -204,7 +212,7 @@ private fun CraftList(
     modifier: Modifier,
     selectedItemIndex: Int,
     selectCraftItem: (index: Int) -> Unit,
-    craftList: List<CraftItem>,
+    craftList: List<DomainCraftItem>,
 ) {
     LazyColumn(modifier.fillMaxWidth()) {
         itemsIndexed(craftList) { index, item ->
@@ -216,9 +224,9 @@ private fun CraftList(
 }
 
 @Composable
-private fun CraftCardView(item: CraftItem, isSelected: Boolean, click: () -> Unit) {
+private fun CraftCardView(item: DomainCraftItem, isSelected: Boolean, click: () -> Unit) {
     Text(
-        text = stringResource(item.gearData.gearName),
+        text = stringResource(item.gearData.name),
         color = if (isSelected) Color.Red else Color.Green,//MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary,
         fontSize = 24.sp,
         modifier = Modifier
@@ -233,6 +241,9 @@ private fun CraftCardView(item: CraftItem, isSelected: Boolean, click: () -> Uni
 @Composable
 private fun CraftViewPreview() {
     CraftView(
-        craftState = CraftViewState.getEmpty(),
+        craftState = CraftViewState(
+            items = listOf(DomainCraftItem.getMock()),
+            reagents = mapOf("copper" to 20)
+        ),
     )
 }
