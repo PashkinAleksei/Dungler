@@ -54,6 +54,7 @@ private val BACKGROUND_DARK = Color(0xFF282828)
 private val BACKGROUND_LIGHT = Color(0xB3282828)
 
 private val PRIMARY_TEXT_COLOR_DARK = Color(0xFFFFEBBC)
+private val SECONDARY_TEXT_COLOR_DARK = Color(0xFFB19E75)
 private val POSITIVE_TEXT_COLOR_DARK = Color(0xFF00FF00)
 private val NEGATIVE_TEXT_COLOR_DARK = Color(0xFFFF0000)
 
@@ -68,7 +69,7 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
 val PRIMARY = Color(0xFF616161)
-val PRIMARY_VARIANT = Color(0xFF282828) // Не используется в Material3
+val SECONDARY = Color(0xFF282828)
 val ACCENT = Color(0xFF00FF00)
 val HEALTH = Color(0xFF449E2B)
 val MANA = Color(0xFF3700B3)
@@ -92,7 +93,8 @@ val backgroundDefault = Color(0xFF121212)
 fun getMaterialDarkColorPalette(): ColorScheme = darkColorScheme(
     primary = PRIMARY,
     onPrimary = PRIMARY_TEXT_COLOR_DARK,
-    secondary = ACCENT,
+    secondary = SECONDARY,
+    onSecondary = SECONDARY_TEXT_COLOR_DARK,
     background = BACKGROUND_DARK,
     surface = SURFACE
 )

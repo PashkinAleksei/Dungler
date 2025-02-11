@@ -6,17 +6,20 @@ import ru.lemonapes.dungler.navigation.domain_models.GearId
 import ru.lemonapes.dungler.navigation.domain_models.GearType
 
 @Serializable
-data class CrreateItemsResponse(
-    val items: List<CreateItem>,
+data class UpgradeItemsResponse(
+    val items: List<UpgradeItem>,
     val reagents: HashMap<String, Int>
 )
 
 @Serializable
-data class CreateItem(
+data class UpgradeItem(
     @SerialName("gear_id")
     val gearId: GearId,
+    val level: Int,
     @SerialName("gear_type")
     val gearType: GearType,
     val stats: Map<String, Int>,
+    @SerialName("next_stats")
+    val nextStats: Map<String, Int>,
     val reagents: Map<String, Int>
 )

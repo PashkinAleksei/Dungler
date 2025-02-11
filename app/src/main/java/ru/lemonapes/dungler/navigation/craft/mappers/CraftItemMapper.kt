@@ -1,14 +1,14 @@
 package ru.lemonapes.dungler.navigation.craft.mappers
 
-import ru.lemonapes.dungler.navigation.domain_models.DomainCraftItem
+import ru.lemonapes.dungler.navigation.domain_models.DomainCreateItem
 import ru.lemonapes.dungler.navigation.game_items_data.DEFAULT_GEAR_DATA
 import ru.lemonapes.dungler.navigation.game_items_data.GEAR_DATA_MAP
-import ru.lemonapes.dungler.network.models.CraftItem
-import ru.lemonapes.dungler.network.models.CraftItemsResponse
+import ru.lemonapes.dungler.network.models.CreateItem
+import ru.lemonapes.dungler.network.models.CrreateItemsResponse
 
-object CraftItemMapper : (CraftItem) -> DomainCraftItem {
-    override fun invoke(craftItem: CraftItem) =
-        DomainCraftItem(
+object CraftItemMapper : (CreateItem) -> DomainCreateItem {
+    override fun invoke(craftItem: CreateItem) =
+        DomainCreateItem(
             gearId = craftItem.gearId,
             gearType = craftItem.gearType,
             gearData = GEAR_DATA_MAP[craftItem.gearId] ?: DEFAULT_GEAR_DATA,
@@ -17,8 +17,8 @@ object CraftItemMapper : (CraftItem) -> DomainCraftItem {
         )
 }
 
-object CraftItemResponseMapper : (CraftItemsResponse) -> Pair<List<DomainCraftItem>, HashMap<String, Int>> {
-    override fun invoke(response: CraftItemsResponse) =
+object CreateItemResponseMapper : (CrreateItemsResponse) -> Pair<List<DomainCreateItem>, HashMap<String, Int>> {
+    override fun invoke(response: CrreateItemsResponse) =
         Pair(
             response.items.map(CraftItemMapper),
             response.reagents

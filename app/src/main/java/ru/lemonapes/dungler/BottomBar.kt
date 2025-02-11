@@ -3,13 +3,11 @@ package ru.lemonapes.dungler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -30,7 +28,7 @@ val topLevelRoutes = listOf(
 @Composable
 fun BottomBar(navController: NavController) {
     NavigationBar(
-        tonalElevation = 8.dp
+        tonalElevation = 8.dp,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
@@ -39,8 +37,8 @@ fun BottomBar(navController: NavController) {
                 icon = {
                     Icon(
                         modifier = Modifier
-                            .size(64.dp)
-                            .padding(6.dp),
+                            .size(60.dp)
+                            .padding(vertical = 2.dp),
                         painter = painterResource(id = topLevelRoute.icon),
                         contentDescription = topLevelRoute.route.label,
                     )

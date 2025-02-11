@@ -3,12 +3,17 @@ package ru.lemonapes.dungler.navigation.craft
 import ru.lemonapes.dungler.parent_store.ViewModelStore
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import ru.lemonapes.dungler.navigation.craft.mappers.CraftItemResponseMapper
-import ru.lemonapes.dungler.network.endpoints.loadCraftItems
+import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState
+import ru.lemonapes.dungler.navigation.craft.mappers.CreateItemResponseMapper
+import ru.lemonapes.dungler.navigation.craft.mappers.UpgradeItemResponseMapper
+import ru.lemonapes.dungler.network.endpoints.loadCreateItems
+import ru.lemonapes.dungler.network.endpoints.loadUpgradeItems
 
 interface CraftAction {
     fun actionStart()
+    fun switchClick(state: CraftSwitchState)
     fun actionError(throwable: Throwable)
     fun actionClearError()
 }
@@ -26,13 +31,28 @@ class CraftViewModel :
 
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
-            val (items, reagents) = CraftItemResponseMapper(loadCraftItems())
+            val getCreateItemsJob = async {
+                loadCreateItems()
+            }
+            val getUpgradeItemsJob = async {
+                loadUpgradeItems()
+            }
+            val (createItems, reagents) = CreateItemResponseMapper(getCreateItemsJob.await())
+            val (upgradeItems, _) = UpgradeItemResponseMapper(getUpgradeItemsJob.await())
+
             updateState { state ->
                 state.copy(
-                    items = items,
+                    createItems = createItems,
+                    upgradeItems = upgradeItems,
                     reagents = reagents
                 )
             }
+        }
+    }
+
+    override fun switchClick(state: CraftSwitchState) {
+        updateState { oldState ->
+            oldState.copy(switchState = state)
         }
     }
 
