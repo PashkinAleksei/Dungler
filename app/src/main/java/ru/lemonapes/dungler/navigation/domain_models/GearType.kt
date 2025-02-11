@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.models
+package ru.lemonapes.dungler.navigation.domain_models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,17 +6,17 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class GearType {
     @SerialName("helm")
-    Helm,
+    HELM,
     @SerialName("shoulders")
-    Shoulders,
+    SHOULDERS,
     @SerialName("chest")
-    Chest,
+    CHEST,
     @SerialName("gloves")
-    Gloves,
+    GLOVES,
     @SerialName("legs")
-    Legs,
+    LEGS,
     @SerialName("boots")
-    Boots,
+    BOOTS,
     @SerialName("weapon")
-    Weapon
+    WEAPON
 }

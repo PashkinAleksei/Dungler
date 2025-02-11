@@ -13,8 +13,8 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import ru.lemonapes.dungler.Utils.Companion.log
-import ru.lemonapes.dungler.navigation.ktor.IMAGES_PATH
-import ru.lemonapes.dungler.navigation.ktor.IMAGES_POSTFIX
+import ru.lemonapes.dungler.network.IMAGES_PATH
+import ru.lemonapes.dungler.network.IMAGES_POSTFIX
 
 @Composable
 fun ImageView(
