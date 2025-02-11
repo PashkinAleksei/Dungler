@@ -3,6 +3,9 @@
     <string name="reagent_icon_description">Реагент</string>
     <string name="gear_icon_description">Снаряжение</string>
     <string name="craft_create_button_text">Создать</string>
+    <string name="craft_upgrade_button_text">Улучшить</string>
+    <string name="craft_switch_create_button_text">Создание</string>
+    <string name="craft_switch_upgrade_button_text">Улучшение</string>
 
     <string name="green_knight_helm_name">Шлем Зеленого Рыцаря</string>
     <string name="unknown_gear_name">Неопознанный предмет</string>

@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import ru.lemonapes.dungler.navigation.Screens
+import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState
 
 fun NavGraphBuilder.craftNavigation(
     navController: NavController,
@@ -13,6 +14,12 @@ fun NavGraphBuilder.craftNavigation(
     composable<Screens.Craft>() {
         val model: CraftViewModel = viewModel(factory = CraftModelFactory())
         val state = model.observeState().collectAsState().value
-        CraftView(state)
+        CraftView(state, CraftListener { model.switchClick(it) })
+    }
+}
+
+class CraftListener(val switchClick: (state: CraftSwitchState) -> Unit) {
+    companion object {
+        val EMPTY get() = CraftListener {}
     }
 }

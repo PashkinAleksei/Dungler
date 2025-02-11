@@ -22,53 +22,110 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.navigation.domain_models.DomainCraftItem
-import ru.lemonapes.dungler.network.IMAGES_GEAR_PATH
+import ru.lemonapes.dungler.navigation.domain_models.DomainCreateItem
 import ru.lemonapes.dungler.network.IMAGES_REAGENTS_PATH
-import ru.lemonapes.dungler.network.models.CraftItem
 import ru.lemonapes.dungler.ui.ImageView
+import ru.lemonapes.dungler.ui.SegmentedSwitch
+import ru.lemonapes.dungler.ui.SwitchSegment
+import ru.lemonapes.dungler.ui.theme.DunglerTheme
+import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 
 @Composable
-fun CraftView(craftState: CraftViewState) {
+fun CraftView(craftState: CraftViewState, craftListener: CraftListener) {
+    //craftState.HandleError(viewEvent)
+    Column {
+        SegmentedSwitch(
+            modifier = Modifier.padding(16.dp),
+            leftText = stringResource(id = R.string.craft_switch_create_button_text),
+            rightText = stringResource(id = R.string.craft_switch_upgrade_button_text),
+            selectedSegment = if (craftState.switchState == CraftViewState.CraftSwitchState.CREATE) {
+                SwitchSegment.LEFT
+            } else {
+                SwitchSegment.RIGHT
+            },
+            onSelectionChanged = {
+                when (it) {
+                    SwitchSegment.LEFT -> craftListener.switchClick(CraftViewState.CraftSwitchState.CREATE)
+                    SwitchSegment.RIGHT -> craftListener.switchClick(CraftViewState.CraftSwitchState.UPGRADE)
+                }
+            }
+        )
+        when (craftState.switchState) {
+            CraftViewState.CraftSwitchState.CREATE -> CreateGearView(craftState)
+            CraftViewState.CraftSwitchState.UPGRADE -> UpgradeGearView(craftState)
+        }
+    }
+}
+
+@Composable
+fun CreateGearView(craftState: CraftViewState) {
     var selectedItemIndex by remember { mutableIntStateOf(0) }
-    if (craftState.items.isNotEmpty()) {
+    if (craftState.createItems.isNotEmpty()) {
         Column(
             Modifier.fillMaxHeight()
         ) {
             CraftList(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .weight(1f),
                 selectedItemIndex = selectedItemIndex,
                 selectCraftItem = { itemIndex -> selectedItemIndex = itemIndex },
-                craftList = craftState.items,
+                craftList = craftState.createItems,
             )
             CraftPanel(
-                craftItem = craftState.items[selectedItemIndex],
+                craftItem = craftState.createItems[selectedItemIndex],
                 reagentMap = craftState.reagents,
                 craftItemFun = {
-                    //viewEvent(CraftViewEvent.CraftItemEvent(selectedItem.reference))
+
                 },
             )
         }
     }
+}
 
-    //craftState.HandleError(viewEvent)
+@Composable
+fun UpgradeGearView(craftState: CraftViewState) {
+    var selectedItemIndex by remember { mutableIntStateOf(0) }
+    if (craftState.createItems.isNotEmpty()) {
+        Column(
+            Modifier.fillMaxHeight()
+        ) {
+            CraftList(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .weight(1f),
+                selectedItemIndex = selectedItemIndex,
+                selectCraftItem = { itemIndex -> selectedItemIndex = itemIndex },
+                craftList = craftState.upgradeItems,
+            )
+            CraftPanel(
+                craftItem = craftState.upgradeItems[selectedItemIndex],
+                reagentMap = craftState.reagents,
+                craftItemFun = {
+
+                },
+            )
+        }
+    }
 }
 
 /*@Composable
@@ -104,7 +161,6 @@ private fun CraftPanel(
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth(),
-        //color = secondaryBackgroundColor,
     ) {
         Column(
             modifier = Modifier
@@ -227,7 +283,7 @@ private fun CraftList(
 private fun CraftCardView(item: DomainCraftItem, isSelected: Boolean, click: () -> Unit) {
     Text(
         text = stringResource(item.gearData.name),
-        color = if (isSelected) Color.Red else Color.Green,//MaterialTheme.colors.secondary else MaterialTheme.colors.onPrimary,
+        color = if (isSelected) LocalThemeColors.current.positiveTextColor else MaterialTheme.colorScheme.onPrimary,
         fontSize = 24.sp,
         modifier = Modifier
             .fillMaxWidth()
@@ -240,10 +296,13 @@ private fun CraftCardView(item: DomainCraftItem, isSelected: Boolean, click: () 
 @Preview
 @Composable
 private fun CraftViewPreview() {
-    CraftView(
-        craftState = CraftViewState(
-            items = listOf(DomainCraftItem.getMock()),
-            reagents = mapOf("copper" to 20)
-        ),
-    )
+    DunglerTheme(darkTheme = true) {
+        CraftView(
+            craftState = CraftViewState(
+                createItems = listOf(DomainCreateItem.getMock()),
+                reagents = mapOf("copper" to 20)
+            ),
+            craftListener = CraftListener.EMPTY
+        )
+    }
 }

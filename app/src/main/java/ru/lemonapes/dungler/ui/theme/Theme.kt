@@ -8,7 +8,7 @@ import com.limonapes.dungle.ui.theme.typographies.LimonApesTypographies
 import com.limonapes.dungle.ui.theme.typographies.ThemeTypographies
 
 @Composable
-fun ComposeTheme(
+fun DunglerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
