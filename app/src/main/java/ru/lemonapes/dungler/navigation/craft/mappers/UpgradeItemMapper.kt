@@ -7,16 +7,24 @@ import ru.lemonapes.dungler.network.models.UpgradeItem
 import ru.lemonapes.dungler.network.models.UpgradeItemsResponse
 
 object UpgradeItemMapper : (UpgradeItem) -> DomainUpgradeItem {
-    override fun invoke(item: UpgradeItem): DomainUpgradeItem =
-        DomainUpgradeItem(
+    override fun invoke(item: UpgradeItem): DomainUpgradeItem {
+        val gearData = GEAR_DATA_MAP[item.gearId]
+        val image =
+            gearData?.imageList
+                ?.getOrNull(item.level)
+                ?: gearData?.imageList?.lastOrNull()
+                ?: DEFAULT_GEAR_DATA.imageList.last()
+
+        return DomainUpgradeItem(
             gearId = item.gearId,
             gearType = item.gearType,
-            gearData = GEAR_DATA_MAP[item.gearId] ?: DEFAULT_GEAR_DATA,
+            image = image,
             level = item.level,
             stats = item.stats,
             nextStats = item.nextStats,
             reagents = item.reagents
         )
+    }
 }
 
 object UpgradeItemResponseMapper : (UpgradeItemsResponse) -> Pair<List<DomainUpgradeItem>, HashMap<String, Int>> {

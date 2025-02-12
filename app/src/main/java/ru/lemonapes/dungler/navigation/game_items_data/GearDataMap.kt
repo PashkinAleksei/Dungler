@@ -6,36 +6,50 @@ import ru.lemonapes.dungler.navigation.domain_models.GearId
 
 val GEAR_DATA_MAP: Map<GearId, GearData> = mapOf(
     GearId.GREEN_KNIGHT_HELM to GearData(
-        R.string.green_knight_helm_name,
-        R.drawable.green_knight_helm
+        listOf(R.drawable.green_knight_helm)
     ),
     GearId.GREEN_KNIGHT_SHOULDERS to GearData(
-        R.string.green_knight_shoulders_name,
-        R.drawable.shoulders
+        listOf(R.drawable.shoulders)
     ),
     GearId.GREEN_KNIGHT_CHEST to GearData(
-        R.string.green_knight_chest_name,
-        R.drawable.green_knight_chest_10
+        listOf(
+            R.drawable.green_knight_chest_1,
+            R.drawable.green_knight_chest_2,
+            R.drawable.green_knight_chest_3,
+            R.drawable.green_knight_chest_4,
+            R.drawable.green_knight_chest_5,
+            R.drawable.green_knight_chest_6,
+            R.drawable.green_knight_chest_7,
+            R.drawable.green_knight_chest_8,
+            R.drawable.green_knight_chest_9,
+            R.drawable.green_knight_chest_10,
+        )
     ),
     GearId.GREEN_KNIGHT_GLOVES to GearData(
-        R.string.green_knight_gloves_name,
-        R.drawable.green_knight_gloves_1
+        listOf(
+            R.drawable.green_knight_gloves_1,
+            R.drawable.green_knight_gloves_2,
+            R.drawable.green_knight_gloves_3,
+            R.drawable.green_knight_gloves_4,
+            R.drawable.green_knight_gloves_5,
+            R.drawable.green_knight_gloves_6,
+            R.drawable.green_knight_gloves_7,
+            R.drawable.green_knight_gloves_8,
+            R.drawable.green_knight_gloves_9,
+            R.drawable.green_knight_gloves_10,
+        )
     ),
     GearId.GREEN_KNIGHT_LEGS to GearData(
-        R.string.green_knight_pants_name,
-        R.drawable.pants
+        listOf(R.drawable.pants)
     ),
     GearId.GREEN_KNIGHT_BOOTS to GearData(
-        R.string.green_knight_boots_name,
-        R.drawable.boots
+        listOf(R.drawable.boots)
     ),
     GearId.GREEN_KNIGHT_SWORD to GearData(
-        R.string.green_knight_sword_name,
-        R.drawable.sword
+        listOf(R.drawable.sword)
     )
 )
 
 val DEFAULT_GEAR_DATA = GearData(
-    R.string.unknown_gear_name,
-    R.drawable.ic_error
+    listOf(R.drawable.ic_error)
 )

@@ -1,24 +1,22 @@
 package ru.lemonapes.dungler.navigation.domain_models
 
+import androidx.annotation.DrawableRes
 import ru.lemonapes.dungler.R
 
 data class DomainUpgradeItem(
     override val gearId: GearId,
-    override val gearData: GearData,
+    @DrawableRes override val image: Int,
     override val gearType: GearType,
     override val stats: Map<String, Int>,
-    override val reagents: Map<String, Int>,
+    override val reagents: Map<ReagentId, Int>,
     val level: Int,
     val nextStats: Map<String, Int>,
 ) : DomainCraftItem {
     companion object {
         fun getMock() = DomainUpgradeItem(
-            gearId = GearId.GREEN_KNIGHT_HELM, // пример, замените на нужное значение
-            gearData = GearData(
-                name = R.string.green_knight_helm_name,
-                image = R.drawable.green_knight_helm
-            ),
-            gearType = GearType.HELM, // пример, замените на нужное значение
+            gearId = GearId.GREEN_KNIGHT_HELM,
+            image = R.drawable.green_knight_helm,
+            gearType = GearType.HELM,
             level = 5,
             stats = mapOf(
                 "armor" to 13,
@@ -33,9 +31,9 @@ data class DomainUpgradeItem(
                 "stamina" to 11
             ),
             reagents = mapOf(
-                "copper" to 41,
-                "linen_cloth" to 51,
-                "topaz" to 3
+                ReagentId.COPPER to 41,
+                ReagentId.LINEN_CLOTH to 51,
+                ReagentId.TOPAZ to 3
             )
         )
     }
