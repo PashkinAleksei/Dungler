@@ -6,13 +6,18 @@
     <string name="craft_upgrade_button_text">Улучшить</string>
     <string name="craft_switch_create_button_text">Создание</string>
     <string name="craft_switch_upgrade_button_text">Улучшение</string>
+    <string name="craft_panel_title_level">. Уровень %s</string>
 
     <string name="green_knight_helm_name">Шлем Зеленого Рыцаря</string>
-    <string name="unknown_gear_name">Неопознанный предмет</string>
+    <string name="unknown_item_name">Неопознанный предмет</string>
     <string name="green_knight_shoulders_name">Наплечники Зеленого Рыцаря</string>
     <string name="green_knight_chest_name">Нагрудник Зеленого Рыцаря</string>
     <string name="green_knight_gloves_name">Перчатки Зеленого Рыцаря</string>
     <string name="green_knight_pants_name">Поножи Зеленого Рыцаря</string>
     <string name="green_knight_boots_name">Сапоги Зеленого Рыцаря</string>
     <string name="green_knight_sword_name">Меч Зеленого Рыцаря</string>
+
+    <string name="linen_cloth_name">Льняная ткань</string>
+    <string name="copper_name">Медная руда</string>
+    <string name="topaz_name">Топаз</string>
 </resources>

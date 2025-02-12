@@ -46,6 +46,7 @@ import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState.UPG
 import ru.lemonapes.dungler.navigation.domain_models.DomainCraftItem
 import ru.lemonapes.dungler.navigation.domain_models.DomainCreateItem
 import ru.lemonapes.dungler.navigation.domain_models.DomainUpgradeItem
+import ru.lemonapes.dungler.navigation.domain_models.ReagentId
 import ru.lemonapes.dungler.network.IMAGES_REAGENTS_PATH
 import ru.lemonapes.dungler.ui.image_views.ImageView
 import ru.lemonapes.dungler.ui.SwitchButton
@@ -170,16 +171,18 @@ private fun CraftPanel(
 }
 
 @Composable
-private fun ReagentItem(reagentName: String, countRequired: Int, countInBag: Int) {
+private fun ReagentItem(reagentId: ReagentId, countRequired: Int, countInBag: Int) {
     Column(modifier = Modifier.width(65.dp)) {
-        ImageView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(62.dp)
-                .padding(3.dp),
-            url = IMAGES_REAGENTS_PATH + reagentName,
-            contentDescription = stringResource(id = R.string.reagent_icon_description),
-        )
+        Box(Modifier.fillMaxWidth()) {
+            Image(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(62.dp)
+                    .padding(3.dp),
+                painter = painterResource(reagentId.image),
+                contentDescription = stringResource(id = R.string.reagent_icon_description),
+            )
+        }
         UIText(
             modifier = Modifier.fillMaxWidth(),
             text = "$countInBag/${countRequired}",
@@ -203,35 +206,29 @@ private fun DomainCraftItem.CraftItemInfo() {
             modifier = Modifier.wrapContentSize(),
             contentAlignment = Alignment.BottomEnd
         ) {
+            Image(
+                modifier = Modifier
+                    .border(2.dp, Color.Gray)
+                    .border(3.dp, Color.LightGray)
+                    .size(120.dp)
+                    .background(Color.Black)
+                    .padding(4.dp),
+                painter = painterResource(image),
+                contentDescription = stringResource(id = R.string.gear_icon_description),
+            )
+        }
+        val text = stringResource(gearId.gearName).run {
             if (this@CraftItemInfo is DomainUpgradeItem) {
-                ImageWithCounter(
-                    modifier = Modifier
-                        .border(2.dp, Color.Gray)
-                        .border(3.dp, Color.LightGray)
-                        .size(120.dp)
-                        .background(Color.Black)
-                        .padding(4.dp),
-                    painter = painterResource(gearData.image),
-                    count = level
-                )
+                this + stringResource(R.string.craft_panel_title_level, level + 1)
             } else {
-                Image(
-                    modifier = Modifier
-                        .border(2.dp, Color.Gray)
-                        .border(3.dp, Color.LightGray)
-                        .size(120.dp)
-                        .background(Color.Black)
-                        .padding(4.dp),
-                    painter = painterResource(gearData.image),
-                    contentDescription = stringResource(id = R.string.gear_icon_description),
-                )
+                this
             }
         }
         UIText(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
-            text = stringResource(gearData.name),
+            text = text,
             textStyle = LocalThemeTypographies.current.regular20,
             //color = primaryTextColor,
             maxLines = 3
@@ -250,9 +247,9 @@ private fun ReagentList(item: DomainCraftItem, reagentMap: Map<String, Int>) {
     ) {
         items(item.reagents.toList()) { item ->
             ReagentItem(
-                reagentName = item.first,
+                reagentId = item.first,
                 countRequired = item.second,
-                countInBag = reagentMap[item.first] ?: 0
+                countInBag = item.second
             )
         }
     }
@@ -277,7 +274,7 @@ private fun CraftList(
 @Composable
 private fun CraftCardView(item: DomainCraftItem, isSelected: Boolean, click: () -> Unit) {
     Text(
-        text = stringResource(item.gearData.name),
+        text = stringResource(item.gearId.gearName),
         color = if (isSelected) LocalThemeColors.current.positiveTextColor else MaterialTheme.colorScheme.onPrimary,
         fontSize = 24.sp,
         modifier = Modifier

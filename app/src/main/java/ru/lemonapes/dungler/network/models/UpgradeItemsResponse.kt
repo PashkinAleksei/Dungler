@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.lemonapes.dungler.navigation.domain_models.GearId
 import ru.lemonapes.dungler.navigation.domain_models.GearType
+import ru.lemonapes.dungler.navigation.domain_models.ReagentId
 
 @Serializable
 data class UpgradeItemsResponse(
@@ -21,5 +22,5 @@ data class UpgradeItem(
     val stats: Map<String, Int>,
     @SerialName("next_stats")
     val nextStats: Map<String, Int>,
-    val reagents: Map<String, Int>
+    val reagents: Map<ReagentId, Int>
 )
