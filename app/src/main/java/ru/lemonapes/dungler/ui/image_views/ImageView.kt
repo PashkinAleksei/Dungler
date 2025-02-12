@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.ui
+package ru.lemonapes.dungler.ui.image_views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

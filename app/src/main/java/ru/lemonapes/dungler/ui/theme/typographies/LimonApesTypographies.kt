@@ -1,4 +1,4 @@
-package com.limonapes.dungle.ui.theme.typographies
+package ru.lemonapes.dungler.ui.theme.typographies
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -8,7 +8,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
-import ru.lemonapes.dungler.ui.theme.typographies.fontsMuseoSansCyrl
 
 @JvmInline
 value class AppTextStyle(val textStyle: TextStyle)
@@ -16,7 +15,7 @@ value class AppTextStyle(val textStyle: TextStyle)
 /**
  * A composition local for [LimonApesTypographies].
  */
-internal val ThemeTypographies = staticCompositionLocalOf { LimonApesTypographies() }
+internal val LocalThemeTypographies = staticCompositionLocalOf { LimonApesTypographies() }
 
 /**
  * LimonApes typographies

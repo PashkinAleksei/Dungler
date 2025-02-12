@@ -4,8 +4,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import com.limonapes.dungle.ui.theme.typographies.LimonApesTypographies
-import com.limonapes.dungle.ui.theme.typographies.ThemeTypographies
+import ru.lemonapes.dungler.ui.theme.typographies.LimonApesTypographies
+import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
 fun DunglerTheme(
@@ -16,7 +16,7 @@ fun DunglerTheme(
     val colorScheme = if (darkTheme) getMaterialDarkColorPalette() else getMaterialLightColorPalette()
 
     CompositionLocalProvider(
-        ThemeTypographies provides LimonApesTypographies(),
+        LocalThemeTypographies provides LimonApesTypographies(),
         LocalThemeColors provides colors
     ) {
         MaterialTheme(
