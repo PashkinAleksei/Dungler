@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 // Enum для управления выбором
-enum class SwitchSegment {
+enum class SwitchState {
     LEFT, RIGHT
 }
 
@@ -30,11 +30,11 @@ enum class SwitchSegment {
  * @param unselectedElevation Elevation для невыбранного сегмента.
  */
 @Composable
-fun SegmentedSwitch(
+fun SwitchButton(
     leftText: String,
     rightText: String,
-    selectedSegment: SwitchSegment,
-    onSelectionChanged: (SwitchSegment) -> Unit,
+    selectedSegment: SwitchState,
+    onSelectionChanged: (SwitchState) -> Unit,
     modifier: Modifier = Modifier,
     selectedElevation: Dp = 0.dp,
     unselectedElevation: Dp = 8.dp,
@@ -49,9 +49,9 @@ fun SegmentedSwitch(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .clickable { onSelectionChanged(SwitchSegment.LEFT) },
-            color = if (selectedSegment == SwitchSegment.LEFT) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-            shadowElevation = if (selectedSegment == SwitchSegment.LEFT) selectedElevation else unselectedElevation,
+                .clickable { onSelectionChanged(SwitchState.LEFT) },
+            color = if (selectedSegment == SwitchState.LEFT) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+            shadowElevation = if (selectedSegment == SwitchState.LEFT) selectedElevation else unselectedElevation,
             shape = RoundedCornerShape(topStart = 50.dp, bottomStart = 50.dp)
         ) {
             Box(
@@ -62,7 +62,7 @@ fun SegmentedSwitch(
             ) {
                 Text(
                     text = leftText,
-                    color = if (selectedSegment == SwitchSegment.LEFT) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                    color = if (selectedSegment == SwitchState.LEFT) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -71,9 +71,9 @@ fun SegmentedSwitch(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .clickable { onSelectionChanged(SwitchSegment.RIGHT) },
-            color = if (selectedSegment == SwitchSegment.RIGHT) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-            shadowElevation = if (selectedSegment == SwitchSegment.RIGHT) selectedElevation else unselectedElevation,
+                .clickable { onSelectionChanged(SwitchState.RIGHT) },
+            color = if (selectedSegment == SwitchState.RIGHT) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+            shadowElevation = if (selectedSegment == SwitchState.RIGHT) selectedElevation else unselectedElevation,
             shape = RoundedCornerShape(topEnd = 50.dp, bottomEnd = 50.dp)
         ) {
             Box(
@@ -84,7 +84,7 @@ fun SegmentedSwitch(
             ) {
                 Text(
                     text = rightText,
-                    color = if (selectedSegment == SwitchSegment.RIGHT) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                    color = if (selectedSegment == SwitchState.RIGHT) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
                 )
             }
         }

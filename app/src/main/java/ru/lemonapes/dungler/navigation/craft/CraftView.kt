@@ -1,5 +1,6 @@
 package ru.lemonapes.dungler.navigation.craft
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,45 +41,52 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.lemonapes.dungler.R
+import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState.CREATE
+import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState.UPGRADE
 import ru.lemonapes.dungler.navigation.domain_models.DomainCraftItem
 import ru.lemonapes.dungler.navigation.domain_models.DomainCreateItem
+import ru.lemonapes.dungler.navigation.domain_models.DomainUpgradeItem
 import ru.lemonapes.dungler.network.IMAGES_REAGENTS_PATH
-import ru.lemonapes.dungler.ui.ImageView
-import ru.lemonapes.dungler.ui.SegmentedSwitch
-import ru.lemonapes.dungler.ui.SwitchSegment
+import ru.lemonapes.dungler.ui.image_views.ImageView
+import ru.lemonapes.dungler.ui.SwitchButton
+import ru.lemonapes.dungler.ui.SwitchState
+import ru.lemonapes.dungler.ui.UIText
+import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
+import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
 fun CraftView(craftState: CraftViewState, craftListener: CraftListener) {
     //craftState.HandleError(viewEvent)
     Column {
-        SegmentedSwitch(
+        SwitchButton(
             modifier = Modifier.padding(16.dp),
             leftText = stringResource(id = R.string.craft_switch_create_button_text),
             rightText = stringResource(id = R.string.craft_switch_upgrade_button_text),
-            selectedSegment = if (craftState.switchState == CraftViewState.CraftSwitchState.CREATE) {
-                SwitchSegment.LEFT
+            selectedSegment = if (craftState.switchState == CREATE) {
+                SwitchState.LEFT
             } else {
-                SwitchSegment.RIGHT
+                SwitchState.RIGHT
             },
             onSelectionChanged = {
                 when (it) {
-                    SwitchSegment.LEFT -> craftListener.switchClick(CraftViewState.CraftSwitchState.CREATE)
-                    SwitchSegment.RIGHT -> craftListener.switchClick(CraftViewState.CraftSwitchState.UPGRADE)
+                    SwitchState.LEFT -> craftListener.switchClick(CREATE)
+                    SwitchState.RIGHT -> craftListener.switchClick(UPGRADE)
                 }
             }
         )
-        when (craftState.switchState) {
-            CraftViewState.CraftSwitchState.CREATE -> CreateGearView(craftState)
-            CraftViewState.CraftSwitchState.UPGRADE -> UpgradeGearView(craftState)
-        }
+        CraftGearView(craftState)
     }
 }
 
 @Composable
-fun CreateGearView(craftState: CraftViewState) {
-    var selectedItemIndex by remember { mutableIntStateOf(0) }
+fun CraftGearView(craftState: CraftViewState) {
+    val (craftItems, buttonText) = when (craftState.switchState) {
+        CREATE -> Pair(craftState.createItems, R.string.craft_create_button_text)
+        UPGRADE -> Pair(craftState.upgradeItems, R.string.craft_upgrade_button_text)
+    }
+    var selectedItemIndex by remember(craftState.switchState) { mutableIntStateOf(0) }
     if (craftState.createItems.isNotEmpty()) {
         Column(
             Modifier.fillMaxHeight()
@@ -89,40 +97,15 @@ fun CreateGearView(craftState: CraftViewState) {
                     .weight(1f),
                 selectedItemIndex = selectedItemIndex,
                 selectCraftItem = { itemIndex -> selectedItemIndex = itemIndex },
-                craftList = craftState.createItems,
+                craftList = craftItems,
             )
             CraftPanel(
-                craftItem = craftState.createItems[selectedItemIndex],
+                craftItem = craftItems[selectedItemIndex],
                 reagentMap = craftState.reagents,
                 craftItemFun = {
 
                 },
-            )
-        }
-    }
-}
-
-@Composable
-fun UpgradeGearView(craftState: CraftViewState) {
-    var selectedItemIndex by remember { mutableIntStateOf(0) }
-    if (craftState.createItems.isNotEmpty()) {
-        Column(
-            Modifier.fillMaxHeight()
-        ) {
-            CraftList(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .weight(1f),
-                selectedItemIndex = selectedItemIndex,
-                selectCraftItem = { itemIndex -> selectedItemIndex = itemIndex },
-                craftList = craftState.upgradeItems,
-            )
-            CraftPanel(
-                craftItem = craftState.upgradeItems[selectedItemIndex],
-                reagentMap = craftState.reagents,
-                craftItemFun = {
-
-                },
+                buttonText = buttonText
             )
         }
     }
@@ -156,6 +139,7 @@ private fun CraftPanel(
     craftItem: DomainCraftItem,
     reagentMap: Map<String, Int>,
     craftItemFun: () -> Unit,
+    @StringRes buttonText: Int,
 ) {
     Surface(
         modifier = Modifier
@@ -176,7 +160,10 @@ private fun CraftPanel(
                     .padding(vertical = 8.dp)
                     .fillMaxWidth(),
                 onClick = { craftItemFun() }) {
-                Text(text = stringResource(id = R.string.craft_create_button_text))
+                UIText(
+                    text = stringResource(buttonText),
+                    textStyle = LocalThemeTypographies.current.regular18
+                )
             }
         }
     }
@@ -193,13 +180,12 @@ private fun ReagentItem(reagentName: String, countRequired: Int, countInBag: Int
             url = IMAGES_REAGENTS_PATH + reagentName,
             contentDescription = stringResource(id = R.string.reagent_icon_description),
         )
-        Text(
+        UIText(
             modifier = Modifier.fillMaxWidth(),
             text = "$countInBag/${countRequired}",
             textAlign = TextAlign.Center,
+            textStyle = LocalThemeTypographies.current.regular18,
             //color = itemBagCountTextColor,
-            fontSize = 20.sp
-
         )
     }
 }
@@ -217,27 +203,36 @@ private fun DomainCraftItem.CraftItemInfo() {
             modifier = Modifier.wrapContentSize(),
             contentAlignment = Alignment.BottomEnd
         ) {
-            /*if (countOrLevel > 0) {
-                CraftImageWithCounter(modifier = Modifier.size(75.dp))
-            } else {*/
-            Image(
-                modifier = Modifier
-                    .border(2.dp, Color.Gray)
-                    .border(3.dp, Color.LightGray)
-                    .size(120.dp)
-                    .background(Color.Black)
-                    .padding(4.dp),
-                painter = painterResource(gearData.image),
-                contentDescription = stringResource(id = R.string.gear_icon_description),
-            )
-            //}
+            if (this@CraftItemInfo is DomainUpgradeItem) {
+                ImageWithCounter(
+                    modifier = Modifier
+                        .border(2.dp, Color.Gray)
+                        .border(3.dp, Color.LightGray)
+                        .size(120.dp)
+                        .background(Color.Black)
+                        .padding(4.dp),
+                    painter = painterResource(gearData.image),
+                    count = level
+                )
+            } else {
+                Image(
+                    modifier = Modifier
+                        .border(2.dp, Color.Gray)
+                        .border(3.dp, Color.LightGray)
+                        .size(120.dp)
+                        .background(Color.Black)
+                        .padding(4.dp),
+                    painter = painterResource(gearData.image),
+                    contentDescription = stringResource(id = R.string.gear_icon_description),
+                )
+            }
         }
-        Text(
+        UIText(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
             text = stringResource(gearData.name),
-            fontSize = 22.sp,
+            textStyle = LocalThemeTypographies.current.regular20,
             //color = primaryTextColor,
             maxLines = 3
         )
@@ -295,11 +290,28 @@ private fun CraftCardView(item: DomainCraftItem, isSelected: Boolean, click: () 
 
 @Preview
 @Composable
-private fun CraftViewPreview() {
+private fun CreateViewPreview() {
     DunglerTheme(darkTheme = true) {
         CraftView(
             craftState = CraftViewState(
                 createItems = listOf(DomainCreateItem.getMock()),
+                upgradeItems = listOf(DomainUpgradeItem.getMock()),
+                reagents = mapOf("copper" to 20)
+            ),
+            craftListener = CraftListener.EMPTY
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun UpgradeViewPreview() {
+    DunglerTheme(darkTheme = true) {
+        CraftView(
+            craftState = CraftViewState(
+                createItems = listOf(DomainCreateItem.getMock()),
+                upgradeItems = listOf(DomainUpgradeItem.getMock()),
+                switchState = UPGRADE,
                 reagents = mapOf("copper" to 20)
             ),
             craftListener = CraftListener.EMPTY
