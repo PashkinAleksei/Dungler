@@ -1,8 +1,8 @@
 package ru.lemonapes.dungler.navigation.game_items_data
 
 import ru.lemonapes.dungler.R
-import ru.lemonapes.dungler.navigation.domain_models.GearData
-import ru.lemonapes.dungler.navigation.domain_models.GearId
+import ru.lemonapes.dungler.domain_models.GearData
+import ru.lemonapes.dungler.domain_models.GearId
 
 val GEAR_DATA_MAP: Map<GearId, GearData> = mapOf(
     GearId.GREEN_KNIGHT_HELM to GearData(

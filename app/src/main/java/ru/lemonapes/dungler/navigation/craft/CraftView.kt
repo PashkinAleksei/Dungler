@@ -40,13 +40,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.collections.immutable.persistentMapOf
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState.CREATE
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState.UPGRADE
-import ru.lemonapes.dungler.navigation.domain_models.DomainCraftItem
-import ru.lemonapes.dungler.navigation.domain_models.DomainCreateItem
-import ru.lemonapes.dungler.navigation.domain_models.DomainUpgradeItem
-import ru.lemonapes.dungler.navigation.domain_models.ReagentId
+import ru.lemonapes.dungler.domain_models.DomainCraftItem
+import ru.lemonapes.dungler.domain_models.DomainCreateItem
+import ru.lemonapes.dungler.domain_models.DomainUpgradeItem
+import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.network.IMAGES_REAGENTS_PATH
 import ru.lemonapes.dungler.ui.image_views.ImageView
 import ru.lemonapes.dungler.ui.SwitchButton
@@ -77,12 +78,12 @@ fun CraftView(craftState: CraftViewState, craftListener: CraftListener) {
                 }
             }
         )
-        CraftGearView(craftState)
+        CraftGearView(craftState, craftListener)
     }
 }
 
 @Composable
-fun CraftGearView(craftState: CraftViewState) {
+fun CraftGearView(craftState: CraftViewState, craftListener: CraftListener) {
     val (craftItems, buttonText) = when (craftState.switchState) {
         CREATE -> Pair(craftState.createItems, R.string.craft_create_button_text)
         UPGRADE -> Pair(craftState.upgradeItems, R.string.craft_upgrade_button_text)
@@ -104,7 +105,7 @@ fun CraftGearView(craftState: CraftViewState) {
                 craftItem = craftItems[selectedItemIndex],
                 reagentMap = craftState.reagents,
                 craftItemFun = {
-
+                    craftListener.craftItem(craftItems[selectedItemIndex])
                 },
                 buttonText = buttonText
             )
@@ -138,7 +139,7 @@ private fun CraftViewState.HandleError(viewEvent: (CraftViewEvent) -> Unit) {
 @Composable
 private fun CraftPanel(
     craftItem: DomainCraftItem,
-    reagentMap: Map<String, Int>,
+    reagentMap: Map<ReagentId, Int>,
     craftItemFun: () -> Unit,
     @StringRes buttonText: Int,
 ) {
@@ -237,7 +238,7 @@ private fun DomainCraftItem.CraftItemInfo() {
 }
 
 @Composable
-private fun ReagentList(item: DomainCraftItem, reagentMap: Map<String, Int>) {
+private fun ReagentList(item: DomainCraftItem, reagentMap: Map<ReagentId, Int>) {
     LazyVerticalGrid(
         GridCells.Fixed(3),
         Modifier
@@ -249,7 +250,7 @@ private fun ReagentList(item: DomainCraftItem, reagentMap: Map<String, Int>) {
             ReagentItem(
                 reagentId = item.first,
                 countRequired = item.second,
-                countInBag = item.second
+                countInBag = reagentMap[item.first] ?: 0
             )
         }
     }
@@ -293,7 +294,7 @@ private fun CreateViewPreview() {
             craftState = CraftViewState(
                 createItems = listOf(DomainCreateItem.getMock()),
                 upgradeItems = listOf(DomainUpgradeItem.getMock()),
-                reagents = mapOf("copper" to 20)
+                reagents = persistentMapOf(ReagentId.COPPER to 20)
             ),
             craftListener = CraftListener.EMPTY
         )
@@ -309,7 +310,7 @@ private fun UpgradeViewPreview() {
                 createItems = listOf(DomainCreateItem.getMock()),
                 upgradeItems = listOf(DomainUpgradeItem.getMock()),
                 switchState = UPGRADE,
-                reagents = mapOf("copper" to 20)
+                reagents = persistentMapOf(ReagentId.COPPER to 20)
             ),
             craftListener = CraftListener.EMPTY
         )

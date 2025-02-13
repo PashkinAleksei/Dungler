@@ -1,10 +1,12 @@
-package ru.lemonapes.dungler.navigation.domain_models
+package ru.lemonapes.dungler.domain_models
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.lemonapes.dungler.R
 
+@Immutable
 @Serializable
 enum class GearId(@StringRes val gearName: Int) {
     UNKNOWN_ITEM(R.string.unknown_item_name),

@@ -2,14 +2,14 @@ package ru.lemonapes.dungler.network.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.lemonapes.dungler.navigation.domain_models.GearId
-import ru.lemonapes.dungler.navigation.domain_models.GearType
-import ru.lemonapes.dungler.navigation.domain_models.ReagentId
+import ru.lemonapes.dungler.domain_models.GearId
+import ru.lemonapes.dungler.domain_models.GearType
+import ru.lemonapes.dungler.domain_models.ReagentId
 
 @Serializable
 data class UpgradeItemsResponse(
     val items: List<UpgradeItem>,
-    val reagents: HashMap<String, Int>
+    val reagents: Map<ReagentId, Int>
 )
 
 @Serializable

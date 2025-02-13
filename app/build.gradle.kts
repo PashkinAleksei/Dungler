@@ -64,4 +64,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    implementation(libs.kotlinx.collections.immutable)
 }
