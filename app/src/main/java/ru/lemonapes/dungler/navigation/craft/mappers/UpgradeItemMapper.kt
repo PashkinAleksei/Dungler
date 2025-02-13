@@ -1,13 +1,10 @@
 package ru.lemonapes.dungler.navigation.craft.mappers
 
-import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.DomainUpgradeItem
-import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.navigation.game_items_data.DEFAULT_GEAR_DATA
 import ru.lemonapes.dungler.navigation.game_items_data.GEAR_DATA_MAP
 import ru.lemonapes.dungler.network.models.UpgradeItem
-import ru.lemonapes.dungler.network.models.UpgradeItemsResponse
 
 object UpgradeItemMapper : (UpgradeItem) -> DomainUpgradeItem {
     override fun invoke(item: UpgradeItem): DomainUpgradeItem {
@@ -28,12 +25,4 @@ object UpgradeItemMapper : (UpgradeItem) -> DomainUpgradeItem {
             reagents = item.reagents.toPersistentMap()
         )
     }
-}
-
-object UpgradeItemResponseMapper : (UpgradeItemsResponse) -> Pair<List<DomainUpgradeItem>, ImmutableMap<ReagentId, Int>> {
-    override fun invoke(response: UpgradeItemsResponse) =
-        Pair(
-            response.items.map(UpgradeItemMapper),
-            response.reagents.toPersistentMap()
-        )
 }
