@@ -9,12 +9,11 @@ import ru.lemonapes.dungler.domain_models.GearId
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.CreateItemsResponse
-import ru.lemonapes.dungler.network.models.UpgradeItemsResponse
+import ru.lemonapes.dungler.network.models.CraftItemsResponse
 
 const val MAP_FIRST_PARAM = "name"
 
-suspend fun createItem(gearId: GearId): CreateItemsResponse {
+suspend fun createItem(gearId: GearId): CraftItemsResponse {
     val url = "$ENDPOINT/craft_items?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.post(url) {
         contentType(ContentType.Application.Json)
@@ -23,7 +22,7 @@ suspend fun createItem(gearId: GearId): CreateItemsResponse {
     return response.body()
 }
 
-suspend fun upgradeItem(gearId: GearId): UpgradeItemsResponse {
+suspend fun upgradeItem(gearId: GearId): CraftItemsResponse {
     val url = "$ENDPOINT/upgrade_items?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.post(url) {
         contentType(ContentType.Application.Json)
