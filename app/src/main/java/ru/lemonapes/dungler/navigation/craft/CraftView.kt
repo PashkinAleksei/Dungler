@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -42,18 +41,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.collections.immutable.persistentMapOf
 import ru.lemonapes.dungler.R
+import ru.lemonapes.dungler.domain_models.CraftGear
+import ru.lemonapes.dungler.domain_models.CreateGear
+import ru.lemonapes.dungler.domain_models.ReagentId
+import ru.lemonapes.dungler.domain_models.UpgradeGear
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState.CREATE
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState.UPGRADE
-import ru.lemonapes.dungler.domain_models.DomainCraftItem
-import ru.lemonapes.dungler.domain_models.DomainCreateItem
-import ru.lemonapes.dungler.domain_models.DomainUpgradeItem
-import ru.lemonapes.dungler.domain_models.ReagentId
-import ru.lemonapes.dungler.network.IMAGES_REAGENTS_PATH
-import ru.lemonapes.dungler.ui.image_views.ImageView
 import ru.lemonapes.dungler.ui.SwitchButton
 import ru.lemonapes.dungler.ui.SwitchState
 import ru.lemonapes.dungler.ui.UIText
-import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
@@ -138,7 +134,7 @@ private fun CraftViewState.HandleError(viewEvent: (CraftViewEvent) -> Unit) {
 
 @Composable
 private fun CraftPanel(
-    craftItem: DomainCraftItem,
+    craftItem: CraftGear,
     reagentMap: Map<ReagentId, Int>,
     craftItemFun: () -> Unit,
     @StringRes buttonText: Int,
@@ -195,7 +191,7 @@ private fun ReagentItem(reagentId: ReagentId, countRequired: Int, countInBag: In
 }
 
 @Composable
-private fun DomainCraftItem.CraftItemInfo() {
+private fun CraftGear.CraftItemInfo() {
     Row(
         Modifier
             .fillMaxWidth()
@@ -219,7 +215,7 @@ private fun DomainCraftItem.CraftItemInfo() {
             )
         }
         val text = stringResource(gearId.gearName).run {
-            if (this@CraftItemInfo is DomainUpgradeItem) {
+            if (this@CraftItemInfo is UpgradeGear) {
                 this + stringResource(R.string.craft_panel_title_level, level + 1)
             } else {
                 this
@@ -238,7 +234,7 @@ private fun DomainCraftItem.CraftItemInfo() {
 }
 
 @Composable
-private fun ReagentList(item: DomainCraftItem, reagentMap: Map<ReagentId, Int>) {
+private fun ReagentList(item: CraftGear, reagentMap: Map<ReagentId, Int>) {
     LazyVerticalGrid(
         GridCells.Fixed(3),
         Modifier
@@ -261,7 +257,7 @@ private fun CraftList(
     modifier: Modifier,
     selectedItemIndex: Int,
     selectCraftItem: (index: Int) -> Unit,
-    craftList: List<DomainCraftItem>,
+    craftList: List<CraftGear>,
 ) {
     LazyColumn(modifier.fillMaxWidth()) {
         itemsIndexed(craftList) { index, item ->
@@ -273,7 +269,7 @@ private fun CraftList(
 }
 
 @Composable
-private fun CraftCardView(item: DomainCraftItem, isSelected: Boolean, click: () -> Unit) {
+private fun CraftCardView(item: CraftGear, isSelected: Boolean, click: () -> Unit) {
     Text(
         text = stringResource(item.gearId.gearName),
         color = if (isSelected) LocalThemeColors.current.positiveTextColor else MaterialTheme.colorScheme.onPrimary,
@@ -292,8 +288,8 @@ private fun CreateViewPreview() {
     DunglerTheme(darkTheme = true) {
         CraftView(
             craftState = CraftViewState(
-                createItems = listOf(DomainCreateItem.getMock()),
-                upgradeItems = listOf(DomainUpgradeItem.getMock()),
+                createItems = listOf(CreateGear.getMock()),
+                upgradeItems = listOf(UpgradeGear.getMock()),
                 reagents = persistentMapOf(ReagentId.COPPER to 20)
             ),
             craftListener = CraftListener.EMPTY
@@ -307,8 +303,8 @@ private fun UpgradeViewPreview() {
     DunglerTheme(darkTheme = true) {
         CraftView(
             craftState = CraftViewState(
-                createItems = listOf(DomainCreateItem.getMock()),
-                upgradeItems = listOf(DomainUpgradeItem.getMock()),
+                createItems = listOf(CreateGear.getMock()),
+                upgradeItems = listOf(UpgradeGear.getMock()),
                 switchState = UPGRADE,
                 reagents = persistentMapOf(ReagentId.COPPER to 20)
             ),

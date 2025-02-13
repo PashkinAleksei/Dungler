@@ -20,5 +20,8 @@ enum class GearType {
     @SerialName("boots")
     BOOTS,
     @SerialName("weapon")
-    WEAPON
+    WEAPON,
+
+    @SerialName("unknown")
+    UNKNOWN
 }

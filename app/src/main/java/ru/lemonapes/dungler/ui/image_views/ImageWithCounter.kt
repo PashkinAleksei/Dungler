@@ -18,7 +18,7 @@ import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
-fun ImageWithCounter(modifier: Modifier = Modifier, painter: Painter, count: Int) {
+fun ImageWithCounter(modifier: Modifier = Modifier, painter: Painter, counter: Int) {
     val textHorizontalPadding = 2
 
     val textStyle = LocalThemeTypographies.current.regular20
@@ -45,7 +45,7 @@ fun ImageWithCounter(modifier: Modifier = Modifier, painter: Painter, count: Int
                     .wrapContentWidth()
                     .padding(horizontal = textHorizontalPadding.dp)
                     .padding(vertical = 2.dp),
-                text = "$count",
+                text = "$counter",
                 color = LocalThemeColors.current.primaryTextColor,
                 textStyle = textStyle,
             )

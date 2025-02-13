@@ -6,8 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.Utils.Companion.log
 import ru.lemonapes.dungler.domain_models.GearId
+import ru.lemonapes.dungler.mappers.CraftItemResponseMapper
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState
-import ru.lemonapes.dungler.navigation.craft.mappers.CraftItemResponseMapper
 import ru.lemonapes.dungler.network.endpoints.createItem
 import ru.lemonapes.dungler.network.endpoints.loadCraftItems
 import ru.lemonapes.dungler.network.endpoints.upgradeItem

@@ -5,9 +5,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import ru.lemonapes.dungler.domain_models.DomainCraftItem
-import ru.lemonapes.dungler.domain_models.DomainCreateItem
-import ru.lemonapes.dungler.domain_models.DomainUpgradeItem
+import ru.lemonapes.dungler.domain_models.CraftGear
+import ru.lemonapes.dungler.domain_models.CreateGear
+import ru.lemonapes.dungler.domain_models.UpgradeGear
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState
 
@@ -25,8 +25,8 @@ fun NavGraphBuilder.craftNavigation(
                 },
                 craftItem = {item->
                     when(item){
-                        is DomainCreateItem -> model.actionCreateItem(item.gearId)
-                        is DomainUpgradeItem -> model.actionUpgradeItem(item.gearId)
+                        is CreateGear -> model.actionCreateItem(item.gearId)
+                        is UpgradeGear -> model.actionUpgradeItem(item.gearId)
                     }
                 },
             )
@@ -36,7 +36,7 @@ fun NavGraphBuilder.craftNavigation(
 
 class CraftListener(
     val switchClick: (state: CraftSwitchState) -> Unit,
-    val craftItem: (item: DomainCraftItem) -> Unit,
+    val craftItem: (item: CraftGear) -> Unit,
 ) {
     companion object {
         val EMPTY get() = CraftListener({}, {})
