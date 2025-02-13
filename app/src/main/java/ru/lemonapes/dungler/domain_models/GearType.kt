@@ -1,8 +1,10 @@
-package ru.lemonapes.dungler.navigation.domain_models
+package ru.lemonapes.dungler.domain_models
 
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Immutable
 @Serializable
 enum class GearType {
     @SerialName("helm")

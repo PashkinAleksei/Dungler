@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.domain_models
+package ru.lemonapes.dungler.domain_models
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
