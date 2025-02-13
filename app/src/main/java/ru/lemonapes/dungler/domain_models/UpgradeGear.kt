@@ -5,20 +5,18 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import ru.lemonapes.dungler.R
 
-data class DomainUpgradeItem(
+data class UpgradeGear(
     override val gearId: GearId,
     @DrawableRes override val image: Int,
-    override val gearType: GearType,
     override val stats: ImmutableMap<String, Int>,
     override val reagents: ImmutableMap<ReagentId, Int>,
     val level: Int,
     val nextStats: ImmutableMap<String, Int>,
-) : DomainCraftItem {
+) : CraftGear {
     companion object {
-        fun getMock() = DomainUpgradeItem(
+        fun getMock() = UpgradeGear(
             gearId = GearId.GREEN_KNIGHT_HELM,
             image = R.drawable.green_knight_helm,
-            gearType = GearType.HELM,
             level = 5,
             stats = persistentMapOf(
                 "armor" to 13,

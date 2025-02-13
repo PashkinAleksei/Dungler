@@ -16,11 +16,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.navigation.Screens.Dungeons
-import ru.lemonapes.dungler.navigation.Screens.Inventory
 import ru.lemonapes.dungler.navigation.character.characterNavigation
 import ru.lemonapes.dungler.navigation.craft.craftNavigation
 import ru.lemonapes.dungler.navigation.dungeons.DungeonsScreen
-import ru.lemonapes.dungler.navigation.inventory.InventoryScreen
+import ru.lemonapes.dungler.navigation.inventory.inventoryNavigation
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 
 class MainActivity : ComponentActivity() {
@@ -62,7 +61,7 @@ fun MainView(
         ) {
             characterNavigation(navController)
             craftNavigation(navController)
-            composable<Inventory> { InventoryScreen() }
+            inventoryNavigation(navController)
             composable<Dungeons> { DungeonsScreen() }
         }
     }
