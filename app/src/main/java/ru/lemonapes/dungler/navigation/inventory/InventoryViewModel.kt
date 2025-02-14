@@ -3,6 +3,7 @@ package ru.lemonapes.dungler.navigation.inventory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.lemonapes.dungler.Utils.Companion.log
 import ru.lemonapes.dungler.mappers.InventoryResponseMapper
 import ru.lemonapes.dungler.network.endpoints.loadInventory
 import ru.lemonapes.dungler.parent_store.ViewModelStore
@@ -37,6 +38,7 @@ class InventoryViewModel : ViewModelStore<InventoryState>(InventoryState.EMPTY),
     }
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->
+        log(throwable)
         oldState.copy(error = throwable)
     }
 
