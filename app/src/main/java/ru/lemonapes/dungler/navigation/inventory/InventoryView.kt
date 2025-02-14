@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
@@ -42,23 +41,29 @@ fun InventoryView(
                     }
                 }*/
 
-                Box(Modifier.aspectRatio(1f)) {
+                Box(
+                    Modifier
+                        .aspectRatio(1f)
+                        .padding(start = 2.dp, top = 2.dp)) {
                     val border = if (gear.isEquipped) BorderStroke(3.dp, Color.Yellow) else null
                     Surface(border = border) {
                         ImageWithCounter(
                             modifier = Modifier.padding(2.dp),
-                            painter = painterResource(R.drawable.helm),
+                            painter = painterResource(gear.image),
                             counter = gear.level
                         )
                     }
                 }
             }
             items(state.reagents.toList()) { (reagentId, count) ->
-                Box(Modifier.aspectRatio(1f)) {
+                Box(
+                    Modifier
+                        .aspectRatio(1f)
+                        .padding(start = 2.dp, top = 2.dp)) {
                     Surface {
                         ImageWithCounter(
                             modifier = Modifier.padding(2.dp),
-                            painter = painterResource(R.drawable.copper),
+                            painter = painterResource(reagentId.image),
                             counter = count
                         )
                     }

@@ -7,7 +7,7 @@ import ru.lemonapes.dungler.network.models.InventoryResponse
 object InventoryResponseMapper : (InventoryResponse) -> Pair<List<Gear>, Map<ReagentId, Int>> {
     override fun invoke(response: InventoryResponse) =
         Pair(
-            response.gears,
+            response.gears.map(GearMapper),
             response.reagents
         )
 }
