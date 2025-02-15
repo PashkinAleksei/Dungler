@@ -13,6 +13,6 @@ fun NavGraphBuilder.characterNavigation(
     composable<Screens.Character>() {
         val model: CharacterViewModel = viewModel(factory = CharacterModelFactory())
         val state = model.observeState().collectAsState().value
-        CharacterView()
+        CharacterView(state)
     }
 }
