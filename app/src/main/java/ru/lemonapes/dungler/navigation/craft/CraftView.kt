@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -37,7 +36,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlinx.collections.immutable.persistentMapOf
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.CraftGear
@@ -50,6 +48,7 @@ import ru.lemonapes.dungler.ui.SwitchButton
 import ru.lemonapes.dungler.ui.SwitchState
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
+import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
@@ -259,7 +258,7 @@ private fun CraftList(
 ) {
     LazyColumn(modifier.fillMaxWidth()) {
         itemsIndexed(craftList) { index, item ->
-            CraftCardView(item, selectedItemIndex == index) {
+            CraftListItemView(item, selectedItemIndex == index) {
                 selectCraftItem(index)
             }
         }
@@ -267,11 +266,11 @@ private fun CraftList(
 }
 
 @Composable
-private fun CraftCardView(item: CraftGear, isSelected: Boolean, click: () -> Unit) {
-    Text(
+private fun CraftListItemView(item: CraftGear, isSelected: Boolean, click: () -> Unit) {
+    UIText(
         text = stringResource(item.gearId.gearName),
-        //color = if (isSelected) LocalThemeColors.current.positiveTextColor else MaterialTheme.colorScheme.onPrimary,
-        fontSize = 24.sp,
+        color = if (isSelected) LocalThemeColors.current.positiveTextColor else LocalThemeColors.current.primaryTextColor,
+        textStyle = LocalThemeTypographies.current.regular24,
         modifier = Modifier
             .fillMaxWidth()
             .clickable { click() }
