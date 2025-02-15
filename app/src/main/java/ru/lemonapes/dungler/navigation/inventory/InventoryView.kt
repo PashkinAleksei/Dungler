@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.persistentMapOf
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
@@ -86,7 +87,7 @@ fun BagViewPreview() {
         InventoryView(
             InventoryState(
                 gears = listOf(Gear.MOCK),
-                reagents = mapOf(ReagentId.LINEN_CLOTH to 99),
+                reagents = persistentMapOf(ReagentId.LINEN_CLOTH to 99),
             ),
             listener = InventoryListener.EMPTY
         )

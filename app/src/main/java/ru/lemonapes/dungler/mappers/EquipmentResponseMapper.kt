@@ -11,12 +11,10 @@ import ru.lemonapes.dungler.network.models.EquipmentResponse
 object EquipmentResponseMapper :
         (EquipmentResponse) -> Pair<ImmutableMap<GearType, Gear>, ImmutableMap<StatId, Int>> {
     override fun invoke(response: EquipmentResponse): Pair<ImmutableMap<GearType, Gear>, ImmutableMap<StatId, Int>> {
-        val gears: Map<GearType, Gear> = response.equipment.mapValues { (_, serverGear) ->
+        val gears = response.equipment.mapValues { (_, serverGear) ->
             GearMapper(serverGear)
         }
 
-        val stats: Map<StatId, Int> = response.stats
-
-        return Pair(gears.toImmutableMap(), stats.toImmutableMap())
+        return Pair(gears.toImmutableMap(), response.stats.toImmutableMap())
     }
 }

@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.CraftGear
@@ -132,7 +133,7 @@ private fun CraftViewState.HandleError(viewEvent: (CraftViewEvent) -> Unit) {
 @Composable
 private fun CraftPanel(
     craftItem: CraftGear,
-    reagentMap: Map<ReagentId, Int>,
+    reagentMap: ImmutableMap<ReagentId, Int>,
     craftItemFun: () -> Unit,
     @StringRes buttonText: Int,
 ) {
@@ -230,7 +231,7 @@ private fun CraftGear.CraftItemInfo() {
 }
 
 @Composable
-private fun ReagentList(item: CraftGear, reagentMap: Map<ReagentId, Int>) {
+private fun ReagentList(item: CraftGear, reagentMap: ImmutableMap<ReagentId, Int>) {
     LazyVerticalGrid(
         GridCells.Fixed(3),
         Modifier

@@ -12,6 +12,7 @@ internal val LocalThemeColors = staticCompositionLocalOf { getLightColorPalette(
 // Data class для нестандартной палитры (например, для игровых элементов)
 data class DungeonColors(
     val primaryTextColor: Color,
+    val secondaryTextColor: Color,
     val background: Color,
     val positiveTextColor: Color,
     val negativeTextColor: Color,
@@ -27,6 +28,7 @@ data class DungeonColors(
 
 fun getDarkColorPalette() = DungeonColors(
     primaryTextColor = PRIMARY_TEXT_COLOR_DARK,
+    secondaryTextColor = SECONDARY_TEXT_COLOR_DARK,
     background = BACKGROUND_DARK,
     positiveTextColor = POSITIVE_TEXT_COLOR_DARK,
     negativeTextColor = NEGATIVE_TEXT_COLOR_DARK,
@@ -42,6 +44,7 @@ fun getDarkColorPalette() = DungeonColors(
 
 fun getLightColorPalette() = DungeonColors(
     primaryTextColor = PRIMARY_TEXT_COLOR_LIGHT,
+    secondaryTextColor = SECONDARY_TEXT_COLOR,
     background = BACKGROUND_LIGHT,
     positiveTextColor = POSITIVE_TEXT_COLOR_LIGHT,
     negativeTextColor = NEGATIVE_TEXT_COLOR_LIGHT,
@@ -60,11 +63,12 @@ private val BACKGROUND_DARK = Color(0xFF282828)
 private val BACKGROUND_LIGHT = Color(0xB3282828)
 
 private val PRIMARY_TEXT_COLOR_DARK = Color(0xFFFFEBBC)
-private val SECONDARY_TEXT_COLOR_DARK = Color(0xFFB19E75)
+private val SECONDARY_TEXT_COLOR_DARK = Color(0xFF7B6C4C)
 private val POSITIVE_TEXT_COLOR_DARK = Color(0xFF00FF00)
 private val NEGATIVE_TEXT_COLOR_DARK = Color(0xFFFF0000)
 
 private val PRIMARY_TEXT_COLOR_LIGHT = Color(0xFF241F20)
+private val SECONDARY_TEXT_COLOR = Color(0xFF3E3A3A)
 private val POSITIVE_TEXT_COLOR_LIGHT = Color(0xFF00FF00)
 private val NEGATIVE_TEXT_COLOR_LIGHT = Color(0xFFFF0000)
 

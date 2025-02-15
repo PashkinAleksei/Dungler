@@ -1,10 +1,10 @@
 package ru.lemonapes.dungler.navigation.character
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,15 +24,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
+import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
-import ru.lemonapes.dungler.ui.UIText
+import ru.lemonapes.dungler.ui.StatItem
+import ru.lemonapes.dungler.ui.item_comparing_dialog.GearDescriptionDialogStatus
+import ru.lemonapes.dungler.ui.item_comparing_dialog.ItemDescriptionDialog
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
-import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
-fun CharacterView(state: CharacterViewState) {
+fun CharacterView(state: CharacterViewState, listener: CharacterListener) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,58 +48,132 @@ fun CharacterView(state: CharacterViewState) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             spacerItem()
-            gearItem(state.gears[GearType.HELM]?.image ?: R.drawable.helm_disabled)
+            helmItem(state.gears[GearType.HELM], listener.onGearClick)
             spacerItem()
 
-            gearItem(state.gears[GearType.SHOULDERS]?.image ?: R.drawable.shoulders_disabled)
-            gearItem(state.gears[GearType.CHEST]?.image ?: R.drawable.chest_disabled)
-            gearItem(state.gears[GearType.GLOVES]?.image ?: R.drawable.gloves_disabled)
+            shouldersItem(state.gears[GearType.SHOULDERS], listener.onGearClick)
+            chestItem(state.gears[GearType.CHEST], listener.onGearClick)
+            glovesItem(state.gears[GearType.GLOVES], listener.onGearClick)
 
-            gearItem(state.gears[GearType.WEAPON]?.image ?: R.drawable.sword_disabled)
-            gearItem(state.gears[GearType.LEGS]?.image ?: R.drawable.pants_disabled)
+            weaponItem(state.gears[GearType.WEAPON], listener.onGearClick)
+            legsItem(state.gears[GearType.LEGS], listener.onGearClick)
             spacerItem()
 
             spacerItem()
-            gearItem(state.gears[GearType.BOOTS]?.image ?: R.drawable.boots_disabled)
+            bootsItem(state.gears[GearType.BOOTS], listener.onGearClick)
         }
         Column(Modifier.scrollable(orientation = Orientation.Vertical, state = rememberScrollState())) {
             state.stats.forEach { (stat, count) ->
                 val maxDamage = state.stats[StatId.DAMAGE_MAX]?.let { "-$it" }
                 when (stat) {
                     StatId.DAMAGE_MIN -> {
-                        Stat_item(R.string.stat_damage, count.toString() + maxDamage)
+                        StatItem(R.string.stat_damage, count.toString() + maxDamage)
                     }
 
                     StatId.DAMAGE_MAX -> {}
 
                     else -> {
-                        Stat_item(stat.statName, count.toString())
+                        StatItem(stat.statName, count.toString())
                     }
                 }
+            }
+        }
+        if (state.gearDescriptionDialogState.status == GearDescriptionDialogStatus.EQUIPPED
+            && state.gearDescriptionDialogState.gear != null
+        ) {
+            ItemDescriptionDialog(state.gearDescriptionDialogState.gear) {
+                listener.onGearDescriptionDialogDismiss()
             }
         }
     }
 }
 
-@Composable
-private fun Stat_item(@StringRes statNameRes: Int, count: String) {
-    val statName = stringResource(statNameRes)
-    UIText(text = "$statName: $count", textStyle = LocalThemeTypographies.current.regular16)
+private fun LazyGridScope.helmItem(
+    helm: Gear?,
+    onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+) {
+    gearItem(helm?.image ?: R.drawable.helm_disabled) {
+        onGearClick(GearType.HELM, helm)
+    }
 }
 
+private fun LazyGridScope.shouldersItem(
+    shoulders: Gear?,
+    onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+) {
+    gearItem(
+        shoulders?.image ?: R.drawable.shoulders_disabled
+    ) {
+        onGearClick(GearType.SHOULDERS, shoulders)
+    }
+}
+
+private fun LazyGridScope.chestItem(
+    chest: Gear?,
+    onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+) {
+    gearItem(
+        chest?.image ?: R.drawable.chest_disabled
+    ) {
+        onGearClick(GearType.CHEST, chest)
+    }
+}
+
+private fun LazyGridScope.glovesItem(
+    gloves: Gear?,
+    onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+) {
+    gearItem(gloves?.image ?: R.drawable.gloves_disabled) {
+        onGearClick(
+            GearType.GLOVES,
+            gloves
+        )
+    }
+}
+
+private fun LazyGridScope.weaponItem(
+    weapon: Gear?,
+    onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+) {
+    gearItem(weapon?.image ?: R.drawable.sword_disabled) {
+        onGearClick(
+            GearType.WEAPON,
+            weapon
+        )
+    }
+}
+
+private fun LazyGridScope.legsItem(
+    legs: Gear?,
+    onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+) {
+    gearItem(legs?.image ?: R.drawable.pants_disabled) {
+        onGearClick(GearType.LEGS, legs)
+    }
+}
+
+private fun LazyGridScope.bootsItem(
+    boots: Gear?,
+    onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+) {
+    gearItem(boots?.image ?: R.drawable.boots_disabled) {
+        onGearClick(GearType.BOOTS, boots)
+    }
+}
 
 private fun LazyGridScope.spacerItem() {
     item {}
 }
 
-private fun LazyGridScope.gearItem(@DrawableRes image: Int) {
+private fun LazyGridScope.gearItem(@DrawableRes image: Int, onClick: () -> Unit) {
     item {
         Image(
             modifier = Modifier
                 .padding(6.dp)
                 .background(LocalThemeColors.current.imageBackground)
                 .border(2.dp, LocalThemeColors.current.bordersColor)
-                .padding(4.dp),
+                .padding(4.dp)
+                .clickable { onClick() },
             painter = painterResource(image),
             contentDescription = stringResource(id = R.string.reagent_icon_description),
         )
@@ -110,6 +186,7 @@ private fun CharacterViewPreview() {
     DunglerTheme(darkTheme = true) {
         CharacterView(
             state = CharacterViewState.MOCK,
+            listener = CharacterListener.EMPTY,
         )
     }
 }
