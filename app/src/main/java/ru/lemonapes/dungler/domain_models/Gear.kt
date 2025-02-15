@@ -5,7 +5,7 @@ import ru.lemonapes.dungler.R
 data class Gear(
     val gearId: GearId,
     val level: Int,
-    val stats: Map<String, Int>,
+    val stats: Map<StatId, Int>,
     val image: Int,
     val isEquipped: Boolean,
 ) {
@@ -14,7 +14,7 @@ data class Gear(
             get() = Gear(
                 gearId = GearId.GREEN_KNIGHT_CHEST,
                 level = 3,
-                stats = mapOf("stamina" to 3),
+                stats = mapOf(StatId.STAMINA to 3),
                 isEquipped = false,
                 image = R.drawable.green_knight_chest_10
             )

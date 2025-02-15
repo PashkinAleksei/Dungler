@@ -4,7 +4,6 @@ import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.lemonapes.dungler.Utils.Companion.log
 import ru.lemonapes.dungler.domain_models.GearId
 import ru.lemonapes.dungler.mappers.CraftItemResponseMapper
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState
@@ -82,7 +81,7 @@ class CraftViewModel :
     }
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->
-        log(throwable)
+        throwable.printStackTrace()
         oldState.copy(error = throwable)
     }
 

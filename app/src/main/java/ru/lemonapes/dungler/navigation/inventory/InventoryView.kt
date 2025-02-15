@@ -20,6 +20,7 @@ import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
+import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 
 @Composable
 fun InventoryView(
@@ -51,7 +52,7 @@ fun InventoryView(
                         ImageWithCounter(
                             modifier = Modifier
                                 .padding(2.dp)
-                                .background(Color.Black),
+                                .background(LocalThemeColors.current.imageBackground),
                             painter = painterResource(gear.image),
                             counter = gear.level
                         )
@@ -67,7 +68,7 @@ fun InventoryView(
                         ImageWithCounter(
                             modifier = Modifier
                                 .padding(2.dp)
-                                .background(Color.Black),
+                                .background(LocalThemeColors.current.imageBackground),
                             painter = painterResource(reagentId.image),
                             counter = count
                         )

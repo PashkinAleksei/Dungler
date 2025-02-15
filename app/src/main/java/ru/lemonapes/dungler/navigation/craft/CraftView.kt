@@ -81,8 +81,8 @@ fun CraftGearView(craftState: CraftViewState, craftListener: CraftListener) {
         CREATE -> Pair(craftState.createItems, R.string.craft_create_button_text)
         UPGRADE -> Pair(craftState.upgradeItems, R.string.craft_upgrade_button_text)
     }
-    var selectedItemIndex by remember(craftState.switchState) { mutableIntStateOf(0) }
-    if (craftState.createItems.isNotEmpty()) {
+    var selectedItemIndex by remember(craftItems) { mutableIntStateOf(0) }
+    if (craftItems.isNotEmpty()) {
         Column(
             Modifier.fillMaxHeight()
         ) {
@@ -205,7 +205,7 @@ private fun CraftGear.CraftItemInfo() {
                     .border(2.dp, Color.Gray)
                     .border(3.dp, Color.LightGray)
                     .size(120.dp)
-                    .background(Color.Black)
+                    .background(LocalThemeColors.current.imageBackground)
                     .padding(4.dp),
                 painter = painterResource(image),
                 contentDescription = stringResource(id = R.string.gear_icon_description),

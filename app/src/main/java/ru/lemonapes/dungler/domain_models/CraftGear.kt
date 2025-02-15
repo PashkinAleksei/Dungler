@@ -5,6 +5,6 @@ import kotlinx.collections.immutable.ImmutableMap
 sealed interface CraftGear {
     val gearId: GearId
     val image: Int
-    val stats: ImmutableMap<String, Int>
+    val stats: ImmutableMap<StatId, Int>
     val reagents: ImmutableMap<ReagentId, Int>
 }

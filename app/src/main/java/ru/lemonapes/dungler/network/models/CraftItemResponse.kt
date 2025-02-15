@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.lemonapes.dungler.domain_models.GearId
 import ru.lemonapes.dungler.domain_models.ReagentId
+import ru.lemonapes.dungler.domain_models.StatId
 
 @Serializable
 data class CraftItemsResponse(
@@ -18,7 +19,7 @@ data class CraftItemsResponse(
 data class ServerCreateItem(
     @SerialName("gear_id")
     val gearId: GearId = GearId.UNKNOWN_ITEM,
-    val stats: Map<String, Int>,
+    val stats: Map<StatId, Int>,
     val reagents: Map<ReagentId, Int>,
 )
 
@@ -27,8 +28,8 @@ data class ServerUpgradeItem(
     @SerialName("gear_id")
     val gearId: GearId,
     val level: Int,
-    val stats: Map<String, Int>,
+    val stats: Map<StatId, Int>,
     @SerialName("next_stats")
-    val nextStats: Map<String, Int>,
+    val nextStats: Map<StatId, Int>,
     val reagents: Map<ReagentId, Int>,
 )

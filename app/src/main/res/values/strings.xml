@@ -20,4 +20,20 @@
     <string name="linen_cloth_name">Льняная ткань</string>
     <string name="copper_name">Медная руда</string>
     <string name="topaz_name">Топаз</string>
+
+    <string name="stat_strength">Сила</string>
+    <string name="stat_stamina">Выносливость</string>
+    <string name="stat_agility">Ловкость</string>
+    <string name="stat_intellect">Интеллект</string>
+    <string name="stat_armor">Броня</string>
+    <string name="stat_total_health">Здоровье</string>
+    <string name="stat_damage">Урон</string>
+    <string name="stat_damage_min">Минимальный урон</string>
+    <string name="stat_damage_max">Максимальный урон</string>
+    <string name="stat_protection">Защита</string>
+    <string name="stat_dodge_chance">Шанс уклонения</string>
+    <string name="stat_crit_chance">Шанс критического удара</string>
+    <string name="min_hero_level">Минимальный уровень героя</string>
+    <string name="unknown_stat">Неопознанная характеристика</string>
+
 </resources>

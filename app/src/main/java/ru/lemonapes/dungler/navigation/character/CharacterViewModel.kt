@@ -26,7 +26,7 @@ class CharacterViewModel() :
 
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
-            val (gears, stats) = EquipmentResponseMapper.map(loadEquipment())
+            val (gears, stats) = EquipmentResponseMapper(loadEquipment())
 
             updateState { state ->
                 state.copy(gears = gears, stats = stats)
