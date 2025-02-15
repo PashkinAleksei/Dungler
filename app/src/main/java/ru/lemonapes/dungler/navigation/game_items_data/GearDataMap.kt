@@ -47,7 +47,12 @@ val GEAR_DATA_MAP: Map<GearId, GearData> = mapOf(
     ),
     GearId.GREEN_KNIGHT_SWORD to GearData(
         listOf(R.drawable.sword)
-    )
+    ),
+
+
+    GearId.TEST_KNIGHT_CHEST to GearData(
+        listOf(R.drawable.chest)
+    ),
 )
 
 val DEFAULT_GEAR_DATA = GearData(

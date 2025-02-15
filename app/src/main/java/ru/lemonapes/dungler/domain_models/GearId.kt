@@ -34,4 +34,8 @@ enum class GearId(
 
     @SerialName("green_knight_sword")
     GREEN_KNIGHT_SWORD(R.string.green_knight_sword_name, GearType.WEAPON),
+
+
+    @SerialName("test_knight_chest")
+    TEST_KNIGHT_CHEST(R.string.test_knight_chest_name, GearType.CHEST),
 }
