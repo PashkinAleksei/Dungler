@@ -22,6 +22,7 @@ data class DungeonColors(
     val surfaceColor: Color,
     val surfaceSemiTransparentColor: Color,
     val bordersColor: Color,
+    val imageBackground: Color,
 )
 
 fun getDarkColorPalette() = DungeonColors(
@@ -36,6 +37,7 @@ fun getDarkColorPalette() = DungeonColors(
     surfaceColor = SURFACE,
     surfaceSemiTransparentColor = SURFACE_SEMI_TRANSPARENT,
     bordersColor = BordersColorDark,
+    imageBackground = ImageBackgroundDark,
 )
 
 fun getLightColorPalette() = DungeonColors(
@@ -50,6 +52,7 @@ fun getLightColorPalette() = DungeonColors(
     surfaceColor = Color.White,
     surfaceSemiTransparentColor = Color.White,
     bordersColor = BordersColor,
+    imageBackground = ImageBackground,
 )
 
 // Константы цветов
@@ -81,6 +84,8 @@ val SURFACE = Color(0xFF3C3B3B)
 val SURFACE_SEMI_TRANSPARENT = Color(0xA63C3B3B)
 
 val BordersColorDark = Color(0xFFCCCCCC)
+val ImageBackground = Color(0xFF000000)
+val ImageBackgroundDark = Color(0xFF000000)
 val BordersColor = Color(0xFF636363)
 val ItemBagCountText = Color(0xFFFFFFFF)
 val PositiveText = Color(0xFF00FF00)

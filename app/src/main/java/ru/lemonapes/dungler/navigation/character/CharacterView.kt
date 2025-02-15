@@ -1,7 +1,9 @@
 package ru.lemonapes.dungler.navigation.character
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -23,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.GearType
+import ru.lemonapes.dungler.domain_models.StatId
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
@@ -59,11 +62,29 @@ fun CharacterView(state: CharacterViewState) {
         }
         Column(Modifier.scrollable(orientation = Orientation.Vertical, state = rememberScrollState())) {
             state.stats.forEach { (stat, count) ->
-                UIText(text = "$stat: $count", textStyle = LocalThemeTypographies.current.regular16)
+                val maxDamage = state.stats[StatId.DAMAGE_MAX]?.let { "-$it" }
+                when (stat) {
+                    StatId.DAMAGE_MIN -> {
+                        Stat_item(R.string.stat_damage, count.toString() + maxDamage)
+                    }
+
+                    StatId.DAMAGE_MAX -> {}
+
+                    else -> {
+                        Stat_item(stat.statName, count.toString())
+                    }
+                }
             }
         }
     }
 }
+
+@Composable
+private fun Stat_item(@StringRes statNameRes: Int, count: String) {
+    val statName = stringResource(statNameRes)
+    UIText(text = "$statName: $count", textStyle = LocalThemeTypographies.current.regular16)
+}
+
 
 private fun LazyGridScope.spacerItem() {
     item {}
@@ -74,6 +95,7 @@ private fun LazyGridScope.gearItem(@DrawableRes image: Int) {
         Image(
             modifier = Modifier
                 .padding(6.dp)
+                .background(LocalThemeColors.current.imageBackground)
                 .border(2.dp, LocalThemeColors.current.bordersColor)
                 .padding(4.dp),
             painter = painterResource(image),

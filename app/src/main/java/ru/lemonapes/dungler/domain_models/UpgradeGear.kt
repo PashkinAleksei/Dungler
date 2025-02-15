@@ -8,10 +8,10 @@ import ru.lemonapes.dungler.R
 data class UpgradeGear(
     override val gearId: GearId,
     @DrawableRes override val image: Int,
-    override val stats: ImmutableMap<String, Int>,
+    override val stats: ImmutableMap<StatId, Int>,
     override val reagents: ImmutableMap<ReagentId, Int>,
     val level: Int,
-    val nextStats: ImmutableMap<String, Int>,
+    val nextStats: ImmutableMap<StatId, Int>,
 ) : CraftGear {
     companion object {
         fun getMock() = UpgradeGear(
@@ -19,16 +19,16 @@ data class UpgradeGear(
             image = R.drawable.green_knight_helm,
             level = 5,
             stats = persistentMapOf(
-                "armor" to 13,
-                "intelligence" to 11,
-                "min_hero_level" to 8,
-                "stamina" to 8
+                StatId.ARMOR to 13,
+                StatId.INTELLECT to 11,
+                StatId.MIN_HERO_LEVEL to 8,
+                StatId.STAMINA to 8
             ),
             nextStats = persistentMapOf(
-                "armor" to 16,
-                "intelligence" to 14,
-                "min_hero_level" to 10,
-                "stamina" to 11
+                StatId.ARMOR to 16,
+                StatId.INTELLECT to 14,
+                StatId.MIN_HERO_LEVEL to 10,
+                StatId.STAMINA to 11
             ),
             reagents = persistentMapOf(
                 ReagentId.COPPER to 41,
