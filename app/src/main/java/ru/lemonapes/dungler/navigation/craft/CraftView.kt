@@ -224,7 +224,6 @@ private fun CraftGear.CraftItemInfo() {
                 .padding(horizontal = 12.dp),
             text = text,
             textStyle = LocalThemeTypographies.current.regular20,
-            //color = primaryTextColor,
             maxLines = 3
         )
     }
