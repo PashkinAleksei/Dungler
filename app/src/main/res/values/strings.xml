@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Dungler</string>
+    <string name="dismiss_dialog">Закрыть диалог</string>
+    <string name="gear_name_level">\n(Уровень %s)</string>
+
     <string name="reagent_icon_description">Реагент</string>
     <string name="gear_icon_description">Снаряжение</string>
     <string name="craft_create_button_text">Создать</string>
@@ -8,14 +11,14 @@
     <string name="craft_switch_upgrade_button_text">Улучшение</string>
     <string name="craft_panel_title_level">. Уровень %s</string>
 
-    <string name="green_knight_helm_name">Шлем Зеленого Рыцаря</string>
     <string name="unknown_item_name">Неопознанный предмет</string>
-    <string name="green_knight_shoulders_name">Наплечники Зеленого Рыцаря</string>
-    <string name="green_knight_chest_name">Нагрудник Зеленого Рыцаря</string>
-    <string name="green_knight_gloves_name">Перчатки Зеленого Рыцаря</string>
-    <string name="green_knight_pants_name">Поножи Зеленого Рыцаря</string>
-    <string name="green_knight_boots_name">Сапоги Зеленого Рыцаря</string>
-    <string name="green_knight_sword_name">Меч Зеленого Рыцаря</string>
+    <string name="green_knight_helm_name">Шлем зеленого рыцаря</string>
+    <string name="green_knight_shoulders_name">Наплечники зеленого рыцаря</string>
+    <string name="green_knight_chest_name">Нагрудник зеленого рыцаря</string>
+    <string name="green_knight_gloves_name">Перчатки зеленого рыцаря</string>
+    <string name="green_knight_pants_name">Поножи зеленого рыцаря</string>
+    <string name="green_knight_boots_name">Сапоги зеленого рыцаря</string>
+    <string name="green_knight_sword_name">Меч зеленого рыцаря</string>
 
     <string name="linen_cloth_name">Льняная ткань</string>
     <string name="copper_name">Медная руда</string>
