@@ -1,8 +1,8 @@
 package ru.lemonapes.dungler.ui.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
@@ -21,6 +21,7 @@ data class DungeonColors(
     val rageBarColor: Color,
     val surfaceColor: Color,
     val surfaceSemiTransparentColor: Color,
+    val bordersColor: Color,
 )
 
 fun getDarkColorPalette() = DungeonColors(
@@ -34,6 +35,7 @@ fun getDarkColorPalette() = DungeonColors(
     rageBarColor = RAGE_COLOR,
     surfaceColor = SURFACE,
     surfaceSemiTransparentColor = SURFACE_SEMI_TRANSPARENT,
+    bordersColor = BordersColorDark,
 )
 
 fun getLightColorPalette() = DungeonColors(
@@ -47,6 +49,7 @@ fun getLightColorPalette() = DungeonColors(
     rageBarColor = RAGE_COLOR,
     surfaceColor = Color.White,
     surfaceSemiTransparentColor = Color.White,
+    bordersColor = BordersColor,
 )
 
 // Константы цветов
@@ -77,7 +80,8 @@ val RAGE_COLOR = Color(0xFFC23127)
 val SURFACE = Color(0xFF3C3B3B)
 val SURFACE_SEMI_TRANSPARENT = Color(0xA63C3B3B)
 
-val HeroItemBorder = Color(0xFFCCCCCC)
+val BordersColorDark = Color(0xFFCCCCCC)
+val BordersColor = Color(0xFF636363)
 val ItemBagCountText = Color(0xFFFFFFFF)
 val PositiveText = Color(0xFF00FF00)
 val CustomToast = Color(0xD9FFC107)

@@ -10,7 +10,7 @@ data class Gear(
     val isEquipped: Boolean,
 ) {
     companion object {
-        val EMPTY
+        val MOCK
             get() = Gear(
                 gearId = GearId.GREEN_KNIGHT_CHEST,
                 level = 3,

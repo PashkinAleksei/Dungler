@@ -22,7 +22,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +50,6 @@ import ru.lemonapes.dungler.ui.SwitchButton
 import ru.lemonapes.dungler.ui.SwitchState
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
-import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
@@ -272,7 +270,7 @@ private fun CraftList(
 private fun CraftCardView(item: CraftGear, isSelected: Boolean, click: () -> Unit) {
     Text(
         text = stringResource(item.gearId.gearName),
-        color = if (isSelected) LocalThemeColors.current.positiveTextColor else MaterialTheme.colorScheme.onPrimary,
+        //color = if (isSelected) LocalThemeColors.current.positiveTextColor else MaterialTheme.colorScheme.onPrimary,
         fontSize = 24.sp,
         modifier = Modifier
             .fillMaxWidth()

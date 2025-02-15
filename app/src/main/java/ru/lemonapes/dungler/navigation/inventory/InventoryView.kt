@@ -1,6 +1,7 @@
 package ru.lemonapes.dungler.navigation.inventory
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
@@ -37,7 +38,7 @@ fun InventoryView(
                     if (item.equipped) {
                         viewListener?.deEquipItemEvent(item.reference)
                     } else {
-                        viewListener?.equipItemEvent(item.reference)
+                        viewListener?.equipItemEvent(item.reference)п
                     }
                 }*/
 
@@ -48,7 +49,9 @@ fun InventoryView(
                     val border = if (gear.isEquipped) BorderStroke(3.dp, Color.Yellow) else null
                     Surface(border = border) {
                         ImageWithCounter(
-                            modifier = Modifier.padding(2.dp),
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .background(Color.Black),
                             painter = painterResource(gear.image),
                             counter = gear.level
                         )
@@ -62,7 +65,9 @@ fun InventoryView(
                         .padding(start = 2.dp, top = 2.dp)) {
                     Surface {
                         ImageWithCounter(
-                            modifier = Modifier.padding(2.dp),
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .background(Color.Black),
                             painter = painterResource(reagentId.image),
                             counter = count
                         )
@@ -79,7 +84,7 @@ fun BagViewPreview() {
     DunglerTheme(darkTheme = true) {
         InventoryView(
             InventoryState(
-                gears = listOf(Gear.EMPTY),
+                gears = listOf(Gear.MOCK),
                 reagents = mapOf(ReagentId.LINEN_CLOTH to 99),
             ),
             listener = InventoryListener.EMPTY
