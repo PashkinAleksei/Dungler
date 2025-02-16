@@ -6,7 +6,7 @@ import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
 import ru.lemonapes.dungler.parent_store.State
-import ru.lemonapes.dungler.ui.item_comparing_dialog.DialogEquipmentState
+import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
 
 data class CharacterViewState(
     val gears: ImmutableMap<GearType, Gear> = persistentMapOf(),
