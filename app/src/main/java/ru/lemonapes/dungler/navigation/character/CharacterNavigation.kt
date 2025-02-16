@@ -21,7 +21,7 @@ fun NavGraphBuilder.characterNavigation(
                 onGearClick = { gearType, gear ->
                     model.actionGearClick(gearType, gear)
                 },
-                gearChooseClick = { gearType ->
+                gearShowInventoryClick = { gearType ->
                     model.actionShowInventoryClick(gearType)
                 },
                 gearCompareClick = { gear ->
@@ -36,6 +36,9 @@ fun NavGraphBuilder.characterNavigation(
                 gearDeEquipClick = { gearType ->
                     model.actionDeEquip(gearType)
                 },
+                backToInventoryClick = {
+                    model.actionBackToInventoryClick()
+                },
             ),
         )
     }
@@ -43,21 +46,23 @@ fun NavGraphBuilder.characterNavigation(
 
 class CharacterListener(
     val onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
-    val gearChooseClick: (gearType: GearType) -> Unit,
+    val gearShowInventoryClick: (gearType: GearType) -> Unit,
     val onGearDescriptionDialogDismiss: () -> Unit,
     val gearCompareClick: (gear: Gear) -> Unit,
     val gearEquipClick: (gear: Gear) -> Unit,
     val gearDeEquipClick: (gearType: GearType) -> Unit,
+    val backToInventoryClick: () -> Unit,
 ) {
     companion object {
         val EMPTY
             get() = CharacterListener(
                 onGearClick = { _, _ -> },
-                gearChooseClick = {},
+                gearShowInventoryClick = {},
                 onGearDescriptionDialogDismiss = {},
                 gearCompareClick = {},
                 gearEquipClick = {},
                 gearDeEquipClick = {},
+                backToInventoryClick = {},
             )
     }
 }
