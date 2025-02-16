@@ -60,12 +60,25 @@ fun EquipmentChangingDialog(
                     }
                 }
             }
+            if (gearDescriptionDialogState.status == DialogEquipmentStateStatus.COMPARISON) {
+                IconButton(
+                    modifier = Modifier.align(Alignment.TopStart),
+                    onClick = listener.backToInventoryClick
+                ) {
+                    Icon(
+                        modifier = Modifier.size(64.dp),
+                        painter = painterResource(R.drawable.ic_arrow_back),
+                        tint = Color.Red,
+                        contentDescription = stringResource(R.string.dismiss_dialog)
+                    )
+                }
+            }
             IconButton(
                 modifier = Modifier.align(Alignment.TopEnd),
                 onClick = listener.onGearDescriptionDialogDismiss
             ) {
                 Icon(
-                    modifier = Modifier.size(164.dp),
+                    modifier = Modifier.size(64.dp),
                     painter = painterResource(R.drawable.ic_cancel),
                     tint = Color.Red,
                     contentDescription = stringResource(R.string.dismiss_dialog)

@@ -87,7 +87,7 @@ fun ItemDescriptionDialogView(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 6.dp),
-                onClick = { listener.gearChooseClick(gear.gearId.gearType) }) {
+                onClick = { listener.gearShowInventoryClick(gear.gearId.gearType) }) {
                 UIText(
                     textStyle = LocalThemeTypographies.current.regular20,
                     text = stringResource(R.string.change_item)

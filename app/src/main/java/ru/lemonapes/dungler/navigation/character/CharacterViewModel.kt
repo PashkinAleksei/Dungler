@@ -25,6 +25,7 @@ interface CharAction {
     fun actionEquip(gear: Gear)
     fun actionDeEquip(gearType: GearType)
     fun actionShowInventoryClick(gearType: GearType)
+    fun actionBackToInventoryClick()
     fun actionGearDescriptionDialogDismiss()
     fun actionError(throwable: Throwable)
     fun actionClearError()
@@ -129,6 +130,18 @@ class CharacterViewModel() :
                         )
                     )
                 }
+            }
+        }
+    }
+
+    override fun actionBackToInventoryClick() = withActualState {
+        if (isActive) {
+            updateState { state ->
+                state.copy(
+                    dialogEquipmentState = state.dialogEquipmentState?.copy(
+                        status = DialogEquipmentStateStatus.INVENTORY,
+                    )
+                )
             }
         }
     }
