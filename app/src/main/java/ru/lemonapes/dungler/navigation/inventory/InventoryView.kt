@@ -85,7 +85,7 @@ fun BagViewPreview() {
     DunglerTheme(darkTheme = true) {
         InventoryView(
             InventoryState(
-                gears = persistentListOf(Gear.MOCK),
+                gears = persistentListOf(Gear.MOCK_1),
                 reagents = persistentMapOf(ReagentId.LINEN_CLOTH to 99),
             ),
             listener = InventoryListener.EMPTY

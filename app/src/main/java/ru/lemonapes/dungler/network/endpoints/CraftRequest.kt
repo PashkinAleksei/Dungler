@@ -11,7 +11,7 @@ import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
 import ru.lemonapes.dungler.network.models.CraftItemsResponse
 
-const val MAP_FIRST_PARAM = "gear_id"
+private const val MAP_FIRST_PARAM = "gear_id"
 
 suspend fun createItem(gearId: GearId): CraftItemsResponse {
     val url = "$ENDPOINT/craft_items?hero_id=$HERO_ID"

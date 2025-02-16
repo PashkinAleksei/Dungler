@@ -2,6 +2,7 @@ package ru.lemonapes.dungler.ui.item_comparing_dialog
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.aspectRatio
@@ -20,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import ru.lemonapes.dungler.domain_models.Gear
+import ru.lemonapes.dungler.navigation.character.CharacterListener
 import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
@@ -27,7 +29,7 @@ import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 @Composable
 fun InventoryDialogView(
     gearList: ImmutableList<Gear>,
-    //listener: InventoryListener,
+    listener: CharacterListener,
 ) {
     val columns = 4
     val rows = 4
@@ -53,10 +55,11 @@ fun InventoryDialogView(
                     Box(
                         Modifier
                             .aspectRatio(1f)
+                            .background(LocalThemeColors.current.secondaryTextColor)
                             .padding(horizontal = 1.dp, vertical = 1.dp)
                     ) {
                         val border = if (gear.isEquipped) BorderStroke(3.dp, Color.Yellow) else null
-                        Surface(border = border) {
+                        Surface(modifier = Modifier.clickable { listener.gearCompareClick(gear) }, border = border) {
                             ImageWithCounter(
                                 modifier = Modifier
                                     .padding(2.dp)
@@ -70,9 +73,10 @@ fun InventoryDialogView(
                     Box(
                         Modifier
                             .aspectRatio(1f)
+                            .background(LocalThemeColors.current.secondaryTextColor)
                             .padding(horizontal = 1.dp, vertical = 1.dp)
                     ) {
-                        Surface(Modifier.fillMaxSize()) {}
+                        Surface(modifier = Modifier.fillMaxSize()) {}
                     }
                 }
             }
@@ -86,7 +90,8 @@ fun InventoryDialogView(
 private fun InventoryDialogPreview() {
     DunglerTheme(darkTheme = true) {
         InventoryDialogView(
-            gearList = GearDescriptionDialogState.INVENTORY_MOCK_BIG.inventoryList
+            gearList = DialogEquipmentState.INVENTORY_MOCK_SMALL.inventoryList,
+            listener = CharacterListener.EMPTY
         )
     }
 }

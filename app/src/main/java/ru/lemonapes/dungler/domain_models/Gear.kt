@@ -12,13 +12,21 @@ data class Gear(
     val isEquipped: Boolean,
 ) {
     companion object {
-        val MOCK
+        val MOCK_1
             get() = Gear(
                 gearId = GearId.GREEN_KNIGHT_CHEST,
                 level = 3,
                 stats = persistentMapOf(StatId.STAMINA to 3),
                 isEquipped = false,
                 image = R.drawable.green_knight_chest_10
+            )
+        val MOCK_2
+            get() = Gear(
+                gearId = GearId.TEST_KNIGHT_CHEST,
+                level = 3,
+                stats = persistentMapOf(StatId.STAMINA to 33),
+                isEquipped = false,
+                image = R.drawable.chest
             )
     }
 }
