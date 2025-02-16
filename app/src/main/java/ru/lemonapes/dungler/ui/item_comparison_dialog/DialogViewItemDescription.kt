@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.ui.item_comparing_dialog
+package ru.lemonapes.dungler.ui.item_comparison_dialog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

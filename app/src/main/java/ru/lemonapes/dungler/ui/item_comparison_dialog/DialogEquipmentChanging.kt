@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.ui.item_comparing_dialog
+package ru.lemonapes.dungler.ui.item_comparison_dialog
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,9 +49,9 @@ fun EquipmentChangingDialog(
                         InventoryDialogView(gearDescriptionDialogState.inventoryList, listener)
                     }
 
-                    DialogEquipmentStateStatus.COMPARING -> {
+                    DialogEquipmentStateStatus.COMPARISON -> {
                         gearDescriptionDialogState.gearToCompare?.let { gearToCompare ->
-                            ItemComparingDialogView(
+                            DialogViewItemComparison(
                                 gearToCompare = gearToCompare,
                                 equippedGear = gearDescriptionDialogState.equippedGear,
                                 listener = listener
@@ -99,10 +99,10 @@ private fun EquipmentChangingDialogInventoryPreview() {
 
 @Preview
 @Composable
-private fun EquipmentChangingDialogComparingPreview() {
+private fun EquipmentChangingDialogComparisonPreview() {
     DunglerTheme(darkTheme = true) {
         EquipmentChangingDialog(
-            gearDescriptionDialogState = DialogEquipmentState.COMPARING_MOCK,
+            gearDescriptionDialogState = DialogEquipmentState.COMPARISON_MOCK,
             listener = CharacterListener.EMPTY,
         )
     }

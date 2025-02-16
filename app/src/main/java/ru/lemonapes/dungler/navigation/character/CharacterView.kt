@@ -28,7 +28,7 @@ import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
 import ru.lemonapes.dungler.ui.StatItem
-import ru.lemonapes.dungler.ui.item_comparing_dialog.EquipmentChangingDialog
+import ru.lemonapes.dungler.ui.item_comparison_dialog.EquipmentChangingDialog
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 

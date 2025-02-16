@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.ui.item_comparing_dialog
+package ru.lemonapes.dungler.ui.item_comparison_dialog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,14 +21,14 @@ import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.navigation.character.CharacterListener
 import ru.lemonapes.dungler.ui.StatItem
-import ru.lemonapes.dungler.ui.StatItemWithComparing
+import ru.lemonapes.dungler.ui.StatItemWithComparison
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
-fun ItemComparingDialogView(
+fun DialogViewItemComparison(
     gearToCompare: Gear,
     equippedGear: Gear? = null,
     listener: CharacterListener,
@@ -48,7 +48,7 @@ fun ItemComparingDialogView(
 }
 
 @Composable
-fun GearToCompareDescription(
+private fun GearToCompareDescription(
     gearToCompare: Gear,
     equippedGear: Gear?,
     listener: CharacterListener,
@@ -89,7 +89,7 @@ fun GearToCompareDescription(
             color = LocalThemeColors.current.secondaryTextColor,
         )
         gearToCompare.stats.forEach { (stat, count) ->
-            StatItemWithComparing(stat.statName, count, equippedGear?.stats?.get(stat) ?: 0)
+            StatItemWithComparison(stat.statName, count, equippedGear?.stats?.get(stat) ?: 0)
         }
         Button(
             modifier = Modifier
@@ -105,7 +105,7 @@ fun GearToCompareDescription(
 }
 
 @Composable
-fun EquippedGearDescription(
+private fun EquippedGearDescription(
     equippedGear: Gear,
 ) {
     Column(
@@ -153,7 +153,7 @@ fun EquippedGearDescription(
 @Composable
 private fun ItemDescriptionDialogViewPreview() {
     DunglerTheme(darkTheme = true) {
-        ItemComparingDialogView(
+        DialogViewItemComparison(
             gearToCompare = Gear.MOCK_2,
             equippedGear = Gear.MOCK_1,
             listener = CharacterListener.EMPTY

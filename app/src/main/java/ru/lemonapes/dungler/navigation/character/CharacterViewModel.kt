@@ -15,8 +15,8 @@ import ru.lemonapes.dungler.network.endpoints.equipItem
 import ru.lemonapes.dungler.network.endpoints.getGearsToEquip
 import ru.lemonapes.dungler.network.endpoints.loadEquipment
 import ru.lemonapes.dungler.parent_store.ViewModelStore
-import ru.lemonapes.dungler.ui.item_comparing_dialog.DialogEquipmentState
-import ru.lemonapes.dungler.ui.item_comparing_dialog.DialogEquipmentStateStatus
+import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
+import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentStateStatus
 
 interface CharAction {
     fun actionStart()
@@ -73,7 +73,7 @@ class CharacterViewModel() :
             state.copy(
                 dialogEquipmentState = state.dialogEquipmentState?.copy(
                     gearToCompare = gear,
-                    status = DialogEquipmentStateStatus.COMPARING
+                    status = DialogEquipmentStateStatus.COMPARISON
                 )
             )
         }

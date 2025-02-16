@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.ui.item_comparing_dialog
+package ru.lemonapes.dungler.ui.item_comparison_dialog
 
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -35,17 +35,17 @@ data class DialogEquipmentState(
                     status = DialogEquipmentStateStatus.INVENTORY,
                 )
             }
-        val COMPARING_MOCK: DialogEquipmentState
+        val COMPARISON_MOCK: DialogEquipmentState
             get() {
                 return DialogEquipmentState(
                     equippedGear = Gear.MOCK_1,
                     gearToCompare = Gear.MOCK_2,
-                    status = DialogEquipmentStateStatus.COMPARING,
+                    status = DialogEquipmentStateStatus.COMPARISON,
                 )
             }
     }
 }
 
 enum class DialogEquipmentStateStatus() {
-    EQUIPPED, INVENTORY, COMPARING
+    EQUIPPED, INVENTORY, COMPARISON
 }
