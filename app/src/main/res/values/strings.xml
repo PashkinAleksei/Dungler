@@ -2,6 +2,9 @@
     <string name="app_name">Dungler</string>
     <string name="dismiss_dialog">Закрыть диалог</string>
     <string name="gear_name_level">\n(Уровень %s)</string>
+    <string name="change_item">Заменить</string>
+    <string name="equip_item">Экипировать</string>
+    <string name="deequip_item">Снять</string>
 
     <string name="reagent_icon_description">Реагент</string>
     <string name="gear_icon_description">Снаряжение</string>

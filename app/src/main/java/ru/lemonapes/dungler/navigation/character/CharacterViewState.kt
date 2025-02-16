@@ -6,19 +6,19 @@ import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
 import ru.lemonapes.dungler.parent_store.State
-import ru.lemonapes.dungler.ui.item_comparing_dialog.GearDescriptionDialogState
+import ru.lemonapes.dungler.ui.item_comparing_dialog.DialogEquipmentState
 
 data class CharacterViewState(
     val gears: ImmutableMap<GearType, Gear> = persistentMapOf(),
     val stats: ImmutableMap<StatId, Int> = persistentMapOf(),
-    val gearDescriptionDialogState: GearDescriptionDialogState = GearDescriptionDialogState.CLOSED,
+    val dialogEquipmentState: DialogEquipmentState? = null,
     val error: Throwable? = null,
 ) : State {
     companion object {
         val EMPTY get() = CharacterViewState()
         val MOCK
             get() = CharacterViewState(
-                gears = persistentMapOf(GearType.CHEST to Gear.MOCK),
+                gears = persistentMapOf(GearType.CHEST to Gear.MOCK_1),
                 stats = persistentMapOf(
                     StatId.STRENGTH to 17,
                     StatId.STAMINA to 12,

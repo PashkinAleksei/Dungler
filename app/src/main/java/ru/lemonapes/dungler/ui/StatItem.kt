@@ -10,3 +10,12 @@ fun StatItem(@StringRes statNameRes: Int, count: String) {
     val statName = stringResource(statNameRes)
     UIText(text = "$statName: $count", textStyle = LocalThemeTypographies.current.regular16)
 }
+
+@Composable
+fun StatItemWithComparing(@StringRes statNameRes: Int, count: Int, countComparable: Int) {
+    val statName = stringResource(statNameRes)
+    UIText(
+        text = "$statName: $count (${count - countComparable})",
+        textStyle = LocalThemeTypographies.current.regular16
+    )
+}

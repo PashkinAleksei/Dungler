@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Gear
-import ru.lemonapes.dungler.domain_models.GearType
+import ru.lemonapes.dungler.navigation.character.CharacterListener
 import ru.lemonapes.dungler.ui.StatItem
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
@@ -29,7 +29,7 @@ import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 @Composable
 fun ItemDescriptionDialogView(
     gear: Gear,
-    gearChooseClick: (gearType: GearType) -> Unit,
+    listener: CharacterListener,
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
@@ -69,8 +69,30 @@ fun ItemDescriptionDialogView(
         gear.stats.forEach { (stat, count) ->
             StatItem(stat.statName, count.toString())
         }
-        Button(onClick = { gearChooseClick(gear.gearId.gearType) }) {
-            UIText(textStyle = LocalThemeTypographies.current.regular20, text = "ПОМЕНЯТЬ")
+        Row(
+            modifier = Modifier
+                .padding(top = 12.dp),
+        ) {
+            Button(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 6.dp),
+                onClick = { listener.gearDeEquipClick(gear.gearId.gearType) }) {
+                UIText(
+                    textStyle = LocalThemeTypographies.current.regular20,
+                    text = stringResource(R.string.deequip_item)
+                )
+            }
+            Button(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 6.dp),
+                onClick = { listener.gearChooseClick(gear.gearId.gearType) }) {
+                UIText(
+                    textStyle = LocalThemeTypographies.current.regular20,
+                    text = stringResource(R.string.change_item)
+                )
+            }
         }
     }
 }
@@ -80,7 +102,8 @@ fun ItemDescriptionDialogView(
 private fun ItemDescriptionDialogViewPreview() {
     DunglerTheme(darkTheme = true) {
         ItemDescriptionDialogView(
-            gear = Gear.MOCK
-        ) {}
+            gear = Gear.MOCK_1,
+            listener = CharacterListener.EMPTY,
+        )
     }
 }
