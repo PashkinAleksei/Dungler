@@ -29,7 +29,7 @@ import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
 import ru.lemonapes.dungler.ui.StatItem
 import ru.lemonapes.dungler.ui.item_comparing_dialog.GearDescriptionDialogStatus
-import ru.lemonapes.dungler.ui.item_comparing_dialog.ItemDescriptionDialog
+import ru.lemonapes.dungler.ui.item_comparing_dialog.ItemComparingDialog
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 
@@ -78,10 +78,8 @@ fun CharacterView(state: CharacterViewState, listener: CharacterListener) {
                 }
             }
         }
-        if (state.gearDescriptionDialogState.status == GearDescriptionDialogStatus.EQUIPPED
-            && state.gearDescriptionDialogState.gear != null
-        ) {
-            ItemDescriptionDialog(state.gearDescriptionDialogState.gear) {
+        if (state.gearDescriptionDialogState.status != GearDescriptionDialogStatus.CLOSED) {
+            ItemComparingDialog(state.gearDescriptionDialogState, listener.gearChooseClick) {
                 listener.onGearDescriptionDialogDismiss()
             }
         }

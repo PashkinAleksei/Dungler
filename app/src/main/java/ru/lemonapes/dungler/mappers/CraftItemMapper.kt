@@ -1,5 +1,6 @@
 package ru.lemonapes.dungler.mappers
 
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.navigation.game_items_data.DEFAULT_GEAR_DATA
@@ -15,8 +16,8 @@ object CraftItemMapper : (ServerCreateItem) -> CreateGear {
         return CreateGear(
             gearId = craftItem.gearId,
             image = image,
-            stats = craftItem.stats.toPersistentMap(),
-            reagents = craftItem.reagents.toPersistentMap(),
+            stats = craftItem.stats?.toPersistentMap() ?: persistentMapOf(),
+            reagents = craftItem.reagents?.toPersistentMap() ?: persistentMapOf(),
         )
     }
 }

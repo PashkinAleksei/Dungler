@@ -36,7 +36,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.CraftGear
@@ -254,7 +256,7 @@ private fun CraftList(
     modifier: Modifier,
     selectedItemIndex: Int,
     selectCraftItem: (index: Int) -> Unit,
-    craftList: List<CraftGear>,
+    craftList: ImmutableList<CraftGear>,
 ) {
     LazyColumn(modifier.fillMaxWidth()) {
         itemsIndexed(craftList) { index, item ->
@@ -285,8 +287,8 @@ private fun CreateViewPreview() {
     DunglerTheme(darkTheme = true) {
         CraftView(
             craftState = CraftViewState(
-                createItems = listOf(CreateGear.getMock()),
-                upgradeItems = listOf(UpgradeGear.getMock()),
+                createItems = persistentListOf(CreateGear.getMock()),
+                upgradeItems = persistentListOf(UpgradeGear.getMock()),
                 reagents = persistentMapOf(ReagentId.COPPER to 20)
             ),
             craftListener = CraftListener.EMPTY
@@ -300,8 +302,8 @@ private fun UpgradeViewPreview() {
     DunglerTheme(darkTheme = true) {
         CraftView(
             craftState = CraftViewState(
-                createItems = listOf(CreateGear.getMock()),
-                upgradeItems = listOf(UpgradeGear.getMock()),
+                createItems = persistentListOf(CreateGear.getMock()),
+                upgradeItems = persistentListOf(UpgradeGear.getMock()),
                 switchState = UPGRADE,
                 reagents = persistentMapOf(ReagentId.COPPER to 20)
             ),
