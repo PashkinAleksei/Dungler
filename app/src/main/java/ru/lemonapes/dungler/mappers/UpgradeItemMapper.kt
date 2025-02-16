@@ -1,5 +1,6 @@
 package ru.lemonapes.dungler.mappers
 
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.UpgradeGear
 import ru.lemonapes.dungler.navigation.game_items_data.DEFAULT_GEAR_DATA
@@ -19,9 +20,9 @@ object UpgradeItemMapper : (ServerUpgradeItem) -> UpgradeGear {
             gearId = item.gearId,
             image = image,
             level = item.level,
-            stats = item.stats.toPersistentMap(),
-            nextStats = item.nextStats.toPersistentMap(),
-            reagents = item.reagents.toPersistentMap()
+            stats = item.stats?.toPersistentMap() ?: persistentMapOf(),
+            nextStats = item.nextStats?.toPersistentMap() ?: persistentMapOf(),
+            reagents = item.reagents?.toPersistentMap() ?: persistentMapOf(),
         )
     }
 }

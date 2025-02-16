@@ -7,6 +7,6 @@ import ru.lemonapes.dungler.domain_models.StatId
 
 @Serializable
 data class EquipmentResponse(
-    @SerialName("equipment") val equipment: Map<GearType, ServerGear>,
-    @SerialName("stats") val stats: Map<StatId, Int>,
+    @SerialName("equipment") val equipment: Map<GearType, ServerGear>? = null,
+    @SerialName("stats") val stats: Map<StatId, Int>? = null,
 )

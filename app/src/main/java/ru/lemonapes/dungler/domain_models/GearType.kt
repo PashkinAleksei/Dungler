@@ -6,22 +6,28 @@ import kotlinx.serialization.Serializable
 
 @Immutable
 @Serializable
-enum class GearType {
+enum class GearType(val serialName: String) {
     @SerialName("helm")
-    HELM,
+    HELM("helm"),
+
     @SerialName("shoulders")
-    SHOULDERS,
+    SHOULDERS("shoulders"),
+
     @SerialName("chest")
-    CHEST,
+    CHEST("chest"),
+
     @SerialName("gloves")
-    GLOVES,
+    GLOVES("gloves"),
+
     @SerialName("legs")
-    LEGS,
+    LEGS("legs"),
+
     @SerialName("boots")
-    BOOTS,
+    BOOTS("boots"),
+
     @SerialName("weapon")
-    WEAPON,
+    WEAPON("weapon"),
 
     @SerialName("unknown")
-    UNKNOWN
+    UNKNOWN("unknown")
 }

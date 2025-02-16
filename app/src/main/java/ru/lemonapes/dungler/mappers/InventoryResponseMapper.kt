@@ -1,15 +1,19 @@
 package ru.lemonapes.dungler.mappers
 
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.network.models.InventoryResponse
 
-object InventoryResponseMapper : (InventoryResponse) -> Pair<List<Gear>, ImmutableMap<ReagentId, Int>> {
+object InventoryResponseMapper : (InventoryResponse) -> Pair<ImmutableList<Gear>, ImmutableMap<ReagentId, Int>> {
     override fun invoke(response: InventoryResponse) =
         Pair(
-            response.gears.map(GearMapper),
-            response.reagents.toPersistentMap()
+            response.gears?.map(GearMapper)?.toPersistentList() ?: persistentListOf(),
+            response.reagents?.toPersistentMap() ?: persistentMapOf()
         )
 }

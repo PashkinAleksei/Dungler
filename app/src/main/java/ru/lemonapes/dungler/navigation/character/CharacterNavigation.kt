@@ -21,6 +21,9 @@ fun NavGraphBuilder.characterNavigation(
                 onGearClick = { gearType, gear ->
                     model.actionGearClick(gearType, gear)
                 },
+                gearChooseClick = { gearType ->
+                    model.actionGearChooseClick(gearType)
+                },
                 onGearDescriptionDialogDismiss = {
                     model.actionGearDescriptionDialogDismiss()
                 }),
@@ -30,12 +33,14 @@ fun NavGraphBuilder.characterNavigation(
 
 class CharacterListener(
     val onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+    val gearChooseClick: (gearType: GearType) -> Unit,
     val onGearDescriptionDialogDismiss: () -> Unit,
 ) {
     companion object {
         val EMPTY
             get() = CharacterListener(
                 onGearClick = { _, _ -> },
+                gearChooseClick = {},
                 onGearDescriptionDialogDismiss = {})
     }
 }
