@@ -29,6 +29,8 @@ fun NavGraphBuilder.characterNavigation(
                 onRetryClick = {
                     model.actionStart()
                 },
+            ),
+            equipmentChangingDialogListener = EquipmentChangingDialogListener(
                 gearShowInventoryClick = { gearType ->
                     model.actionShowInventoryClick(gearType)
                 },
@@ -47,6 +49,9 @@ fun NavGraphBuilder.characterNavigation(
                 backToInventoryClick = {
                     model.actionBackToInventoryClick()
                 },
+                onRetryClick = {
+                    model.actionShowInventoryReload()
+                },
             ),
         )
     }
@@ -55,6 +60,18 @@ fun NavGraphBuilder.characterNavigation(
 class CharacterListener(
     override val onRetryClick: () -> Unit,
     val onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+) : StateListener {
+    companion object {
+        val EMPTY
+            get() = CharacterListener(
+                onRetryClick = {},
+                onGearClick = { _, _ -> },
+            )
+    }
+}
+
+class EquipmentChangingDialogListener(
+    override val onRetryClick: () -> Unit,
     val gearShowInventoryClick: (gearType: GearType) -> Unit,
     val onGearDescriptionDialogDismiss: () -> Unit,
     val gearCompareClick: (gear: Gear) -> Unit,
@@ -64,9 +81,8 @@ class CharacterListener(
 ) : StateListener {
     companion object {
         val EMPTY
-            get() = CharacterListener(
+            get() = EquipmentChangingDialogListener(
                 onRetryClick = {},
-                onGearClick = { _, _ -> },
                 gearShowInventoryClick = {},
                 onGearDescriptionDialogDismiss = {},
                 gearCompareClick = {},

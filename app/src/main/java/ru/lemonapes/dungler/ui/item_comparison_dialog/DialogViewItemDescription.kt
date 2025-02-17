@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Gear
-import ru.lemonapes.dungler.navigation.character.CharacterListener
+import ru.lemonapes.dungler.navigation.character.EquipmentChangingDialogListener
 import ru.lemonapes.dungler.ui.StatItem
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
@@ -29,7 +29,7 @@ import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 @Composable
 fun ItemDescriptionDialogView(
     gear: Gear,
-    listener: CharacterListener,
+    listener: EquipmentChangingDialogListener,
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
@@ -103,7 +103,7 @@ private fun ItemDescriptionDialogViewPreview() {
     DunglerTheme(darkTheme = true) {
         ItemDescriptionDialogView(
             gear = Gear.MOCK_1,
-            listener = CharacterListener.EMPTY,
+            listener = EquipmentChangingDialogListener.EMPTY,
         )
     }
 }

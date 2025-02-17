@@ -91,7 +91,7 @@ fun CraftGearView(craftState: CraftViewState, craftListener: CraftListener) {
         CREATE -> Pair(craftState.createItems, R.string.craft_create_button_text)
         UPGRADE -> Pair(craftState.upgradeItems, R.string.craft_upgrade_button_text)
     }
-    var selectedItemIndex by remember(craftItems) { mutableIntStateOf(0) }
+    var selectedItemIndex by remember(craftState.switchState, craftItems.size) { mutableIntStateOf(0) }
     if (craftItems.isNotEmpty()) {
         Column(
             Modifier.fillMaxHeight()

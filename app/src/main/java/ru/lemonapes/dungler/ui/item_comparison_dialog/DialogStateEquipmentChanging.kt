@@ -4,15 +4,17 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import ru.lemonapes.dungler.domain_models.Gear
+import ru.lemonapes.dungler.parent_store.State
 
 data class DialogEquipmentState(
+    override val error: Throwable? = null,
+    override val isLoading: Boolean = false,
+
     val status: DialogEquipmentStateStatus,
     val equippedGear: Gear? = null,
     val gearToCompare: Gear? = null,
     val inventoryList: ImmutableList<Gear> = persistentListOf(),
-    val isLoading: Boolean = true,
-    val error: Throwable? = null,
-) {
+) : State {
     companion object {
         val DESCRIPTION_MOCK
             get() = DialogEquipmentState(

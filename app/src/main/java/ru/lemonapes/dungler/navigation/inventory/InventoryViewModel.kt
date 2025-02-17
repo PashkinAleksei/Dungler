@@ -1,6 +1,5 @@
 package ru.lemonapes.dungler.navigation.inventory
 
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.mappers.InventoryResponseMapper
@@ -11,10 +10,6 @@ import ru.lemonapes.dungler.parent_store.ViewModelStore
 interface InventoryAction : ViewModelAction
 
 class InventoryViewModel : ViewModelStore<InventoryState>(InventoryState.EMPTY), InventoryAction {
-
-    override val ceh = CoroutineExceptionHandler { _, throwable ->
-        actionError(throwable)
-    }
 
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {

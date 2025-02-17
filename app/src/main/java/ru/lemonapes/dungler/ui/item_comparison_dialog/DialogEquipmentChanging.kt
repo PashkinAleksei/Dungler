@@ -19,13 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ru.lemonapes.dungler.R
-import ru.lemonapes.dungler.navigation.character.CharacterListener
+import ru.lemonapes.dungler.navigation.character.EquipmentChangingDialogListener
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 
 @Composable
 fun EquipmentChangingDialog(
-    gearDescriptionDialogState: DialogEquipmentState,
-    listener: CharacterListener,
+    dialogEquipmentState: DialogEquipmentState,
+    listener: EquipmentChangingDialogListener,
 ) {
     Dialog(
         onDismissRequest = listener.onGearDescriptionDialogDismiss,
@@ -38,29 +38,29 @@ fun EquipmentChangingDialog(
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                when (gearDescriptionDialogState.status) {
+                when (dialogEquipmentState.status) {
                     DialogEquipmentStateStatus.EQUIPPED -> {
-                        gearDescriptionDialogState.equippedGear?.let { gear ->
+                        dialogEquipmentState.equippedGear?.let { gear ->
                             ItemDescriptionDialogView(gear, listener)
                         }
                     }
 
                     DialogEquipmentStateStatus.INVENTORY -> {
-                        InventoryDialogView(gearDescriptionDialogState.inventoryList, listener)
+                        InventoryDialogView(state = dialogEquipmentState, listener = listener)
                     }
 
                     DialogEquipmentStateStatus.COMPARISON -> {
-                        gearDescriptionDialogState.gearToCompare?.let { gearToCompare ->
+                        dialogEquipmentState.gearToCompare?.let { gearToCompare ->
                             DialogViewItemComparison(
                                 gearToCompare = gearToCompare,
-                                equippedGear = gearDescriptionDialogState.equippedGear,
+                                equippedGear = dialogEquipmentState.equippedGear,
                                 listener = listener
                             )
                         }
                     }
                 }
             }
-            if (gearDescriptionDialogState.status == DialogEquipmentStateStatus.COMPARISON) {
+            if (dialogEquipmentState.status == DialogEquipmentStateStatus.COMPARISON) {
                 IconButton(
                     modifier = Modifier.align(Alignment.TopStart),
                     onClick = listener.backToInventoryClick
@@ -93,8 +93,8 @@ fun EquipmentChangingDialog(
 private fun EquipmentChangingDialogDescriptionPreview() {
     DunglerTheme(darkTheme = true) {
         EquipmentChangingDialog(
-            gearDescriptionDialogState = DialogEquipmentState.DESCRIPTION_MOCK,
-            listener = CharacterListener.EMPTY,
+            dialogEquipmentState = DialogEquipmentState.DESCRIPTION_MOCK,
+            listener = EquipmentChangingDialogListener.EMPTY,
         )
     }
 }
@@ -104,8 +104,8 @@ private fun EquipmentChangingDialogDescriptionPreview() {
 private fun EquipmentChangingDialogInventoryPreview() {
     DunglerTheme(darkTheme = true) {
         EquipmentChangingDialog(
-            gearDescriptionDialogState = DialogEquipmentState.INVENTORY_MOCK_SMALL,
-            listener = CharacterListener.EMPTY,
+            dialogEquipmentState = DialogEquipmentState.INVENTORY_MOCK_SMALL,
+            listener = EquipmentChangingDialogListener.EMPTY,
         )
     }
 }
@@ -115,8 +115,8 @@ private fun EquipmentChangingDialogInventoryPreview() {
 private fun EquipmentChangingDialogComparisonPreview() {
     DunglerTheme(darkTheme = true) {
         EquipmentChangingDialog(
-            gearDescriptionDialogState = DialogEquipmentState.COMPARISON_MOCK,
-            listener = CharacterListener.EMPTY,
+            dialogEquipmentState = DialogEquipmentState.COMPARISON_MOCK,
+            listener = EquipmentChangingDialogListener.EMPTY,
         )
     }
 }
