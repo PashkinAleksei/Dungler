@@ -45,7 +45,7 @@ class CharacterViewModel() :
         inventoryDialogError(throwable)
     }
 
-    private var inventoryLoadJob: Job? = null
+    private var dialogLoadJob: Job? = null
 
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
@@ -90,34 +90,40 @@ class CharacterViewModel() :
     }
 
     override fun actionEquip(gear: Gear) = withActualState {
-        launch(Dispatchers.IO + dialogCeh) {
+        dialogLoadJob?.cancel()
+        dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
             val (gears, stats) = EquipmentResponseMapper(equipItem(gear))
-            updateState { state ->
-                state.copy(
-                    gears = gears,
-                    stats = stats,
-                    dialogEquipmentState = null
-                )
+            if (isActive) {
+                updateState { state ->
+                    state.copy(
+                        gears = gears,
+                        stats = stats,
+                        dialogEquipmentState = null
+                    )
+                }
             }
         }
     }
 
     override fun actionDeEquip(gearType: GearType) = withActualState {
-        launch(Dispatchers.IO + dialogCeh) {
+        dialogLoadJob?.cancel()
+        dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
             val (gears, stats) = EquipmentResponseMapper(deEquipItem(gearType))
-            updateState { state ->
-                state.copy(
-                    gears = gears,
-                    stats = stats,
-                    dialogEquipmentState = null
-                )
+            if (isActive) {
+                updateState { state ->
+                    state.copy(
+                        gears = gears,
+                        stats = stats,
+                        dialogEquipmentState = null
+                    )
+                }
             }
         }
     }
 
     override fun actionShowInventoryClick(gearType: GearType) = withActualState {
-        inventoryLoadJob?.cancel()
-        inventoryLoadJob = launch(Dispatchers.IO + inventoryCeh) {
+        dialogLoadJob?.cancel()
+        dialogLoadJob = launch(Dispatchers.IO + inventoryCeh) {
             var loadingState: DialogEquipmentState
             updateState { state ->
                 loadingState = DialogEquipmentState(
@@ -163,7 +169,7 @@ class CharacterViewModel() :
     }
 
     override fun actionGearDescriptionDialogDismiss() {
-        inventoryLoadJob?.cancel()
+        dialogLoadJob?.cancel()
         updateState { state ->
             state.copy(
                 dialogEquipmentState = null
@@ -172,7 +178,7 @@ class CharacterViewModel() :
     }
 
     override fun actionDialogError(throwable: Throwable) {
-        actionError(throwable)
+
     }
 
     override fun inventoryDialogError(throwable: Throwable) = updateState { state ->
