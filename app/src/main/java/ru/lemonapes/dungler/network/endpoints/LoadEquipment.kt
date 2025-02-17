@@ -9,5 +9,7 @@ import ru.lemonapes.dungler.network.models.EquipmentResponse
 
 suspend fun loadEquipment(): EquipmentResponse {
     val url = "$ENDPOINT/equipment?hero_id=$HERO_ID"
-    return HttpClientProvider.client.get(url).body()
+    val response = HttpClientProvider.client.get(url)
+    if (response.status.value != 200) throw Exception()
+    return response.body()
 }

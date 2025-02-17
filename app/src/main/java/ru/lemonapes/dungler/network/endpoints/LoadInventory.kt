@@ -9,5 +9,7 @@ import ru.lemonapes.dungler.network.models.InventoryResponse
 
 suspend fun loadInventory(): InventoryResponse {
     val url = "$ENDPOINT/inventory?hero_id=$HERO_ID"
-    return HttpClientProvider.client.get(url).body()
+    val response = HttpClientProvider.client.get(url)
+    if (response.status.value != 200) throw Exception()
+    return response.body()
 }
