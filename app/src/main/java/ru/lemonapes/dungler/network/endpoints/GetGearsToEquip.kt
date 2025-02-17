@@ -10,5 +10,7 @@ import ru.lemonapes.dungler.network.models.GearsToEquipResponse
 
 suspend fun getGearsToEquip(gearType: GearType): GearsToEquipResponse {
     val url = "$ENDPOINT/gears_to_equip?hero_id=$HERO_ID&gear_type=${gearType.serialName}"
-    return HttpClientProvider.client.get(url).body()
+    val response = HttpClientProvider.client.get(url)
+    if (response.status.value != 200) throw Exception()
+    return response.body()
 }

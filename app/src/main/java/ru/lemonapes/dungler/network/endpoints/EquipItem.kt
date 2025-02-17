@@ -17,5 +17,6 @@ suspend fun equipItem(gear: Gear): EquipmentResponse {
         contentType(ContentType.Application.Json)
         setBody(mapOf(gear.gearId.gearType to gear.gearId))
     }
+    if (response.status.value != 200) throw Exception()
     return response.body()
 }

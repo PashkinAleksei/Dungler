@@ -17,5 +17,6 @@ suspend fun deEquipItem(gearType: GearType): EquipmentResponse {
         contentType(ContentType.Application.Json)
         setBody(mapOf(gearType to null))
     }
+    if (response.status.value != 200) throw Exception()
     return response.body()
 }
