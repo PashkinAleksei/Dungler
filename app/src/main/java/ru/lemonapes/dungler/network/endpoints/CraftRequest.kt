@@ -19,6 +19,7 @@ suspend fun createItem(gearId: GearId): CraftItemsResponse {
         contentType(ContentType.Application.Json)
         setBody(mapOf(MAP_FIRST_PARAM to gearId))
     }
+    if (response.status.value != 200) throw Exception()
     return response.body()
 }
 
@@ -28,5 +29,6 @@ suspend fun upgradeItem(gearId: GearId): CraftItemsResponse {
         contentType(ContentType.Application.Json)
         setBody(mapOf(MAP_FIRST_PARAM to gearId))
     }
+    if (response.status.value != 200) throw Exception()
     return response.body()
 }
