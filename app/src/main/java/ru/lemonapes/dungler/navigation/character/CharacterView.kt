@@ -38,6 +38,7 @@ fun CharacterView(
     modifier: Modifier = Modifier,
     state: CharacterViewState,
     listener: CharacterListener,
+    equipmentChangingDialogListener: EquipmentChangingDialogListener,
 ) {
     StateCheck(
         modifier = modifier,
@@ -89,8 +90,8 @@ fun CharacterView(
             }
             state.dialogEquipmentState?.let { dialogState ->
                 EquipmentChangingDialog(
-                    gearDescriptionDialogState = dialogState,
-                    listener = listener
+                    dialogEquipmentState = dialogState,
+                    listener = equipmentChangingDialogListener
                 )
             }
         }
@@ -196,6 +197,7 @@ private fun CharacterViewPreview() {
         CharacterView(
             state = CharacterViewState.MOCK,
             listener = CharacterListener.EMPTY,
+            equipmentChangingDialogListener = EquipmentChangingDialogListener.EMPTY,
         )
     }
 }

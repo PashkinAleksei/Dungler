@@ -2,11 +2,11 @@ package ru.lemonapes.dungler.parent_store
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlin.coroutines.CoroutineContext
 
 interface State {
     val isLoading: Boolean
@@ -27,8 +27,10 @@ interface Store<S : State> {
 
 abstract class ViewModelStore<S : State>(
     initialState: S,
-) : ViewModel(), Store<S> {
-    abstract val ceh: CoroutineContext
+) : ViewModel(), Store<S>, ViewModelAction {
+    open val ceh = CoroutineExceptionHandler { _, throwable ->
+        actionError(throwable)
+    }
 
     private val _state = MutableStateFlow(initialState)
 

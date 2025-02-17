@@ -21,19 +21,28 @@ import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentStateStatus
 
 interface CharViewModelAction : ViewModelAction {
     fun actionGearClick(gearType: GearType, gear: Gear?)
+
+    //Dialog actions
     fun actionGearCompareClick(gear: Gear)
     fun actionEquip(gear: Gear)
     fun actionDeEquip(gearType: GearType)
     fun actionShowInventoryClick(gearType: GearType)
+    fun actionShowInventoryReload()
     fun actionBackToInventoryClick()
     fun actionGearDescriptionDialogDismiss()
+    fun actionDialogError(throwable: Throwable)
+    fun inventoryDialogError(throwable: Throwable)
 }
 
 class CharacterViewModel() :
     ViewModelStore<CharacterViewState>(CharacterViewState.EMPTY), CharViewModelAction {
 
-    override val ceh = CoroutineExceptionHandler { coroutineContext, throwable ->
-        actionError(throwable)
+    private val dialogCeh = CoroutineExceptionHandler { _, throwable ->
+        actionDialogError(throwable)
+    }
+
+    private val inventoryCeh = CoroutineExceptionHandler { _, throwable ->
+        inventoryDialogError(throwable)
     }
 
     private var inventoryLoadJob: Job? = null
@@ -47,7 +56,8 @@ class CharacterViewModel() :
                 state.copy(
                     gears = gears,
                     stats = stats,
-                    isLoading = false
+                    isLoading = false,
+                    dialogEquipmentState = null
                 )
             }
         }
@@ -80,7 +90,7 @@ class CharacterViewModel() :
     }
 
     override fun actionEquip(gear: Gear) = withActualState {
-        launch {
+        launch(Dispatchers.IO + dialogCeh) {
             val (gears, stats) = EquipmentResponseMapper(equipItem(gear))
             updateState { state ->
                 state.copy(
@@ -93,7 +103,7 @@ class CharacterViewModel() :
     }
 
     override fun actionDeEquip(gearType: GearType) = withActualState {
-        launch {
+        launch(Dispatchers.IO + dialogCeh) {
             val (gears, stats) = EquipmentResponseMapper(deEquipItem(gearType))
             updateState { state ->
                 state.copy(
@@ -106,7 +116,8 @@ class CharacterViewModel() :
     }
 
     override fun actionShowInventoryClick(gearType: GearType) = withActualState {
-        inventoryLoadJob = launch {
+        inventoryLoadJob?.cancel()
+        inventoryLoadJob = launch(Dispatchers.IO + inventoryCeh) {
             var loadingState: DialogEquipmentState
             updateState { state ->
                 loadingState = DialogEquipmentState(
@@ -133,6 +144,12 @@ class CharacterViewModel() :
         }
     }
 
+    override fun actionShowInventoryReload() = withActualState { state ->
+        state.dialogEquipmentState?.equippedGear?.gearId?.gearType?.let { gearType ->
+            actionShowInventoryClick(gearType)
+        }
+    }
+
     override fun actionBackToInventoryClick() = withActualState {
         if (isActive) {
             updateState { state ->
@@ -152,6 +169,14 @@ class CharacterViewModel() :
                 dialogEquipmentState = null
             )
         }
+    }
+
+    override fun actionDialogError(throwable: Throwable) {
+        actionError(throwable)
+    }
+
+    override fun inventoryDialogError(throwable: Throwable) = updateState { state ->
+        state.copy(dialogEquipmentState = state.dialogEquipmentState?.copy(error = throwable, isLoading = false))
     }
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->

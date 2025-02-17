@@ -1,7 +1,6 @@
 package ru.lemonapes.dungler.navigation.craft
 
 import kotlinx.collections.immutable.toPersistentMap
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.domain_models.GearId
@@ -21,10 +20,6 @@ interface CraftAction : ViewModelAction {
 
 class CraftViewModel :
     ViewModelStore<CraftViewState>(CraftViewState.getEmpty()), CraftAction {
-
-    override val ceh = CoroutineExceptionHandler { coroutineContext, throwable ->
-        actionError(throwable)
-    }
 
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
