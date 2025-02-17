@@ -10,15 +10,13 @@ import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState
 import ru.lemonapes.dungler.network.endpoints.createItem
 import ru.lemonapes.dungler.network.endpoints.loadCraftItems
 import ru.lemonapes.dungler.network.endpoints.upgradeItem
+import ru.lemonapes.dungler.parent_store.ViewModelAction
 import ru.lemonapes.dungler.parent_store.ViewModelStore
 
-interface CraftAction {
-    fun actionStart()
-    fun actionCreateItem(gearId:GearId)
-    fun actionUpgradeItem(gearId:GearId)
+interface CraftAction : ViewModelAction {
+    fun actionCreateItem(gearId: GearId)
+    fun actionUpgradeItem(gearId: GearId)
     fun switchClick(state: CraftSwitchState)
-    fun actionError(throwable: Throwable)
-    fun actionClearError()
 }
 
 class CraftViewModel :
@@ -28,25 +26,23 @@ class CraftViewModel :
         actionError(throwable)
     }
 
-    init {
-        actionStart()
-    }
-
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
+            actionSetLoading()
             val (createItems, upgradeItems, reagents) = CraftItemResponseMapper(loadCraftItems())
 
             updateState { state ->
                 state.copy(
                     createItems = createItems,
                     upgradeItems = upgradeItems,
-                    reagents = reagents
+                    reagents = reagents,
+                    isLoading = false,
                 )
             }
         }
     }
 
-    override fun actionCreateItem(gearId:GearId) = withActualState {
+    override fun actionCreateItem(gearId: GearId) = withActualState {
         launch(Dispatchers.IO + ceh) {
             val (createItems, upgradeItems, reagents) = CraftItemResponseMapper(createItem(gearId = gearId))
 
@@ -60,7 +56,7 @@ class CraftViewModel :
         }
     }
 
-    override fun actionUpgradeItem(gearId:GearId) = withActualState {
+    override fun actionUpgradeItem(gearId: GearId) = withActualState {
         launch(Dispatchers.IO + ceh) {
             val (createItems, upgradeItems, reagents) = CraftItemResponseMapper(upgradeItem(gearId = gearId))
 
@@ -82,10 +78,10 @@ class CraftViewModel :
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->
         throwable.printStackTrace()
-        oldState.copy(error = throwable)
+        oldState.copy(error = throwable, isLoading = false)
     }
 
-    override fun actionClearError() = updateState { oldState ->
-        oldState.copy(error = null)
+    override fun actionSetLoading() = updateState { oldState ->
+        oldState.copy(isLoading = true, error = null)
     }
 }

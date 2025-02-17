@@ -9,10 +9,12 @@ import ru.lemonapes.dungler.parent_store.State
 import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
 
 data class CharacterViewState(
+    override val error: Throwable? = null,
+    override val isLoading: Boolean = false,
+
     val gears: ImmutableMap<GearType, Gear> = persistentMapOf(),
     val stats: ImmutableMap<StatId, Int> = persistentMapOf(),
     val dialogEquipmentState: DialogEquipmentState? = null,
-    val error: Throwable? = null,
 ) : State {
     companion object {
         val EMPTY get() = CharacterViewState()

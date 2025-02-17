@@ -10,12 +10,15 @@ import ru.lemonapes.dungler.domain_models.UpgradeGear
 import ru.lemonapes.dungler.parent_store.State
 
 data class CraftViewState(
+    override val error: Throwable? = null,
+    override val isLoading: Boolean = false,
+
     val createItems: ImmutableList<CreateGear> = persistentListOf(),
     val upgradeItems: ImmutableList<UpgradeGear> = persistentListOf(),
     val reagents: ImmutableMap<ReagentId, Int> = persistentMapOf(),
     val switchState: CraftSwitchState = CraftSwitchState.CREATE,
-    val error: Throwable? = null,
-) : State {
+
+    ) : State {
 
     enum class CraftSwitchState {
         CREATE, UPGRADE

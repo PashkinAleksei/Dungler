@@ -10,6 +10,9 @@ import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.UpgradeGear
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState
+import ru.lemonapes.dungler.ui.ActionLoadingOnStop
+import ru.lemonapes.dungler.ui.ActionStartOnStart
+import ru.lemonapes.dungler.ui.StateListener
 
 fun NavGraphBuilder.craftNavigation(
     navController: NavController,
@@ -17,28 +20,34 @@ fun NavGraphBuilder.craftNavigation(
     composable<Screens.Craft>() {
         val model: CraftViewModel = viewModel(factory = CraftModelFactory())
         val state = model.observeState().collectAsState().value
+        ActionLoadingOnStop(model)
+        ActionStartOnStart(model)
         CraftView(
-            state,
-            CraftListener(
+            state = state,
+            listener = CraftListener(
                 switchClick = {
                     model.switchClick(it)
                 },
-                craftItem = {item->
-                    when(item){
+                craftItem = { item ->
+                    when (item) {
                         is CreateGear -> model.actionCreateItem(item.gearId)
                         is UpgradeGear -> model.actionUpgradeItem(item.gearId)
                     }
                 },
+                onRetryClick = {
+                    model.actionStart()
+                }
             )
         )
     }
 }
 
 class CraftListener(
+    override val onRetryClick: () -> Unit,
     val switchClick: (state: CraftSwitchState) -> Unit,
     val craftItem: (item: CraftGear) -> Unit,
-) {
+) : StateListener {
     companion object {
-        val EMPTY get() = CraftListener({}, {})
+        val EMPTY get() = CraftListener({}, {}, {})
     }
 }

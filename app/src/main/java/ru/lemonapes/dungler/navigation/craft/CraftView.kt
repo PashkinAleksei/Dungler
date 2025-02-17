@@ -47,6 +47,7 @@ import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.domain_models.UpgradeGear
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState.CREATE
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState.UPGRADE
+import ru.lemonapes.dungler.ui.StateCheck
 import ru.lemonapes.dungler.ui.SwitchButton
 import ru.lemonapes.dungler.ui.SwitchState
 import ru.lemonapes.dungler.ui.UIText
@@ -55,26 +56,32 @@ import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
-fun CraftView(craftState: CraftViewState, craftListener: CraftListener) {
+fun CraftView(modifier: Modifier = Modifier, state: CraftViewState, listener: CraftListener) {
     //craftState.HandleError(viewEvent)
-    Column {
-        SwitchButton(
-            modifier = Modifier.padding(16.dp),
-            leftText = stringResource(id = R.string.craft_switch_create_button_text),
-            rightText = stringResource(id = R.string.craft_switch_upgrade_button_text),
-            selectedSegment = if (craftState.switchState == CREATE) {
-                SwitchState.LEFT
-            } else {
-                SwitchState.RIGHT
-            },
-            onSelectionChanged = {
-                when (it) {
-                    SwitchState.LEFT -> craftListener.switchClick(CREATE)
-                    SwitchState.RIGHT -> craftListener.switchClick(UPGRADE)
+    StateCheck(
+        modifier = modifier,
+        state = state,
+        listener = listener
+    ) {
+        Column(modifier) {
+            SwitchButton(
+                modifier = Modifier.padding(16.dp),
+                leftText = stringResource(id = R.string.craft_switch_create_button_text),
+                rightText = stringResource(id = R.string.craft_switch_upgrade_button_text),
+                selectedSegment = if (state.switchState == CREATE) {
+                    SwitchState.LEFT
+                } else {
+                    SwitchState.RIGHT
+                },
+                onSelectionChanged = {
+                    when (it) {
+                        SwitchState.LEFT -> listener.switchClick(CREATE)
+                        SwitchState.RIGHT -> listener.switchClick(UPGRADE)
+                    }
                 }
-            }
-        )
-        CraftGearView(craftState, craftListener)
+            )
+            CraftGearView(state, listener)
+        }
     }
 }
 
@@ -286,12 +293,12 @@ private fun CraftListItemView(item: CraftGear, isSelected: Boolean, click: () ->
 private fun CreateViewPreview() {
     DunglerTheme(darkTheme = true) {
         CraftView(
-            craftState = CraftViewState(
+            state = CraftViewState(
                 createItems = persistentListOf(CreateGear.getMock()),
                 upgradeItems = persistentListOf(UpgradeGear.getMock()),
                 reagents = persistentMapOf(ReagentId.COPPER to 20)
             ),
-            craftListener = CraftListener.EMPTY
+            listener = CraftListener.EMPTY
         )
     }
 }
@@ -301,13 +308,13 @@ private fun CreateViewPreview() {
 private fun UpgradeViewPreview() {
     DunglerTheme(darkTheme = true) {
         CraftView(
-            craftState = CraftViewState(
+            state = CraftViewState(
                 createItems = persistentListOf(CreateGear.getMock()),
                 upgradeItems = persistentListOf(UpgradeGear.getMock()),
                 switchState = UPGRADE,
                 reagents = persistentMapOf(ReagentId.COPPER to 20)
             ),
-            craftListener = CraftListener.EMPTY
+            listener = CraftListener.EMPTY
         )
     }
 }

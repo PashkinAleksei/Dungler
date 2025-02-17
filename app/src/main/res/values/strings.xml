@@ -6,6 +6,8 @@
     <string name="change_item">Заменить</string>
     <string name="equip_item">Экипировать</string>
     <string name="deequip_item">Снять</string>
+    <string name="error_text">Произошла ошибка!</string>
+    <string name="error_button_text">Повторить</string>
 
     <string name="reagent_icon_description">Реагент</string>
     <string name="gear_icon_description">Снаряжение</string>

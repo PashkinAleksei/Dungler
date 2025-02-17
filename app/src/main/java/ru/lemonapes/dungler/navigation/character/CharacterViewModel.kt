@@ -14,12 +14,12 @@ import ru.lemonapes.dungler.network.endpoints.deEquipItem
 import ru.lemonapes.dungler.network.endpoints.equipItem
 import ru.lemonapes.dungler.network.endpoints.getGearsToEquip
 import ru.lemonapes.dungler.network.endpoints.loadEquipment
+import ru.lemonapes.dungler.parent_store.ViewModelAction
 import ru.lemonapes.dungler.parent_store.ViewModelStore
 import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
 import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentStateStatus
 
-interface CharAction {
-    fun actionStart()
+interface CharViewModelAction : ViewModelAction {
     fun actionGearClick(gearType: GearType, gear: Gear?)
     fun actionGearCompareClick(gear: Gear)
     fun actionEquip(gear: Gear)
@@ -27,12 +27,10 @@ interface CharAction {
     fun actionShowInventoryClick(gearType: GearType)
     fun actionBackToInventoryClick()
     fun actionGearDescriptionDialogDismiss()
-    fun actionError(throwable: Throwable)
-    fun actionClearError()
 }
 
 class CharacterViewModel() :
-    ViewModelStore<CharacterViewState>(CharacterViewState.EMPTY), CharAction {
+    ViewModelStore<CharacterViewState>(CharacterViewState.EMPTY), CharViewModelAction {
 
     override val ceh = CoroutineExceptionHandler { coroutineContext, throwable ->
         actionError(throwable)
@@ -40,16 +38,17 @@ class CharacterViewModel() :
 
     private var inventoryLoadJob: Job? = null
 
-    init {
-        actionStart()
-    }
-
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
+            actionSetLoading()
             val (gears, stats) = EquipmentResponseMapper(loadEquipment())
 
             updateState { state ->
-                state.copy(gears = gears, stats = stats)
+                state.copy(
+                    gears = gears,
+                    stats = stats,
+                    isLoading = false
+                )
             }
         }
     }
@@ -157,10 +156,10 @@ class CharacterViewModel() :
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->
         throwable.printStackTrace()
-        oldState.copy(error = throwable)
+        oldState.copy(error = throwable, isLoading = false)
     }
 
-    override fun actionClearError() = updateState { oldState ->
-        oldState.copy(error = null)
+    override fun actionSetLoading() = updateState { oldState ->
+        oldState.copy(isLoading = true, error = null)
     }
 }
