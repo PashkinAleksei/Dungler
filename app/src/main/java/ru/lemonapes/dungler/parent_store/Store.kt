@@ -8,7 +8,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlin.coroutines.CoroutineContext
 
-interface State
+interface State {
+    val isLoading: Boolean
+    val error: Throwable?
+}
+
+interface ViewModelAction {
+    fun actionStart()
+    fun actionSetLoading()
+    fun actionError(throwable: Throwable)
+}
 
 interface Store<S : State> {
     fun observeState(): StateFlow<S>

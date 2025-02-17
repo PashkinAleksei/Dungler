@@ -19,60 +19,68 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.ReagentId
+import ru.lemonapes.dungler.ui.StateCheck
 import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 
 @Composable
 fun InventoryView(
+    modifier: Modifier = Modifier,
     state: InventoryState,
     listener: InventoryListener,
 ) {
-    LazyVerticalGrid(
-        modifier = Modifier
-            .padding(4.dp),
-        columns = GridCells.Fixed(5)
+    StateCheck(
+        modifier = modifier,
+        state = state,
+        listener = listener
     ) {
-        items(state.gears) { gear ->
-            /*val modifier = Modifier.clickable {
-                if (item.equipped) {
-                    viewListener?.deEquipItemEvent(item.reference)
-                } else {
-                    viewListener?.equipItemEvent(item.reference)п
-                }
-            }*/
+        LazyVerticalGrid(
+            modifier = modifier
+                .padding(4.dp),
+            columns = GridCells.Fixed(5)
+        ) {
+            items(state.gears) { gear ->
+                /*val modifier = Modifier.clickable {
+                    if (item.equipped) {
+                        viewListener?.deEquipItemEvent(item.reference)
+                    } else {
+                        viewListener?.equipItemEvent(item.reference)п
+                    }
+                }*/
 
-            Box(
-                Modifier
-                    .aspectRatio(1f)
-                    .padding(horizontal = 1.dp, vertical = 1.dp)
-            ) {
-                val border = if (gear.isEquipped) BorderStroke(3.dp, Color.Yellow) else null
-                Surface(border = border) {
-                    ImageWithCounter(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .background(LocalThemeColors.current.imageBackground),
-                        painter = painterResource(gear.image),
-                        counter = gear.level
-                    )
+                Box(
+                    Modifier
+                        .aspectRatio(1f)
+                        .padding(horizontal = 1.dp, vertical = 1.dp)
+                ) {
+                    val border = if (gear.isEquipped) BorderStroke(3.dp, Color.Yellow) else null
+                    Surface(border = border) {
+                        ImageWithCounter(
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .background(LocalThemeColors.current.imageBackground),
+                            painter = painterResource(gear.image),
+                            counter = gear.level
+                        )
+                    }
                 }
             }
-        }
-        items(state.reagents.toList()) { (reagentId, count) ->
-            Box(
-                Modifier
-                    .aspectRatio(1f)
-                    .padding(horizontal = 1.dp, vertical = 1.dp)
-            ) {
-                Surface {
-                    ImageWithCounter(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .background(LocalThemeColors.current.imageBackground),
-                        painter = painterResource(reagentId.image),
-                        counter = count
-                    )
+            items(state.reagents.toList()) { (reagentId, count) ->
+                Box(
+                    Modifier
+                        .aspectRatio(1f)
+                        .padding(horizontal = 1.dp, vertical = 1.dp)
+                ) {
+                    Surface {
+                        ImageWithCounter(
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .background(LocalThemeColors.current.imageBackground),
+                            painter = painterResource(reagentId.image),
+                            counter = count
+                        )
+                    }
                 }
             }
         }
@@ -84,7 +92,7 @@ fun InventoryView(
 fun BagViewPreview() {
     DunglerTheme(darkTheme = true) {
         InventoryView(
-            InventoryState(
+            state = InventoryState(
                 gears = persistentListOf(Gear.MOCK_1),
                 reagents = persistentMapOf(ReagentId.LINEN_CLOTH to 99),
             ),

@@ -28,60 +28,71 @@ import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
 import ru.lemonapes.dungler.ui.StatItem
+import ru.lemonapes.dungler.ui.StateCheck
 import ru.lemonapes.dungler.ui.item_comparison_dialog.EquipmentChangingDialog
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 
 @Composable
-fun CharacterView(state: CharacterViewState, listener: CharacterListener) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+fun CharacterView(
+    modifier: Modifier = Modifier,
+    state: CharacterViewState,
+    listener: CharacterListener,
+) {
+    StateCheck(
+        modifier = modifier,
+        state = state,
+        listener = listener
     ) {
-        LazyVerticalGrid(
-            GridCells.Fixed(3),
-            Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp),
         ) {
-            spacerItem()
-            helmItem(state.gears[GearType.HELM], listener.onGearClick)
-            spacerItem()
+            LazyVerticalGrid(
+                GridCells.Fixed(3),
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                spacerItem()
+                helmItem(state.gears[GearType.HELM], listener.onGearClick)
+                spacerItem()
 
-            shouldersItem(state.gears[GearType.SHOULDERS], listener.onGearClick)
-            chestItem(state.gears[GearType.CHEST], listener.onGearClick)
-            glovesItem(state.gears[GearType.GLOVES], listener.onGearClick)
+                shouldersItem(state.gears[GearType.SHOULDERS], listener.onGearClick)
+                chestItem(state.gears[GearType.CHEST], listener.onGearClick)
+                glovesItem(state.gears[GearType.GLOVES], listener.onGearClick)
 
-            weaponItem(state.gears[GearType.WEAPON], listener.onGearClick)
-            legsItem(state.gears[GearType.LEGS], listener.onGearClick)
-            spacerItem()
+                weaponItem(state.gears[GearType.WEAPON], listener.onGearClick)
+                legsItem(state.gears[GearType.LEGS], listener.onGearClick)
+                spacerItem()
 
-            spacerItem()
-            bootsItem(state.gears[GearType.BOOTS], listener.onGearClick)
-        }
-        Column(Modifier.scrollable(orientation = Orientation.Vertical, state = rememberScrollState())) {
-            state.stats.forEach { (stat, count) ->
-                val maxDamage = state.stats[StatId.DAMAGE_MAX]?.let { "-$it" }
-                when (stat) {
-                    StatId.DAMAGE_MIN -> {
-                        StatItem(R.string.stat_damage, count.toString() + maxDamage)
-                    }
+                spacerItem()
+                bootsItem(state.gears[GearType.BOOTS], listener.onGearClick)
+            }
+            Column(Modifier.scrollable(orientation = Orientation.Vertical, state = rememberScrollState())) {
+                state.stats.forEach { (stat, count) ->
+                    val maxDamage = state.stats[StatId.DAMAGE_MAX]?.let { "-$it" }
+                    when (stat) {
+                        StatId.DAMAGE_MIN -> {
+                            StatItem(R.string.stat_damage, count.toString() + maxDamage)
+                        }
 
-                    StatId.DAMAGE_MAX -> {}
+                        StatId.DAMAGE_MAX -> {}
 
-                    else -> {
-                        StatItem(stat.statName, count.toString())
+                        else -> {
+                            StatItem(stat.statName, count.toString())
+                        }
                     }
                 }
             }
-        }
-        state.dialogEquipmentState?.let { dialogState ->
-            EquipmentChangingDialog(
-                gearDescriptionDialogState = dialogState,
-                listener = listener
-            )
+            state.dialogEquipmentState?.let { dialogState ->
+                EquipmentChangingDialog(
+                    gearDescriptionDialogState = dialogState,
+                    listener = listener
+                )
+            }
         }
     }
 }

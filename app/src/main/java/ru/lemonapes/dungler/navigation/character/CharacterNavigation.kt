@@ -8,6 +8,9 @@ import androidx.navigation.compose.composable
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.navigation.Screens
+import ru.lemonapes.dungler.ui.ActionLoadingOnStop
+import ru.lemonapes.dungler.ui.ActionStartOnStart
+import ru.lemonapes.dungler.ui.StateListener
 
 fun NavGraphBuilder.characterNavigation(
     navController: NavController,
@@ -15,11 +18,16 @@ fun NavGraphBuilder.characterNavigation(
     composable<Screens.Character>() {
         val model: CharacterViewModel = viewModel(factory = CharacterModelFactory())
         val state = model.observeState().collectAsState().value
+        ActionLoadingOnStop(model)
+        ActionStartOnStart(model)
         CharacterView(
             state = state,
             listener = CharacterListener(
                 onGearClick = { gearType, gear ->
                     model.actionGearClick(gearType, gear)
+                },
+                onRetryClick = {
+                    model.actionStart()
                 },
                 gearShowInventoryClick = { gearType ->
                     model.actionShowInventoryClick(gearType)
@@ -45,6 +53,7 @@ fun NavGraphBuilder.characterNavigation(
 }
 
 class CharacterListener(
+    override val onRetryClick: () -> Unit,
     val onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
     val gearShowInventoryClick: (gearType: GearType) -> Unit,
     val onGearDescriptionDialogDismiss: () -> Unit,
@@ -52,10 +61,11 @@ class CharacterListener(
     val gearEquipClick: (gear: Gear) -> Unit,
     val gearDeEquipClick: (gearType: GearType) -> Unit,
     val backToInventoryClick: () -> Unit,
-) {
+) : StateListener {
     companion object {
         val EMPTY
             get() = CharacterListener(
+                onRetryClick = {},
                 onGearClick = { _, _ -> },
                 gearShowInventoryClick = {},
                 onGearDescriptionDialogDismiss = {},

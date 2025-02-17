@@ -5,13 +5,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.mappers.InventoryResponseMapper
 import ru.lemonapes.dungler.network.endpoints.loadInventory
+import ru.lemonapes.dungler.parent_store.ViewModelAction
 import ru.lemonapes.dungler.parent_store.ViewModelStore
 
-interface InventoryAction {
-    fun actionStart()
-    fun actionError(throwable: Throwable)
-    fun actionClearError()
-}
+interface InventoryAction : ViewModelAction
 
 class InventoryViewModel : ViewModelStore<InventoryState>(InventoryState.EMPTY), InventoryAction {
 
@@ -19,18 +16,16 @@ class InventoryViewModel : ViewModelStore<InventoryState>(InventoryState.EMPTY),
         actionError(throwable)
     }
 
-    init {
-        actionStart()
-    }
-
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
+            actionSetLoading()
             val (gears, reagents) = InventoryResponseMapper(loadInventory())
 
             updateState { state ->
                 state.copy(
                     gears = gears,
-                    reagents = reagents
+                    reagents = reagents,
+                    isLoading = false,
                 )
             }
         }
@@ -38,10 +33,10 @@ class InventoryViewModel : ViewModelStore<InventoryState>(InventoryState.EMPTY),
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->
         throwable.printStackTrace()
-        oldState.copy(error = throwable)
+        oldState.copy(error = throwable, isLoading = false)
     }
 
-    override fun actionClearError() = updateState { oldState ->
-        oldState.copy(error = null)
+    override fun actionSetLoading() = updateState { oldState ->
+        oldState.copy(isLoading = true, error = null)
     }
 }

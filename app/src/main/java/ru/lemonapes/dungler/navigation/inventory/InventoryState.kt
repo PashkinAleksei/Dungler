@@ -9,9 +9,11 @@ import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.parent_store.State
 
 data class InventoryState(
+    override val error: Throwable? = null,
+    override val isLoading: Boolean = false,
+
     val gears: ImmutableList<Gear> = persistentListOf(),
     val reagents: ImmutableMap<ReagentId, Int> = persistentMapOf(),
-    val error: Throwable? = null,
 ) : State {
     companion object {
         val EMPTY get() = InventoryState()
