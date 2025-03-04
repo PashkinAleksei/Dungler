@@ -5,10 +5,10 @@ import io.ktor.client.request.get
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.EquipmentResponse
+import ru.lemonapes.dungler.network.models.HeroStateResponce
 
-suspend fun loadEquipment(): EquipmentResponse {
-    val url = "$ENDPOINT/equipment?hero_id=$HERO_ID"
+suspend fun getHeroState(): HeroStateResponce {
+    val url = "$ENDPOINT/hero_state?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.get(url)
     if (response.status.value != 200) throw Exception()
     return response.body()

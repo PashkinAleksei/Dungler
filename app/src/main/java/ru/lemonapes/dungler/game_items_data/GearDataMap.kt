@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.game_items_data
+package ru.lemonapes.dungler.game_items_data
 
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.GearData

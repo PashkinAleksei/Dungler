@@ -7,7 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.ui.ActionLoadingOnStop
-import ru.lemonapes.dungler.ui.ActionStartOnStart
+import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.StateListener
 
 fun NavGraphBuilder.inventoryNavigation(
@@ -17,7 +17,7 @@ fun NavGraphBuilder.inventoryNavigation(
         val model: InventoryViewModel = viewModel(factory = InventoryModelFactory())
         val state = model.observeState().collectAsState().value
         ActionLoadingOnStop(model)
-        ActionStartOnStart(model)
+        ActionOnStart(model::actionStart)
         InventoryView(state = state, listener = InventoryListener { model.actionStart() })
     }
 }

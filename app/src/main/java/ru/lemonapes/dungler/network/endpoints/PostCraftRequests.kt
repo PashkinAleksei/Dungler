@@ -13,7 +13,7 @@ import ru.lemonapes.dungler.network.models.CraftItemsResponse
 
 private const val MAP_FIRST_PARAM = "gear_id"
 
-suspend fun createItem(gearId: GearId): CraftItemsResponse {
+suspend fun postCreateItem(gearId: GearId): CraftItemsResponse {
     val url = "$ENDPOINT/craft_items?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.post(url) {
         contentType(ContentType.Application.Json)
@@ -23,7 +23,7 @@ suspend fun createItem(gearId: GearId): CraftItemsResponse {
     return response.body()
 }
 
-suspend fun upgradeItem(gearId: GearId): CraftItemsResponse {
+suspend fun postUpgradeItem(gearId: GearId): CraftItemsResponse {
     val url = "$ENDPOINT/upgrade_items?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.post(url) {
         contentType(ContentType.Application.Json)

@@ -3,7 +3,7 @@ package ru.lemonapes.dungler.navigation.inventory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.mappers.InventoryResponseMapper
-import ru.lemonapes.dungler.network.endpoints.loadInventory
+import ru.lemonapes.dungler.network.endpoints.getInventory
 import ru.lemonapes.dungler.parent_store.ViewModelAction
 import ru.lemonapes.dungler.parent_store.ViewModelStore
 
@@ -14,7 +14,7 @@ class InventoryViewModel : ViewModelStore<InventoryState>(InventoryState.EMPTY),
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
-            val (gears, reagents) = InventoryResponseMapper(loadInventory())
+            val (gears, reagents) = InventoryResponseMapper(getInventory())
 
             updateState { state ->
                 state.copy(

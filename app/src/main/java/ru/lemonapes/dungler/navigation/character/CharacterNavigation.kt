@@ -9,7 +9,7 @@ import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.ui.ActionLoadingOnStop
-import ru.lemonapes.dungler.ui.ActionStartOnStart
+import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.StateListener
 
 fun NavGraphBuilder.characterNavigation(
@@ -19,7 +19,7 @@ fun NavGraphBuilder.characterNavigation(
         val model: CharacterViewModel = viewModel(factory = CharacterModelFactory())
         val state = model.observeState().collectAsState().value
         ActionLoadingOnStop(model)
-        ActionStartOnStart(model)
+        ActionOnStart(model::actionStart)
         CharacterView(
             state = state,
             listener = CharacterListener(

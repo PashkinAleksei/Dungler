@@ -10,10 +10,10 @@ import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.mappers.EquipmentResponseMapper
 import ru.lemonapes.dungler.mappers.GearsToEquipResponseMapper
-import ru.lemonapes.dungler.network.endpoints.deEquipItem
-import ru.lemonapes.dungler.network.endpoints.equipItem
+import ru.lemonapes.dungler.network.endpoints.getEquipment
 import ru.lemonapes.dungler.network.endpoints.getGearsToEquip
-import ru.lemonapes.dungler.network.endpoints.loadEquipment
+import ru.lemonapes.dungler.network.endpoints.patchDeEquipItem
+import ru.lemonapes.dungler.network.endpoints.patchEquipItem
 import ru.lemonapes.dungler.parent_store.ViewModelAction
 import ru.lemonapes.dungler.parent_store.ViewModelStore
 import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
@@ -50,7 +50,7 @@ class CharacterViewModel() :
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
-            val (gears, stats) = EquipmentResponseMapper(loadEquipment())
+            val (gears, stats) = EquipmentResponseMapper(getEquipment())
 
             updateState { state ->
                 state.copy(
@@ -92,7 +92,7 @@ class CharacterViewModel() :
     override fun actionEquip(gear: Gear) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val (gears, stats) = EquipmentResponseMapper(equipItem(gear))
+            val (gears, stats) = EquipmentResponseMapper(patchEquipItem(gear))
             if (isActive) {
                 updateState { state ->
                     state.copy(
@@ -108,7 +108,7 @@ class CharacterViewModel() :
     override fun actionDeEquip(gearType: GearType) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val (gears, stats) = EquipmentResponseMapper(deEquipItem(gearType))
+            val (gears, stats) = EquipmentResponseMapper(patchDeEquipItem(gearType))
             if (isActive) {
                 updateState { state ->
                     state.copy(

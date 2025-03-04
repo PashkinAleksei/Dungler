@@ -11,7 +11,7 @@ import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
 import ru.lemonapes.dungler.network.models.EquipmentResponse
 
-suspend fun deEquipItem(gearType: GearType): EquipmentResponse {
+suspend fun patchDeEquipItem(gearType: GearType): EquipmentResponse {
     val url = "$ENDPOINT/equipment?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.patch(url) {
         contentType(ContentType.Application.Json)
