@@ -1,5 +1,6 @@
 package ru.lemonapes.dungler.navigation.craft
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,6 +12,7 @@ import ru.lemonapes.dungler.network.endpoints.postCreateItem
 import ru.lemonapes.dungler.network.endpoints.postUpgradeItem
 import ru.lemonapes.dungler.parent_store.ViewModelAction
 import ru.lemonapes.dungler.parent_store.ViewModelStore
+import javax.inject.Inject
 
 interface CraftAction : ViewModelAction {
     fun actionCreateItem(gearId: GearId)
@@ -18,7 +20,8 @@ interface CraftAction : ViewModelAction {
     fun switchClick(state: CraftSwitchState)
 }
 
-class CraftViewModel :
+@HiltViewModel
+class CraftViewModel @Inject constructor() :
     ViewModelStore<CraftViewState>(CraftViewState.getEmpty()), CraftAction {
 
     override fun actionStart() = withActualState {

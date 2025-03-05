@@ -1,7 +1,7 @@
 package ru.lemonapes.dungler.navigation.craft
 
 import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -18,7 +18,7 @@ fun NavGraphBuilder.craftNavigation(
     navController: NavController,
 ) {
     composable<Screens.Craft>() {
-        val model: CraftViewModel = viewModel(factory = CraftModelFactory())
+        val model: CraftViewModel = hiltViewModel()
         val state = model.observeState().collectAsState().value
         ActionLoadingOnStop(model)
         ActionOnStart(model::actionStart)

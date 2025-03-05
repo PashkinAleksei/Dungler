@@ -1,5 +1,6 @@
 package ru.lemonapes.dungler.navigation.character
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,7 @@ import ru.lemonapes.dungler.parent_store.ViewModelAction
 import ru.lemonapes.dungler.parent_store.ViewModelStore
 import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
 import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentStateStatus
+import javax.inject.Inject
 
 interface CharViewModelAction : ViewModelAction {
     fun actionGearClick(gearType: GearType, gear: Gear?)
@@ -34,7 +36,8 @@ interface CharViewModelAction : ViewModelAction {
     fun inventoryDialogError(throwable: Throwable)
 }
 
-class CharacterViewModel() :
+@HiltViewModel
+class CharacterViewModel @Inject constructor() :
     ViewModelStore<CharacterViewState>(CharacterViewState.EMPTY), CharViewModelAction {
 
     private val dialogCeh = CoroutineExceptionHandler { _, throwable ->

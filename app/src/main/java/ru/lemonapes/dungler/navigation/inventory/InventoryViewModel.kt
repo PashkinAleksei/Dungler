@@ -1,15 +1,18 @@
 package ru.lemonapes.dungler.navigation.inventory
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.mappers.InventoryResponseMapper
 import ru.lemonapes.dungler.network.endpoints.getInventory
 import ru.lemonapes.dungler.parent_store.ViewModelAction
 import ru.lemonapes.dungler.parent_store.ViewModelStore
+import javax.inject.Inject
 
 interface InventoryAction : ViewModelAction
 
-class InventoryViewModel : ViewModelStore<InventoryState>(InventoryState.EMPTY), InventoryAction {
+@HiltViewModel
+class InventoryViewModel @Inject constructor() : ViewModelStore<InventoryState>(InventoryState.EMPTY), InventoryAction {
 
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
