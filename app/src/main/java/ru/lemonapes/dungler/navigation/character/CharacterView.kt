@@ -5,8 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -48,7 +47,7 @@ fun CharacterView(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(horizontal = 16.dp),
         ) {
             LazyVerticalGrid(
                 GridCells.Fixed(3),
@@ -72,7 +71,11 @@ fun CharacterView(
                 spacerItem()
                 bootsItem(state.gears[GearType.BOOTS], listener.onGearClick)
             }
-            Column(Modifier.scrollable(orientation = Orientation.Vertical, state = rememberScrollState())) {
+            Column(
+                Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 state.stats.forEach { (stat, count) ->
                     val maxDamage = state.stats[StatId.DAMAGE_MAX]?.let { "-$it" }
                     when (stat) {

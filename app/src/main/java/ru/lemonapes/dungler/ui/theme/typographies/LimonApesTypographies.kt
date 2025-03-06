@@ -46,6 +46,18 @@ data class LimonApesTypographies(
             ),
         )
     ),
+    val semibold24: AppTextStyle = AppTextStyle(
+        TextStyle(
+            fontWeight = FontWeight.W500,
+            fontFamily = fontsMuseoSansCyrl,
+            fontSize = 24.sp,
+            lineHeight = 28.sp,
+            lineHeightStyle = LineHeightStyle(
+                alignment = LineHeightStyle.Alignment.Center,
+                trim = LineHeightStyle.Trim.None
+            ),
+        )
+    ),
     val regular24: AppTextStyle = AppTextStyle(
         TextStyle(
             fontWeight = FontWeight.W300,

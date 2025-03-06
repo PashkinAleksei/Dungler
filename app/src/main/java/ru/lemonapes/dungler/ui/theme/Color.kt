@@ -16,6 +16,7 @@ data class DungeonColors(
     val background: Color,
     val positiveTextColor: Color,
     val negativeTextColor: Color,
+    val barsTextColor: Color,
     val experienceColor: Color,
     val healthBarColor: Color,
     val manaBarColor: Color,
@@ -32,7 +33,8 @@ fun getDarkColorPalette() = DungeonColors(
     background = BACKGROUND_DARK,
     positiveTextColor = POSITIVE_TEXT_COLOR_DARK,
     negativeTextColor = NEGATIVE_TEXT_COLOR_DARK,
-    experienceColor = Purple400,
+    barsTextColor = BARS_TEXT_COLOR,
+    experienceColor = EXPERIENCE_COLOR,
     healthBarColor = HEALTH,
     manaBarColor = MANA,
     rageBarColor = RAGE_COLOR,
@@ -48,7 +50,8 @@ fun getLightColorPalette() = DungeonColors(
     background = BACKGROUND_LIGHT,
     positiveTextColor = POSITIVE_TEXT_COLOR_LIGHT,
     negativeTextColor = NEGATIVE_TEXT_COLOR_LIGHT,
-    experienceColor = Purple400,
+    barsTextColor = BARS_TEXT_COLOR,
+    experienceColor = EXPERIENCE_COLOR,
     healthBarColor = HEALTH,
     manaBarColor = MANA,
     rageBarColor = RAGE_COLOR,
@@ -71,6 +74,7 @@ private val PRIMARY_TEXT_COLOR_LIGHT = Color(0xFF241F20)
 private val SECONDARY_TEXT_COLOR = Color(0xFF3E3A3A)
 private val POSITIVE_TEXT_COLOR_LIGHT = Color(0xFF00FF00)
 private val NEGATIVE_TEXT_COLOR_LIGHT = Color(0xFFFF0000)
+private val EXPERIENCE_COLOR = Color(0xFFFFAA00)
 
 val Purple200 = Color(0xFFBB86FC)
 val Purple400 = Color(0xFF872BF8)
@@ -86,6 +90,7 @@ val MANA = Color(0xFF3700B3)
 val RAGE_COLOR = Color(0xFFC23127)
 val SURFACE = Color(0xFF3C3B3B)
 val SURFACE_SEMI_TRANSPARENT = Color(0xA63C3B3B)
+val BARS_TEXT_COLOR = Color(0xFFFFFFFF)
 
 val BordersColorDark = Color(0xFFCCCCCC)
 val ImageBackground = Color(0xFF000000)

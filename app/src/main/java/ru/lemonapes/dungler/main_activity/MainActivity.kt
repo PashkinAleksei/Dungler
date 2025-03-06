@@ -9,18 +9,26 @@ import androidx.activity.viewModels
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.lemonapes.dungler.BottomBar
+import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.navigation.character.characterNavigation
 import ru.lemonapes.dungler.navigation.craft.craftNavigation
@@ -45,11 +53,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val state = mainViewModel.observeState().collectAsState().value
+            val heroState = heroStateRepository.heroStateFlow.collectAsState().value
             ActionOnStart(mainViewModel::actionStart)
 
             DunglerTheme(darkTheme = true) {
-                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-                    MainView(state = state)
+                val navController = rememberNavController()
+                MainView(heroState = heroState, navController = navController) {
+                    MainViewContent(state = state, navController = navController)
                 }
             }
         }
@@ -64,53 +74,70 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainView(
     modifier: Modifier = Modifier,
-    state: MainActivityState,
+    heroState: HeroState,
+    navController: NavHostController,
+    content: @Composable () -> Unit,
 ) {
-    val navController = rememberNavController()
 
-    when (state.rootRoute) {
-        MainRoute.MAIN ->
-            Scaffold(
-                modifier = modifier,
-                bottomBar = {
-                    BottomBar(navController)
-                }
-            ) { innerPadding ->
-                NavHost(
-                    navController = navController,
-                    startDestination = Screens.Character,
-                    modifier = Modifier.padding(innerPadding),
-                    enterTransition = { fadeIn(animationSpec = tween(200)) },
-                    exitTransition = { fadeOut(animationSpec = tween(200)) },
-                ) {
-                    characterNavigation()
-                    craftNavigation()
-                    inventoryNavigation()
-                    dungeonListNavigation()
-                }
-            }
-
-        MainRoute.DUNGEON ->
-            Scaffold(
-                modifier = modifier,
-            ) { innerPadding ->
-                NavHost(
-                    navController = navController,
-                    startDestination = Screens.Dungeon,
-                    modifier = Modifier.padding(innerPadding),
-                    enterTransition = { fadeIn(animationSpec = tween(200)) },
-                    exitTransition = { fadeOut(animationSpec = tween(200)) },
-                ) {
-                    composable<Screens.Dungeon> { DungeonScreen() }
-                }
-            }
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        bottomBar = {
+            BottomBar(navController)
+        }
+    ) { innerPadding ->
+        Column(Modifier.padding(innerPadding)) {
+            HeroTopBar(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .padding(16.dp),
+                heroState = heroState
+            )
+            content()
+        }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun MainViewContent(
+    modifier: Modifier = Modifier,
+    state: MainActivityState,
+    navController: NavHostController,
+) {
+    when (state.rootRoute) {
+        MainRoute.MAIN ->
+            NavHost(
+                navController = navController,
+                startDestination = Screens.Character,
+                enterTransition = { fadeIn(animationSpec = tween(200)) },
+                exitTransition = { fadeOut(animationSpec = tween(200)) },
+            ) {
+                characterNavigation()
+                craftNavigation()
+                inventoryNavigation()
+                dungeonListNavigation()
+            }
+
+        MainRoute.DUNGEON -> NavHost(
+            navController = navController,
+            startDestination = Screens.Dungeon,
+            enterTransition = { fadeIn(animationSpec = tween(200)) },
+            exitTransition = { fadeOut(animationSpec = tween(200)) },
+        ) {
+            composable<Screens.Dungeon> { DungeonScreen() }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun MainViewPreview() {
     DunglerTheme(darkTheme = true) {
-        MainView(state = MainActivityState.EMPTY)
+        MainView(heroState = HeroState.MOCK, navController = rememberNavController()) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.Gray)
+            )
+        }
     }
 }

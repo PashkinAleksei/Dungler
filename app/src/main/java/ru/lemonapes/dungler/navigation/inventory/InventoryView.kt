@@ -37,7 +37,7 @@ fun InventoryView(
     ) {
         LazyVerticalGrid(
             modifier = modifier
-                .padding(4.dp),
+                .padding(16.dp),
             columns = GridCells.Fixed(5)
         ) {
             items(state.gears) { gear ->
