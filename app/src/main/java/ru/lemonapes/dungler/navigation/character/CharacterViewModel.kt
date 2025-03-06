@@ -15,8 +15,9 @@ import ru.lemonapes.dungler.network.endpoints.getEquipment
 import ru.lemonapes.dungler.network.endpoints.getGearsToEquip
 import ru.lemonapes.dungler.network.endpoints.patchDeEquipItem
 import ru.lemonapes.dungler.network.endpoints.patchEquipItem
-import ru.lemonapes.dungler.parent_store.ViewModelAction
-import ru.lemonapes.dungler.parent_store.ViewModelStore
+import ru.lemonapes.dungler.parent_view_model.ParentViewModel
+import ru.lemonapes.dungler.parent_view_model.ViewModelAction
+import ru.lemonapes.dungler.repositories.HeroStateRepository
 import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
 import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentStateStatus
 import javax.inject.Inject
@@ -37,8 +38,9 @@ interface CharViewModelAction : ViewModelAction {
 }
 
 @HiltViewModel
-class CharacterViewModel @Inject constructor() :
-    ViewModelStore<CharacterViewState>(CharacterViewState.EMPTY), CharViewModelAction {
+class CharacterViewModel @Inject constructor(
+    heroStateRepository: HeroStateRepository,
+) : ParentViewModel<CharacterViewState>(CharacterViewState.EMPTY, heroStateRepository), CharViewModelAction {
 
     private val dialogCeh = CoroutineExceptionHandler { _, throwable ->
         actionDialogError(throwable)
@@ -189,7 +191,6 @@ class CharacterViewModel @Inject constructor() :
     }
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->
-        throwable.printStackTrace()
         oldState.copy(error = throwable, isLoading = false)
     }
 

@@ -5,18 +5,17 @@ import io.ktor.client.request.patch
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.EquipmentResponse
+import ru.lemonapes.dungler.network.models.HeroStateResponce
 import ru.lemonapes.dungler.network.models.checkNetworkException
 
-suspend fun patchEquipItem(gear: Gear): EquipmentResponse {
-    val url = "$ENDPOINT/equipment?hero_id=$HERO_ID"
+suspend fun setHeroLocation(dungeonId: String): HeroStateResponce {
+    val url = "$ENDPOINT/set_hero_location?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.patch(url) {
         contentType(ContentType.Application.Json)
-        setBody(mapOf(gear.gearId.gearType to gear.gearId))
+        setBody(mapOf("dungeon_id" to dungeonId))
     }
     response.checkNetworkException()
     return response.body()

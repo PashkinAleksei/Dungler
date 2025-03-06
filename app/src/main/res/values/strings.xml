@@ -46,4 +46,7 @@
     <string name="min_hero_level">Минимальный уровень героя</string>
     <string name="unknown_stat">Неопознанная характеристика</string>
 
+    <string name="castle_dungeons_title">Замковые подземелья</string>
+    <string name="enter_the_dungeons">Войти</string>
+
 </resources>

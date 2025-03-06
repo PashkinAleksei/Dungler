@@ -10,6 +10,7 @@ import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
 import ru.lemonapes.dungler.network.models.CraftItemsResponse
+import ru.lemonapes.dungler.network.models.checkNetworkException
 
 private const val MAP_FIRST_PARAM = "gear_id"
 
@@ -19,7 +20,7 @@ suspend fun postCreateItem(gearId: GearId): CraftItemsResponse {
         contentType(ContentType.Application.Json)
         setBody(mapOf(MAP_FIRST_PARAM to gearId))
     }
-    if (response.status.value != 200) throw Exception()
+    response.checkNetworkException()
     return response.body()
 }
 
@@ -29,6 +30,6 @@ suspend fun postUpgradeItem(gearId: GearId): CraftItemsResponse {
         contentType(ContentType.Application.Json)
         setBody(mapOf(MAP_FIRST_PARAM to gearId))
     }
-    if (response.status.value != 200) throw Exception()
+    response.checkNetworkException()
     return response.body()
 }

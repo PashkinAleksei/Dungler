@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.parent_store
+package ru.lemonapes.dungler.parent_view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,6 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import ru.lemonapes.dungler.network.NetworkException
+import ru.lemonapes.dungler.network.models.ResponseErrorCode
+import ru.lemonapes.dungler.repositories.HeroStateRepository
 
 interface State {
     val isLoading: Boolean
@@ -25,11 +28,13 @@ interface Store<S : State> {
     fun withActualState(actionBlock: CoroutineScope.(oldState: S) -> Unit)
 }
 
-abstract class ViewModelStore<S : State>(
+abstract class ParentViewModel<S : State>(
     initialState: S,
+    protected val heroStateRepository: HeroStateRepository,
 ) : ViewModel(), Store<S>, ViewModelAction {
     open val ceh = CoroutineExceptionHandler { _, throwable ->
-        actionError(throwable)
+        throwable.handleResponseError()
+        throwable.printStackTrace()
     }
 
     private val _state = MutableStateFlow(initialState)
@@ -41,5 +46,21 @@ abstract class ViewModelStore<S : State>(
 
     override fun updateState(actionBlock: CoroutineScope.(oldState: S) -> S) {
         _state.update { with(viewModelScope) { actionBlock(_state.value) } }
+    }
+
+    private fun Throwable.handleResponseError() {
+        if (this is NetworkException) {
+            when (errorCode) {
+                ResponseErrorCode.HERO_IN_A_DUNGEON -> heroStateRepository.heroInDungeonError()
+
+                ResponseErrorCode.INTERNAL_ERROR -> actionError(this)
+                ResponseErrorCode.INVALID_REQUEST -> actionError(this)
+                ResponseErrorCode.UNPROCESSABLE_REQUEST -> actionError(this)
+                ResponseErrorCode.NOT_ENOUGH_REAGENTS -> actionError(this)
+                ResponseErrorCode.UNKNOWN_ERROR -> actionError(this)
+            }
+        } else {
+            actionError(this)
+        }
     }
 }

@@ -1,7 +1,6 @@
 package ru.lemonapes.dungler.navigation
 
 import kotlinx.serialization.Serializable
-import ru.lemonapes.dungler.R
 
 @Serializable
 sealed class Screens(val label: String) {
@@ -12,5 +11,8 @@ sealed class Screens(val label: String) {
     @Serializable
     data object Craft : Screens("Craft")
     @Serializable
-    data object Dungeons : Screens("Dungeons")
+    data object DungeonList : Screens("DungeonList")
+
+    @Serializable
+    data object Dungeon : Screens("Dungeon")
 }

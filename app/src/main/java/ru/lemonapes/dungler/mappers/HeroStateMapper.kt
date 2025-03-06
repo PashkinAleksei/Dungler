@@ -12,11 +12,12 @@ object HeroStateMapper : (HeroStateResponce) -> HeroState {
             totalHealth = response.totalHealth,
             experience = response.experience,
             isLoading = false,
-            dungeonState = DungeonState(
-                hallNumber = response.hallNumber,
-                districtStringId = response.districtStringId,
-                dungeonStringId = response.dungeonStringId
-            )
-        )
+            dungeonState = response.hallNumber?.let { hallNumber ->
+                DungeonState(
+                    hallNumber = hallNumber,
+                    districtStringId = response.districtStringId,
+                    dungeonStringId = response.dungeonStringId
+                )
+            })
     }
 }

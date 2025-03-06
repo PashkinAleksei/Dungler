@@ -5,12 +5,12 @@ import kotlinx.collections.immutable.persistentMapOf
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
-import ru.lemonapes.dungler.parent_store.State
+import ru.lemonapes.dungler.parent_view_model.State
 import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
 
 data class CharacterViewState(
     override val error: Throwable? = null,
-    override val isLoading: Boolean = false,
+    override val isLoading: Boolean = true,
 
     val gears: ImmutableMap<GearType, Gear> = persistentMapOf(),
     val stats: ImmutableMap<StatId, Int> = persistentMapOf(),
@@ -33,7 +33,8 @@ data class CharacterViewState(
                     StatId.PROTECTION to 0,
                     StatId.DODGE_CHANCE to 0,
                     StatId.CRIT_CHANCE to 0
-                )
+                ),
+                isLoading = false
             )
     }
 }

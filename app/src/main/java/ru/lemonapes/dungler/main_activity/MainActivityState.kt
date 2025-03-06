@@ -3,19 +3,24 @@ package ru.lemonapes.dungler.main_activity
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.lemonapes.dungler.parent_store.State
-import ru.lemonapes.dungler.parent_store.ViewModelAction
-import ru.lemonapes.dungler.parent_store.ViewModelStore
+import ru.lemonapes.dungler.parent_view_model.ParentViewModel
+import ru.lemonapes.dungler.parent_view_model.State
+import ru.lemonapes.dungler.parent_view_model.ViewModelAction
 import ru.lemonapes.dungler.repositories.HeroStateRepository
 import javax.inject.Inject
 
 data class MainActivityState(
     override val isLoading: Boolean = false,
     override val error: Throwable? = null,
+    val rootRoute: MainRoute = MainRoute.MAIN,
 ) : State {
     companion object {
         val EMPTY = MainActivityState()
     }
+}
+
+enum class MainRoute {
+    DUNGEON, MAIN
 }
 
 interface MainViewModelAction : ViewModelAction {
@@ -24,19 +29,29 @@ interface MainViewModelAction : ViewModelAction {
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val heroStateRepository: HeroStateRepository,
-) : ViewModelStore<MainActivityState>(MainActivityState.EMPTY), MainViewModelAction {
+    heroStateRepository: HeroStateRepository,
+) : ParentViewModel<MainActivityState>(MainActivityState.EMPTY, heroStateRepository), MainViewModelAction {
 
-    override fun actionStopPolling() {
+    init {
         viewModelScope.launch {
-            heroStateRepository.stopPolling()
+            heroStateRepository.heroStateFlow.collect { heroState ->
+                updateState { state ->
+                    if (heroState.dungeonState != null) {
+                        state.copy(rootRoute = MainRoute.DUNGEON)
+                    } else {
+                        state.copy(rootRoute = MainRoute.MAIN)
+                    }
+                }
+            }
         }
     }
 
+    override fun actionStopPolling() {
+        heroStateRepository.stopPolling()
+    }
+
     override fun actionStart() {
-        viewModelScope.launch {
-            heroStateRepository.startPolling(this)
-        }
+        heroStateRepository.startPolling(viewModelScope)
     }
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->

@@ -2,7 +2,7 @@ package ru.lemonapes.dungler.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import ru.lemonapes.dungler.parent_store.State
+import ru.lemonapes.dungler.parent_view_model.State
 
 @Composable
 fun StateCheck(

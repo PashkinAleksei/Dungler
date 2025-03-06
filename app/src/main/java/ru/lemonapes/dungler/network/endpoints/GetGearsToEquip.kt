@@ -7,10 +7,11 @@ import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
 import ru.lemonapes.dungler.network.models.GearsToEquipResponse
+import ru.lemonapes.dungler.network.models.checkNetworkException
 
 suspend fun getGearsToEquip(gearType: GearType): GearsToEquipResponse {
     val url = "$ENDPOINT/gears_to_equip?hero_id=$HERO_ID&gear_type=${gearType.serialName}"
     val response = HttpClientProvider.client.get(url)
-    if (response.status.value != 200) throw Exception()
+    response.checkNetworkException()
     return response.body()
 }

@@ -2,7 +2,6 @@ package ru.lemonapes.dungler.navigation.craft
 
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import ru.lemonapes.dungler.domain_models.CraftGear
@@ -14,10 +13,8 @@ import ru.lemonapes.dungler.ui.ActionLoadingOnStop
 import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.StateListener
 
-fun NavGraphBuilder.craftNavigation(
-    navController: NavController,
-) {
-    composable<Screens.Craft>() {
+fun NavGraphBuilder.craftNavigation() {
+    composable<Screens.Craft> {
         val model: CraftViewModel = hiltViewModel()
         val state = model.observeState().collectAsState().value
         ActionLoadingOnStop(model)

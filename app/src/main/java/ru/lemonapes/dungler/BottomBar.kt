@@ -22,7 +22,7 @@ val topLevelRoutes = listOf(
     TopLevelRoute(Screens.Character, R.drawable.ic_helm),
     TopLevelRoute(Screens.Inventory, R.drawable.ic_backpack),
     TopLevelRoute(Screens.Craft, R.drawable.ic_blacksmith),
-    TopLevelRoute(Screens.Dungeons, R.drawable.ic_cave),
+    TopLevelRoute(Screens.DungeonList, R.drawable.ic_cave),
 )
 
 @Composable

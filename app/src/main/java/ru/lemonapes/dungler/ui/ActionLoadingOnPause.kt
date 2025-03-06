@@ -5,7 +5,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import ru.lemonapes.dungler.parent_store.ViewModelAction
+import ru.lemonapes.dungler.parent_view_model.ViewModelAction
 
 @Composable
 fun ActionLoadingOnStop(viewModel: ViewModelAction) {

@@ -22,10 +22,10 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.lemonapes.dungler.BottomBar
 import ru.lemonapes.dungler.navigation.Screens
-import ru.lemonapes.dungler.navigation.Screens.Dungeons
 import ru.lemonapes.dungler.navigation.character.characterNavigation
 import ru.lemonapes.dungler.navigation.craft.craftNavigation
-import ru.lemonapes.dungler.navigation.dungeons.DungeonsScreen
+import ru.lemonapes.dungler.navigation.dungeon.DungeonScreen
+import ru.lemonapes.dungler.navigation.dungeon_list.dungeonListNavigation
 import ru.lemonapes.dungler.navigation.inventory.inventoryNavigation
 import ru.lemonapes.dungler.repositories.HeroStateRepository
 import ru.lemonapes.dungler.ui.ActionOnStart
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
             DunglerTheme(darkTheme = true) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-                    MainView()
+                    MainView(state = state)
                 }
             }
         }
@@ -64,27 +64,46 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainView(
     modifier: Modifier = Modifier,
+    state: MainActivityState,
 ) {
     val navController = rememberNavController()
 
-    Scaffold(
-        modifier = modifier,
-        bottomBar = {
-            BottomBar(navController)
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screens.Character,
-            modifier = Modifier.padding(innerPadding),
-            enterTransition = { fadeIn(animationSpec = tween(200)) },
-            exitTransition = { fadeOut(animationSpec = tween(200)) },
-        ) {
-            characterNavigation(navController)
-            craftNavigation(navController)
-            inventoryNavigation(navController)
-            composable<Dungeons> { DungeonsScreen() }
-        }
+    when (state.rootRoute) {
+        MainRoute.MAIN ->
+            Scaffold(
+                modifier = modifier,
+                bottomBar = {
+                    BottomBar(navController)
+                }
+            ) { innerPadding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = Screens.Character,
+                    modifier = Modifier.padding(innerPadding),
+                    enterTransition = { fadeIn(animationSpec = tween(200)) },
+                    exitTransition = { fadeOut(animationSpec = tween(200)) },
+                ) {
+                    characterNavigation()
+                    craftNavigation()
+                    inventoryNavigation()
+                    dungeonListNavigation()
+                }
+            }
+
+        MainRoute.DUNGEON ->
+            Scaffold(
+                modifier = modifier,
+            ) { innerPadding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = Screens.Dungeon,
+                    modifier = Modifier.padding(innerPadding),
+                    enterTransition = { fadeIn(animationSpec = tween(200)) },
+                    exitTransition = { fadeOut(animationSpec = tween(200)) },
+                ) {
+                    composable<Screens.Dungeon> { DungeonScreen() }
+                }
+            }
     }
 }
 
@@ -92,6 +111,6 @@ fun MainView(
 @Composable
 fun GreetingPreview() {
     DunglerTheme(darkTheme = true) {
-        MainView()
+        MainView(state = MainActivityState.EMPTY)
     }
 }

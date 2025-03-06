@@ -10,8 +10,9 @@ import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState
 import ru.lemonapes.dungler.network.endpoints.getCraftItems
 import ru.lemonapes.dungler.network.endpoints.postCreateItem
 import ru.lemonapes.dungler.network.endpoints.postUpgradeItem
-import ru.lemonapes.dungler.parent_store.ViewModelAction
-import ru.lemonapes.dungler.parent_store.ViewModelStore
+import ru.lemonapes.dungler.parent_view_model.ParentViewModel
+import ru.lemonapes.dungler.parent_view_model.ViewModelAction
+import ru.lemonapes.dungler.repositories.HeroStateRepository
 import javax.inject.Inject
 
 interface CraftAction : ViewModelAction {
@@ -21,8 +22,9 @@ interface CraftAction : ViewModelAction {
 }
 
 @HiltViewModel
-class CraftViewModel @Inject constructor() :
-    ViewModelStore<CraftViewState>(CraftViewState.getEmpty()), CraftAction {
+class CraftViewModel @Inject constructor(
+    heroStateRepository: HeroStateRepository,
+) : ParentViewModel<CraftViewState>(CraftViewState.getEmpty(), heroStateRepository), CraftAction {
 
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
@@ -75,7 +77,6 @@ class CraftViewModel @Inject constructor() :
     }
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->
-        throwable.printStackTrace()
         oldState.copy(error = throwable, isLoading = false)
     }
 

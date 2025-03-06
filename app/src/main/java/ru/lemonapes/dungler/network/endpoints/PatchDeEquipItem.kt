@@ -10,6 +10,7 @@ import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
 import ru.lemonapes.dungler.network.models.EquipmentResponse
+import ru.lemonapes.dungler.network.models.checkNetworkException
 
 suspend fun patchDeEquipItem(gearType: GearType): EquipmentResponse {
     val url = "$ENDPOINT/equipment?hero_id=$HERO_ID"
@@ -17,6 +18,6 @@ suspend fun patchDeEquipItem(gearType: GearType): EquipmentResponse {
         contentType(ContentType.Application.Json)
         setBody(mapOf(gearType to null))
     }
-    if (response.status.value != 200) throw Exception()
+    response.checkNetworkException()
     return response.body()
 }

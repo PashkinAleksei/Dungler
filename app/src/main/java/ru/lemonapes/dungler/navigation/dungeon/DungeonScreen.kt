@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.dungeons
+package ru.lemonapes.dungler.navigation.dungeon
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,11 +8,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun DungeonsScreen() {
+fun DungeonScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Dungeons Screen")
+        Text(text = "Dungeon Screen")
     }
 }
