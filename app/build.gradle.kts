@@ -8,6 +8,9 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
     namespace = "ru.lemonapes.dungler"
     compileSdk = 35
 

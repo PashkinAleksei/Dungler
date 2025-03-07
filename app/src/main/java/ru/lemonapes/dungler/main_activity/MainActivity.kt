@@ -22,11 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.BottomBar
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.navigation.Screens
@@ -35,8 +37,8 @@ import ru.lemonapes.dungler.navigation.craft.craftNavigation
 import ru.lemonapes.dungler.navigation.dungeon.DungeonScreen
 import ru.lemonapes.dungler.navigation.dungeon_list.dungeonListNavigation
 import ru.lemonapes.dungler.navigation.inventory.inventoryNavigation
+import ru.lemonapes.dungler.network.HttpClientProvider
 import ru.lemonapes.dungler.repositories.HeroStateRepository
-import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import javax.inject.Inject
 
@@ -54,8 +56,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             val state = mainViewModel.observeState().collectAsState().value
             val heroState = heroStateRepository.heroStateFlow.collectAsState().value
-            ActionOnStart(mainViewModel::actionStart)
-
             DunglerTheme(darkTheme = true) {
                 val navController = rememberNavController()
                 MainView(heroState = heroState, navController = navController) {
@@ -65,9 +65,21 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        mainViewModel.actionStart()
+    }
+
+    override fun onStop() {
+        super.onStart()
+        mainViewModel.actionStopPolling()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        //HttpClientProvider.close()
+        mainViewModel.viewModelScope.launch {
+            HttpClientProvider.close()
+        }
     }
 }
 

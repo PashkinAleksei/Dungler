@@ -13,7 +13,23 @@ data class ServerHeroState(
     @SerialName("hall_number") val hallNumber: Int? = null,
     @SerialName("district_string_id") val districtStringId: String? = null,
     @SerialName("dungeon_string_id") val dungeonStringId: String? = null,
+    @SerialName("actions") val actions: List<ServerAction> = emptyList(),
 
     // @SerialName("enemies") val Enemies: List<Enemy> = emptyList(),
     // @SerialName("actions") val Actions: List<Actions> = emptyList(),
 )
+
+@Serializable
+data class ServerAction(
+    @SerialName("type") val type: ActionType,
+    @SerialName("heal_effect_data") val healEffectData: Map<String, Int>? = null,
+)
+
+@Serializable
+enum class ActionType {
+    NEXT_HALL,
+    HEAL_EFFECT,
+    HERO_ATTACK,
+    ENEMY_ATTACK,
+    ACTUAL_STATE,
+}

@@ -48,6 +48,7 @@ class MainViewModel @Inject constructor(
 
     override fun actionStopPolling() {
         heroStateRepository.stopPolling()
+        heroStateRepository.stopActionsCalculation()
     }
 
     override fun actionStart() {

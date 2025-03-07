@@ -1,7 +1,6 @@
 package ru.lemonapes.dungler
 
 import android.util.Log
-import android.widget.TextView
 import java.math.BigDecimal
 import java.math.RoundingMode
 import kotlin.random.Random
@@ -13,35 +12,32 @@ class Utils {
         var TAG = "myLogs"
 
         fun <T> log(obj: T?) {
-            Log.d(TAG, obj.toString())
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, obj.toString())
+            }
         }
 
         inline fun <T> logWithTimeTrack(func: (() -> T?)) {
-            val res: T?
-            val time = measureTimeMillis {
-                res = func.invoke()
+            if (BuildConfig.DEBUG) {
+                val res: T?
+                val time = measureTimeMillis {
+                    res = func.invoke()
+                }
+                log("$res msWasted: $time")
             }
-            Log.d(TAG, "$res msWasted: $time")
         }
 
         inline fun logWithMiddleTimeTrack(func: (() -> Int)) {
-            var sum = 0L
-            var res = 0
+            if (BuildConfig.DEBUG) {
+                var sum = 0L
+                var res = 0
 
-            //for (i in 0..100) {
+                //for (i in 0..100) {
                 sum += measureTimeMillis {
                     res = func.invoke()
                 }
-            //}
-            Log.d(TAG, "$res msWasted: ${sum}")
-        }
-
-        fun TextView.setTextOrGone(text: String?) {
-            setText(text)
-            visibility = if (text.isNullOrEmpty()) {
-                TextView.GONE
-            } else {
-                TextView.VISIBLE
+                //}
+                log("$res msWasted: $sum")
             }
         }
 
