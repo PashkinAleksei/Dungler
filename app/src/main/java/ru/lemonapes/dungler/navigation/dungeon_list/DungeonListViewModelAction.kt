@@ -3,7 +3,7 @@ package ru.lemonapes.dungler.navigation.dungeon_list
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.lemonapes.dungler.mappers.HeroStateMapper
+import ru.lemonapes.dungler.mappers.HeroStateResponseMapper
 import ru.lemonapes.dungler.network.endpoints.setHeroLocation
 import ru.lemonapes.dungler.parent_view_model.ParentViewModel
 import ru.lemonapes.dungler.parent_view_model.ViewModelAction
@@ -33,7 +33,7 @@ class DungeonListViewModel @Inject constructor(
         if (!enterDungeonInProcess) {
             enterDungeonInProcess = true
             launch(Dispatchers.IO + ceh) {
-                val heroState = HeroStateMapper(setHeroLocation(dungeonId))
+                val heroState = HeroStateResponseMapper(setHeroLocation(dungeonId))
                 heroStateRepository.setNewHeroState(heroState)
                 enterDungeonInProcess = false
             }

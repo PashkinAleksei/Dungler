@@ -42,3 +42,9 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
         )
     }
 }
+
+object HeroStateResponseMapper : (ru.lemonapes.dungler.network.models.ServerHeroStateResponse) -> HeroState {
+    override fun invoke(response: ru.lemonapes.dungler.network.models.ServerHeroStateResponse): HeroState {
+        return HeroStateMapper(response.serverHeroState)
+    }
+}

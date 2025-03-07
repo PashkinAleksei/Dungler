@@ -8,10 +8,10 @@ import io.ktor.http.contentType
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.ServerHeroState
+import ru.lemonapes.dungler.network.models.ServerHeroStateResponse
 import ru.lemonapes.dungler.network.models.checkNetworkException
 
-suspend fun setHeroLocation(dungeonId: String): ServerHeroState {
+suspend fun setHeroLocation(dungeonId: String): ServerHeroStateResponse {
     val url = "$ENDPOINT/set_hero_location?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.patch(url) {
         contentType(ContentType.Application.Json)

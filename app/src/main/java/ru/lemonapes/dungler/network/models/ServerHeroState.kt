@@ -4,6 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class ServerHeroStateResponse(
+    @SerialName("hero_state") val serverHeroState: ServerHeroState,
+)
+
+@Serializable
 data class ServerHeroState(
     @SerialName("level") val level: Int? = null,
     @SerialName("health") val health: Int? = null,

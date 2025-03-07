@@ -15,7 +15,7 @@ import ru.lemonapes.dungler.Utils.Companion.log
 import ru.lemonapes.dungler.hero_state.DungeonState
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.hero_state.HeroState.Companion.ACTION_CHECK_TICK_TIME
-import ru.lemonapes.dungler.mappers.HeroStateMapper
+import ru.lemonapes.dungler.mappers.HeroStateResponseMapper
 import ru.lemonapes.dungler.network.endpoints.getHeroState
 import ru.lemonapes.dungler.stores.HeroStateStore
 import javax.inject.Inject
@@ -87,7 +87,7 @@ class HeroStateRepository @Inject constructor(
 
     private suspend fun fetchHeroState(coroutineScope: CoroutineScope) {
         log("start fetching HeroState")
-        heroStateStore.heroState = HeroStateMapper(getHeroState())
+        heroStateStore.heroState = HeroStateResponseMapper(getHeroState())
         log("HeroState fetched")
         startActionsCalculation(coroutineScope)
     }
