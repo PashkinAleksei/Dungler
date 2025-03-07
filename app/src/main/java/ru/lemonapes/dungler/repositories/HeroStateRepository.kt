@@ -100,9 +100,10 @@ class HeroStateRepository @Inject constructor(
         resetPolling()
     }
 
-    fun setNewHeroState(newHeroState: HeroState) {
+    fun setNewHeroState(coroutineScope: CoroutineScope, newHeroState: HeroState) {
         heroStateStore.heroState = newHeroState
         delayPolling()
+        startActionsCalculation(coroutineScope)
     }
 
     private fun startActionsCalculation(coroutineScope: CoroutineScope) {

@@ -13,6 +13,7 @@ data class CraftItemsResponse(
     @SerialName("upgrade_items")
     val upgradeItems: List<ServerUpgradeItem>? = null,
     val reagents: Map<ReagentId, Int>? = null,
+    @SerialName("hero_state") val serverHeroState: ServerHeroState,
 )
 
 @Serializable

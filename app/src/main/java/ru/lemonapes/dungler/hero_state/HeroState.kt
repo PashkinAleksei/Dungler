@@ -17,7 +17,7 @@ data class HeroState(
     val actions: ImmutableList<Action> = persistentListOf(),
 ) {
     fun calculateActionsRecursiveAndGet(): HeroState {
-        if (nextCalcTime == 0L) throw HeroStateCalculationException.HeroStateNotInitializedException
+        if (nextCalcTime == 0L || isLoading) throw HeroStateCalculationException.HeroStateNotInitializedException
         if (Calendar.getInstance().timeInMillis < nextCalcTime) return this
 
         return if (actions.isNotEmpty() || actions.firstOrNull() !is Action.ActualStateAction) {

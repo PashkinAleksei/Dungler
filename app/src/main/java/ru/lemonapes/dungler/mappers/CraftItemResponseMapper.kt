@@ -9,14 +9,23 @@ import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.domain_models.UpgradeGear
+import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.network.models.CraftItemsResponse
 
 object CraftItemResponseMapper : (CraftItemsResponse) ->
-Triple<ImmutableList<CreateGear>, ImmutableList<UpgradeGear>, ImmutableMap<ReagentId, Int>> {
+CraftItemMapperResponse {
     override fun invoke(response: CraftItemsResponse) =
-        Triple(
-            response.createItems?.map(CraftItemMapper)?.toPersistentList() ?: persistentListOf(),
-            response.upgradeItems?.map(UpgradeItemMapper)?.toPersistentList() ?: persistentListOf(),
-            response.reagents?.toPersistentMap() ?: persistentMapOf()
+        CraftItemMapperResponse(
+            createItems = response.createItems?.map(CraftItemMapper)?.toPersistentList() ?: persistentListOf(),
+            upgradeItems = response.upgradeItems?.map(UpgradeItemMapper)?.toPersistentList() ?: persistentListOf(),
+            reagents = response.reagents?.toPersistentMap() ?: persistentMapOf(),
+            heroState = HeroStateMapper(response.serverHeroState),
         )
 }
+
+data class CraftItemMapperResponse(
+    val createItems: ImmutableList<CreateGear>,
+    val upgradeItems: ImmutableList<UpgradeGear>,
+    val reagents: ImmutableMap<ReagentId, Int>,
+    val heroState: HeroState,
+)

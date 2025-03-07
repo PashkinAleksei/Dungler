@@ -1,5 +1,6 @@
 package ru.lemonapes.dungler.navigation.dungeon_list
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ class DungeonListViewModel @Inject constructor(
             enterDungeonInProcess = true
             launch(Dispatchers.IO + ceh) {
                 val heroState = HeroStateResponseMapper(setHeroLocation(dungeonId))
-                heroStateRepository.setNewHeroState(heroState)
+                heroStateRepository.setNewHeroState(viewModelScope, heroState)
                 enterDungeonInProcess = false
             }
         }

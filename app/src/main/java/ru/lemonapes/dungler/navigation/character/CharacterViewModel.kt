@@ -1,5 +1,6 @@
 package ru.lemonapes.dungler.navigation.character
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -55,7 +56,8 @@ class CharacterViewModel @Inject constructor(
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
-            val (gears, stats) = EquipmentResponseMapper(getEquipment())
+            val (gears, stats, heroState) = EquipmentResponseMapper(getEquipment())
+            heroStateRepository.setNewHeroState(viewModelScope, heroState)
 
             updateState { state ->
                 state.copy(
@@ -97,7 +99,8 @@ class CharacterViewModel @Inject constructor(
     override fun actionEquip(gear: Gear) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val (gears, stats) = EquipmentResponseMapper(patchEquipItem(gear))
+            val (gears, stats, heroState) = EquipmentResponseMapper(patchEquipItem(gear))
+            heroStateRepository.setNewHeroState(viewModelScope, heroState)
             if (isActive) {
                 updateState { state ->
                     state.copy(
@@ -113,7 +116,8 @@ class CharacterViewModel @Inject constructor(
     override fun actionDeEquip(gearType: GearType) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val (gears, stats) = EquipmentResponseMapper(patchDeEquipItem(gearType))
+            val (gears, stats, heroState) = EquipmentResponseMapper(patchDeEquipItem(gearType))
+            heroStateRepository.setNewHeroState(viewModelScope, heroState)
             if (isActive) {
                 updateState { state ->
                     state.copy(
