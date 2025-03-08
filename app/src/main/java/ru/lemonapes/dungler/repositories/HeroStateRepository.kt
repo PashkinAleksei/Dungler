@@ -133,7 +133,7 @@ class HeroStateRepository @Inject constructor(
     }
 
     companion object {
-        const val POLLING_INTERVAL = 3000L
+        const val POLLING_INTERVAL = 15000L
         const val POLLING_RETRY_DELAY = 5000L
     }
 

@@ -57,4 +57,7 @@
     <string name="castle_dungeons_title">Замковые подземелья</string>
     <string name="enter_the_dungeons">Войти</string>
 
+    <string name="dungeon_screen_damage">⚔ %d-%d</string>
+    <string name="dungeon_screen_level">Ур. %d</string>
+
 </resources>

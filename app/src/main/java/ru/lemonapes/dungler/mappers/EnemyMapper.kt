@@ -13,10 +13,10 @@ object EnemyMapper : (ServerEnemy) -> Enemy {
         return Enemy(
             image = image,
             enemyId = serverEnemy.enemyTypeId,
-            currentHealth = serverEnemy.currentHealth,
+            health = serverEnemy.currentHealth,
             damageMin = serverEnemy.damageMin,
             damageMax = serverEnemy.damageMax,
-            maxHealth = serverEnemy.maxHealth,
+            totalHealth = serverEnemy.maxHealth,
             level = serverEnemy.level
         )
     }

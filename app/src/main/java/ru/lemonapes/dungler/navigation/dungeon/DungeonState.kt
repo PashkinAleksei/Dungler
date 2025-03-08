@@ -11,7 +11,7 @@ data class DungeonState(
     val enemies: ImmutableList<Enemy> = persistentListOf(),
 ) : State {
     companion object {
-        val MOCK get() = DungeonState(isLoading = false, enemies = persistentListOf(Enemy.MOCK))
+        val MOCK get() = DungeonState(isLoading = false, enemies = persistentListOf(Enemy.MOCK, Enemy.MOCK))
         val EMPTY get() = DungeonState()
     }
 }

@@ -193,6 +193,18 @@ data class LimonApesTypographies(
             ),
         )
     ),
+    val regular14Compact: AppTextStyle = AppTextStyle(
+        TextStyle(
+            fontWeight = FontWeight.W300,
+            fontFamily = fontsMuseoSansCyrl,
+            fontSize = 14.sp,
+            lineHeight = 12.sp,
+            lineHeightStyle = LineHeightStyle(
+                alignment = LineHeightStyle.Alignment.Center,
+                trim = LineHeightStyle.Trim.None
+            ),
+        )
+    ),
     val boldUnderline14: AppTextStyle = AppTextStyle(
         TextStyle(
             fontWeight = FontWeight.W700,
