@@ -28,6 +28,7 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
                     ActionType.ACTUAL_STATE -> Action.ActualStateAction
                 }
             }.toPersistentList(),
+            enemies = response.enemies.map(EnemyMapper).toPersistentList(),
             experience = response.experience,
             totalExperience = response.totalExperience,
             isLoading = false,

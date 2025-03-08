@@ -107,11 +107,12 @@ class HeroStateRepository @Inject constructor(
     }
 
     private fun startActionsCalculation(coroutineScope: CoroutineScope) {
-        actionCountingJob?.cancel()
-        actionCountingJob = coroutineScope.launch(Dispatchers.IO) {
-            while (isActive) {
-                calculateActions()
-                delay(ACTION_CHECK_TICK_TIME)
+        if (actionCountingJob?.isActive != true) {
+            actionCountingJob = coroutineScope.launch(Dispatchers.IO) {
+                while (isActive) {
+                    calculateActions()
+                    delay(ACTION_CHECK_TICK_TIME)
+                }
             }
         }
     }

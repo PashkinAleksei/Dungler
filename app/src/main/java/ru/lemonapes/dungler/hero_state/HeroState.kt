@@ -4,6 +4,7 @@ import android.icu.util.Calendar
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import ru.lemonapes.dungler.domain_models.Enemy
 
 data class HeroState(
     val level: Int? = null,
@@ -15,6 +16,7 @@ data class HeroState(
     val dungeonState: DungeonState? = null,
     val nextCalcTime: Long = 0,
     val actions: ImmutableList<Action> = persistentListOf(),
+    val enemies: ImmutableList<Enemy> = persistentListOf(),
 ) {
     fun calculateActionsRecursiveAndGet(): HeroState {
         if (nextCalcTime == 0L || isLoading) throw HeroStateCalculationException.HeroStateNotInitializedException

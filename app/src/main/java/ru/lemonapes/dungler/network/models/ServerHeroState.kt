@@ -19,6 +19,7 @@ data class ServerHeroState(
     @SerialName("district_string_id") val districtStringId: String? = null,
     @SerialName("dungeon_string_id") val dungeonStringId: String? = null,
     @SerialName("actions") val actions: List<ServerAction> = emptyList(),
+    @SerialName("enemies") val enemies: List<ServerEnemy> = emptyList(),
 
     // @SerialName("enemies") val Enemies: List<Enemy> = emptyList(),
     // @SerialName("actions") val Actions: List<Actions> = emptyList(),

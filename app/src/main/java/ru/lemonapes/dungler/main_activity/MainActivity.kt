@@ -58,7 +58,11 @@ class MainActivity : ComponentActivity() {
             val heroState = heroStateRepository.heroStateFlow.collectAsState().value
             DunglerTheme(darkTheme = true) {
                 val navController = rememberNavController()
-                MainView(heroState = heroState, navController = navController) {
+                MainView(
+                    heroState = heroState,
+                    mainActivityState = state,
+                    navController = navController
+                ) {
                     MainViewContent(state = state, navController = navController)
                 }
             }
@@ -87,6 +91,7 @@ class MainActivity : ComponentActivity() {
 fun MainView(
     modifier: Modifier = Modifier,
     heroState: HeroState,
+    mainActivityState: MainActivityState,
     navController: NavHostController,
     content: @Composable () -> Unit,
 ) {
@@ -94,7 +99,9 @@ fun MainView(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
-            BottomBar(navController)
+            if (mainActivityState.rootRoute == MainRoute.MAIN) {
+                BottomBar(navController)
+            }
         }
     ) { innerPadding ->
         Column(Modifier.padding(innerPadding)) {
@@ -144,7 +151,11 @@ fun MainViewContent(
 @Composable
 fun MainViewPreview() {
     DunglerTheme(darkTheme = true) {
-        MainView(heroState = HeroState.MOCK, navController = rememberNavController()) {
+        MainView(
+            heroState = HeroState.MOCK,
+            mainActivityState = MainActivityState.EMPTY,
+            navController = rememberNavController()
+        ) {
             Box(
                 Modifier
                     .fillMaxSize()

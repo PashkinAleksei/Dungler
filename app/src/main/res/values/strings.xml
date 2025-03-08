@@ -27,6 +27,13 @@
     <string name="green_knight_boots_name">Сапоги зеленого рыцаря</string>
     <string name="green_knight_sword_name">Меч зеленого рыцаря</string>
 
+    <string name="unknown_enemy_name">Неопознанный предмет</string>
+    <string name="giant_rat_name">Гигантская крыса</string>
+    <string name="bat_name">Летучая мышь</string>
+    <string name="infected_raccoon_name">Заразный енот</string>
+    <string name="wild_dog_name">Дикая собака</string>
+    <string name="crocolisk_name">Кроколиск</string>
+
     <string name="linen_cloth_name">Льняная ткань</string>
     <string name="copper_name">Медная руда</string>
     <string name="topaz_name">Топаз</string>
