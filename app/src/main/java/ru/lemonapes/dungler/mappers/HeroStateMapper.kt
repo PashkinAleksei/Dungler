@@ -23,6 +23,7 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
                         )
 
                     ActionType.NEXT_HALL -> Action.NextHallAction
+                    ActionType.HERO_IS_DEAD -> Action.HeroIsDeadAction
                     ActionType.HERO_ATTACK -> Action.HeroAttackAction
                     ActionType.ENEMY_ATTACK -> Action.EnemyAttackAction
                     ActionType.ACTUAL_STATE -> Action.ActualStateAction

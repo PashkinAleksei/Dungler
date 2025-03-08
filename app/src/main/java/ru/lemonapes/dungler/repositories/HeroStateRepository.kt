@@ -88,7 +88,7 @@ class HeroStateRepository @Inject constructor(
     private suspend fun fetchHeroState(coroutineScope: CoroutineScope) {
         log("start fetching HeroState")
         heroStateStore.heroState = HeroStateResponseMapper(getHeroState())
-        log("HeroState fetched")
+        log("HeroState fetched ${heroStateStore.heroState}")
         startActionsCalculation(coroutineScope)
     }
 
@@ -101,6 +101,7 @@ class HeroStateRepository @Inject constructor(
     }
 
     fun setNewHeroState(coroutineScope: CoroutineScope, newHeroState: HeroState) {
+        log("setNewHeroState $newHeroState")
         heroStateStore.heroState = newHeroState
         delayPolling()
         startActionsCalculation(coroutineScope)
@@ -126,13 +127,13 @@ class HeroStateRepository @Inject constructor(
             heroStateStore.updateState { heroState ->
                 heroState.calculateActionsRecursiveAndGet()
             }
-        }.onFailure {
+        }.onFailure { exc ->
             stopActionsCalculation()
         }
     }
 
     companion object {
-        const val POLLING_INTERVAL = 15000L
+        const val POLLING_INTERVAL = 3000L
         const val POLLING_RETRY_DELAY = 5000L
     }
 

@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -34,7 +33,7 @@ import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.navigation.character.characterNavigation
 import ru.lemonapes.dungler.navigation.craft.craftNavigation
-import ru.lemonapes.dungler.navigation.dungeon.DungeonScreen
+import ru.lemonapes.dungler.navigation.dungeon.dungeonNavigation
 import ru.lemonapes.dungler.navigation.dungeon_list.dungeonListNavigation
 import ru.lemonapes.dungler.navigation.inventory.inventoryNavigation
 import ru.lemonapes.dungler.network.HttpClientProvider
@@ -75,7 +74,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onStop() {
-        super.onStart()
+        super.onStop()
         mainViewModel.actionStopPolling()
     }
 
@@ -142,7 +141,7 @@ fun MainViewContent(
             enterTransition = { fadeIn(animationSpec = tween(200)) },
             exitTransition = { fadeOut(animationSpec = tween(200)) },
         ) {
-            composable<Screens.Dungeon> { DungeonScreen() }
+            dungeonNavigation()
         }
     }
 }

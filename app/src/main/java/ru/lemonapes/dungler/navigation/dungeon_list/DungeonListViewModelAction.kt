@@ -21,8 +21,6 @@ class DungeonListViewModel @Inject constructor(
 ) : ParentViewModel<DungeonListState>(DungeonListState.EMPTY, heroStateRepository),
     DungeonListViewModelAction {
 
-    private var enterDungeonInProcess: Boolean = false
-
     override fun actionStart() = withActualState {
         actionSetLoading()
         updateState { state ->
@@ -30,13 +28,17 @@ class DungeonListViewModel @Inject constructor(
         }
     }
 
-    override fun actionEnterDungeons(dungeonId: String) = withActualState {
-        if (!enterDungeonInProcess) {
-            enterDungeonInProcess = true
+    override fun actionEnterDungeons(dungeonId: String) = withActualState { state ->
+        if (!state.enterDungeonInProcess) {
+            updateState {
+                state.copy(enterDungeonInProcess = true)
+            }
             launch(Dispatchers.IO + ceh) {
                 val heroState = HeroStateResponseMapper(setHeroLocation(dungeonId))
                 heroStateRepository.setNewHeroState(viewModelScope, heroState)
-                enterDungeonInProcess = false
+                updateState {
+                    state.copy(enterDungeonInProcess = false)
+                }
             }
         }
     }
@@ -46,9 +48,12 @@ class DungeonListViewModel @Inject constructor(
     }
 
     override fun actionError(throwable: Throwable) {
-        enterDungeonInProcess = false
-        updateState { oldState ->
-            oldState.copy(error = throwable, isLoading = false)
+        updateState { state ->
+            state.copy(
+                error = throwable,
+                isLoading = false,
+                enterDungeonInProcess = false
+            )
         }
     }
 }

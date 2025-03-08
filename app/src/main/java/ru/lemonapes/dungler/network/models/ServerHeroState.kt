@@ -35,6 +35,7 @@ data class ServerAction(
 enum class ActionType {
     NEXT_HALL,
     HEAL_EFFECT,
+    HERO_IS_DEAD,
     HERO_ATTACK,
     ENEMY_ATTACK,
     ACTUAL_STATE,
