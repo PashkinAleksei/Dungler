@@ -24,7 +24,7 @@ enum class MainRoute {
 }
 
 interface MainViewModelAction : ViewModelAction {
-    fun actionStopPolling()
+    fun actionStop()
 }
 
 @HiltViewModel
@@ -46,13 +46,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    override fun actionStopPolling() {
+    override fun actionStop() {
         heroStateRepository.stopPolling()
         heroStateRepository.stopActionsCalculation()
     }
 
     override fun actionStart() {
         heroStateRepository.startPolling(viewModelScope)
+        heroStateRepository.startActionsCalculation(viewModelScope)
     }
 
     override fun actionError(throwable: Throwable) = updateState { oldState ->

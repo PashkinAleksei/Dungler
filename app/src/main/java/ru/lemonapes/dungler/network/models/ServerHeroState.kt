@@ -26,12 +26,6 @@ data class ServerHeroState(
 )
 
 @Serializable
-data class ServerAction(
-    @SerialName("type") val type: ActionType,
-    @SerialName("heal_effect_data") val healEffectData: Map<String, Int>? = null,
-)
-
-@Serializable
 enum class ActionType {
     NEXT_HALL,
     HEAL_EFFECT,

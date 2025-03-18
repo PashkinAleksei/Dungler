@@ -23,7 +23,7 @@ class DungeonViewModel @Inject constructor(
                 updateState { currentState ->
                     currentState.copy(
                         isLoading = heroState.isLoading,
-                        enemies = heroState.enemies
+                        enemies = heroState.dungeonState?.enemies
                     )
                 }
             }

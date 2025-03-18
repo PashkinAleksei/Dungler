@@ -14,62 +14,78 @@ data class HeroState(
     val totalExperience: Int? = null,
     val isLoading: Boolean = true,
     val dungeonState: DungeonState? = null,
-    val nextCalcTime: Long = 0,
     val actions: ImmutableList<Action> = persistentListOf(),
-    val enemies: ImmutableList<Enemy> = persistentListOf(),
+    val nextCalcTime: Long = 0,
 ) {
     fun calculateActionsRecursiveAndGet(): HeroState {
-        if (nextCalcTime == 0L || isLoading) {
-            throw HeroStateCalculationException.HeroStateNotInitializedException
+        if (actions.isEmpty() ||
+            actions.firstOrNull() is Action.ActualStateAction ||
+            Calendar.getInstance().timeInMillis < nextCalcTime
+        ) {
+            return this
         }
 
-        return if (actions.isNotEmpty() && actions.firstOrNull() !is Action.ActualStateAction) {
-            if (Calendar.getInstance().timeInMillis < nextCalcTime) {
-                return this
-            }
+        val enemies = dungeonState?.enemies ?: persistentListOf()
+        var newHealth = health
+        var newDungeonState = dungeonState
 
-            var newHealth = health
-            var newDungeonState = dungeonState
+        val newActions = actions.toMutableList()
+        val action = newActions.removeFirstOrNull()
 
-            val newActions = actions.toMutableList()
-            val action = newActions.removeFirstOrNull()
-
-            action?.let {
-                when (action) {
-                    is Action.HealAction -> {
-                        newHealth = health?.let { cHp ->
-                            totalHealth?.let { tHp ->
-                                val regeneratedHealth = cHp + action.data.healAmount
-                                if (regeneratedHealth < tHp) {
-                                    regeneratedHealth
-                                } else {
-                                    tHp
-                                }
+        action?.let {
+            when (action) {
+                is Action.HealAction -> {
+                    newHealth = health?.let { cHp ->
+                        totalHealth?.let { tHp ->
+                            val regeneratedHealth = cHp + action.healAmount
+                            if (regeneratedHealth < tHp) {
+                                regeneratedHealth
+                            } else {
+                                tHp
                             }
                         }
                     }
-
-                    is Action.HeroIsDeadAction -> {
-                        newHealth = 1
-                        newDungeonState = null
-                    }
-
-                    is Action.EnemyAttackAction -> {}
-                    is Action.HeroAttackAction -> {}
-                    is Action.NextHallAction -> {}
-
-                    is Action.ActualStateAction -> {}
                 }
+
+                is Action.HeroIsDeadAction -> {
+                    newHealth = 1
+                    newDungeonState = null
+                }
+
+                is Action.EnemyAttackAction -> {
+                    newHealth = health?.let { cHp ->
+                        val reducedHealth = cHp - action.enemyPureDamage
+                        if (reducedHealth > 0) {
+                            reducedHealth
+                        } else {
+                            0
+                        }
+                    }
+                }
+
+                is Action.HeroAttackAction -> {
+                    val newEnemies = enemies.mapIndexed { index, enemy ->
+                        if (index == action.targetIndex) {
+                            val reducedHealth = enemy.health - action.heroPureDamage
+                            enemy.copy(health = if (reducedHealth > 0) reducedHealth else 0)
+                        } else {
+                            enemy
+                        }
+                    }.toPersistentList()
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                }
+
+                is Action.NextHallAction -> {}
+
+                is Action.ActualStateAction -> {}
             }
-            copy(
-                health = newHealth,
-                actions = newActions.toPersistentList(),
-                nextCalcTime = nextCalcTime + ACTION_TICK_TIME,
-                dungeonState = newDungeonState,
-            ).calculateActionsRecursiveAndGet()
-        } else {
-            throw HeroStateCalculationException.FinalStateException
         }
+        return copy(
+            health = newHealth,
+            nextCalcTime = nextCalcTime + ACTION_TICK_TIME,
+            dungeonState = newDungeonState,
+            actions = newActions.toPersistentList(),
+        ).calculateActionsRecursiveAndGet()
     }
 
     companion object {
@@ -85,8 +101,8 @@ data class HeroState(
                 isLoading = false,
                 dungeonState = null,
             )
-        const val ACTION_TICK_TIME = 1000L
-        const val ACTION_CHECK_TICK_TIME = 100L
+        const val ACTION_TICK_TIME = 2000L
+        const val ACTION_CHECK_TICK_TIME = 400L
     }
 }
 
@@ -94,24 +110,27 @@ data class DungeonState(
     val hallNumber: Int? = null,
     val districtStringId: String? = null,
     val dungeonStringId: String? = null,
-    //val Enemies: List<Enemy> = emptyList(),
-    //val Actions: List<Actions> = emptyList(),
+    val enemies: ImmutableList<Enemy> = persistentListOf(),
 )
 
 sealed class Action {
     data class HealAction(
-        val data: EffectData.HealEffectData,
+        val healAmount: Int,
+    ) : Action()
+
+    data class HeroAttackAction(
+        val targetIndex: Int,
+        val heroPureDamage: Int,
+    ) : Action()
+
+    data class EnemyAttackAction(
+        val enemyIndex: Int,
+        val enemyPureDamage: Int,
     ) : Action()
 
     data object NextHallAction : Action()
     data object HeroIsDeadAction : Action()
-    data object HeroAttackAction : Action()
-    data object EnemyAttackAction : Action()
     data object ActualStateAction : Action()
-}
-
-sealed class EffectData() {
-    data class HealEffectData(val healAmount: Int) : EffectData()
 }
 
 sealed class HeroStateCalculationException(text: String) : Exception(text) {

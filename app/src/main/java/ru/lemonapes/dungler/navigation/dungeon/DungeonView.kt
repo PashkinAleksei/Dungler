@@ -31,8 +31,10 @@ fun DungeonView(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            items(state.enemies) { enemy ->
-                EnemyView(enemy = enemy)
+            state.enemies?.let { enemies ->
+                items(enemies) { enemy ->
+                    EnemyView(enemy = enemy)
+                }
             }
         }
     }

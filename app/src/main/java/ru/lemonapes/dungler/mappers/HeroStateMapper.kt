@@ -4,7 +4,6 @@ import android.icu.util.Calendar
 import kotlinx.collections.immutable.toPersistentList
 import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.DungeonState
-import ru.lemonapes.dungler.hero_state.EffectData
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.hero_state.HeroState.Companion.ACTION_TICK_TIME
 import ru.lemonapes.dungler.network.models.ActionType
@@ -15,21 +14,6 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
             level = response.level,
             health = response.health,
             totalHealth = response.totalHealth,
-            actions = response.actions.map {
-                when (it.type) {
-                    ActionType.HEAL_EFFECT ->
-                        Action.HealAction(
-                            EffectData.HealEffectData(it.healEffectData?.get("heal_amount") ?: 0)
-                        )
-
-                    ActionType.NEXT_HALL -> Action.NextHallAction
-                    ActionType.HERO_IS_DEAD -> Action.HeroIsDeadAction
-                    ActionType.HERO_ATTACK -> Action.HeroAttackAction
-                    ActionType.ENEMY_ATTACK -> Action.EnemyAttackAction
-                    ActionType.ACTUAL_STATE -> Action.ActualStateAction
-                }
-            }.toPersistentList(),
-            enemies = response.enemies.map(EnemyMapper).toPersistentList(),
             experience = response.experience,
             totalExperience = response.totalExperience,
             isLoading = false,
@@ -37,9 +21,32 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
                 DungeonState(
                     hallNumber = hallNumber,
                     districtStringId = response.districtStringId,
-                    dungeonStringId = response.dungeonStringId
+                    dungeonStringId = response.dungeonStringId,
+                    enemies = response.enemies.map(EnemyMapper).toPersistentList(),
                 )
             },
+            actions = response.actions.map {
+                when (it.type) {
+                    ActionType.HEAL_EFFECT ->
+                        Action.HealAction(
+                            healAmount = it.healEffectData?.healAmount ?: 0,
+                        )
+
+                    ActionType.HERO_ATTACK -> Action.HeroAttackAction(
+                        targetIndex = it.heroAttackData?.targetIndex ?: 0,
+                        heroPureDamage = it.heroAttackData?.heroPureDamage ?: 0,
+                    )
+
+                    ActionType.ENEMY_ATTACK -> Action.EnemyAttackAction(
+                        enemyIndex = it.enemyAttackData?.enemyIndex ?: 0,
+                        enemyPureDamage = it.enemyAttackData?.enemyPureDamage ?: 0,
+                    )
+
+                    ActionType.NEXT_HALL -> Action.NextHallAction
+                    ActionType.HERO_IS_DEAD -> Action.HeroIsDeadAction
+                    ActionType.ACTUAL_STATE -> Action.ActualStateAction
+                }
+            }.toPersistentList(),
             nextCalcTime = Calendar.getInstance().timeInMillis + ACTION_TICK_TIME
         )
     }

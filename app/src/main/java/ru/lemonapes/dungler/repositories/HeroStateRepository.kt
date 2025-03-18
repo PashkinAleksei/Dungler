@@ -1,5 +1,6 @@
 package ru.lemonapes.dungler.repositories
 
+import android.icu.util.Calendar
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.onTimeout
 import kotlinx.coroutines.selects.select
 import ru.lemonapes.dungler.Utils.Companion.log
+import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.DungeonState
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.hero_state.HeroState.Companion.ACTION_CHECK_TICK_TIME
@@ -26,6 +28,10 @@ class HeroStateRepository @Inject constructor(
     private val heroStateStore: HeroStateStore,
 ) {
 
+    val ceh = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+    }
+
     private fun getPollingExceptionHandler(coroutineScope: CoroutineScope) = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
         startPolling(coroutineScope = coroutineScope, isRetry = true)
@@ -36,15 +42,18 @@ class HeroStateRepository @Inject constructor(
 
     private val pollingResetChannel = Channel<ChannelAction>(Channel.CONFLATED)
 
+    @Volatile
+    private var isActionCountingActive = true
+
 
     private var pollingJob: Job? = null
-    private var actionCountingJob: Job? = null
+    private var actionCalculationJob: Job? = null
 
     private var polingRetryCounter = 0
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun startPolling(coroutineScope: CoroutineScope, isRetry: Boolean = false) {
-        log("startPolling")
+        //log("startPolling")
         pollingJob?.cancel()
         pollingJob = coroutineScope.launch(Dispatchers.IO + getPollingExceptionHandler(coroutineScope)) {
             if (isRetry) {
@@ -54,7 +63,7 @@ class HeroStateRepository @Inject constructor(
                 }
             }
             while (isActive) {
-                fetchHeroState(coroutineScope)
+                fetchHeroState()
                 polingRetryCounter = 0
 
                 //make new polling after POLLING_INTERVAL,
@@ -81,15 +90,16 @@ class HeroStateRepository @Inject constructor(
     }
 
     fun stopPolling() {
-        log("stopPolling")
+        //log("stopPolling")
         pollingJob?.cancel()
     }
 
-    private suspend fun fetchHeroState(coroutineScope: CoroutineScope) {
-        log("start fetching HeroState")
+    private suspend fun fetchHeroState() {
+        //log("start fetching HeroState")
         heroStateStore.heroState = HeroStateResponseMapper(getHeroState())
+        isActionCountingActive = true
         log("HeroState fetched ${heroStateStore.heroState}")
-        startActionsCalculation(coroutineScope)
+        resumeActionsCalculation()
     }
 
     fun heroInDungeonError() {
@@ -100,38 +110,81 @@ class HeroStateRepository @Inject constructor(
         resetPolling()
     }
 
-    fun setNewHeroState(coroutineScope: CoroutineScope, newHeroState: HeroState) {
+    fun setNewHeroState(newHeroState: HeroState) {
         log("setNewHeroState $newHeroState")
         heroStateStore.heroState = newHeroState
         delayPolling()
-        startActionsCalculation(coroutineScope)
+        resumeActionsCalculation()
     }
 
-    private fun startActionsCalculation(coroutineScope: CoroutineScope) {
-        if (actionCountingJob?.isActive != true) {
-            actionCountingJob = coroutineScope.launch(Dispatchers.IO) {
-                while (isActive) {
+    //-----------------------------------------------------------------------------------------------------------------
+    fun startActionsCalculation(coroutineScope: CoroutineScope) {
+        isActionCountingActive = true
+        actionCalculationJob?.cancel()
+        actionCalculationJob = coroutineScope.launch(Dispatchers.Default + ceh) {
+            while (isActive) {
+                if (isActionCountingActive) {
                     calculateActions()
-                    delay(ACTION_CHECK_TICK_TIME)
+                    //log("calculateActions ended ${actionCalculationJob?.isActive} $isActive\n")
+                }
+                delay(ACTION_CHECK_TICK_TIME)
+                //log("delay(ACTION_CHECK_TICK_TIME)\n")
+            }
+        }
+    }
+
+    private fun pauseActionsCalculation() {
+        //log("pauseActionsCalculation")
+        isActionCountingActive = false
+    }
+
+    private fun resumeActionsCalculation() {
+        //log("resumeActionsCalculation")
+        isActionCountingActive = true
+    }
+
+    fun stopActionsCalculation() {
+        //log("stopActionCalculation")
+        actionCalculationJob?.cancel()
+    }
+
+    private fun calculateActions() {
+        heroStateStore.updateState { heroState ->
+            when {
+                heroState.nextCalcTime == 0L ||
+                        heroState.isLoading ||
+                        heroState.actions.firstOrNull() is Action.ActualStateAction -> {
+                    //log("1_$heroState")
+                    pauseActionsCalculation()
+                    heroState
+                }
+
+                heroState.actions.isEmpty() || heroState.actions.firstOrNull() is Action.ActualStateAction -> {
+                    //log("2_$heroState")
+                    pauseActionsCalculation()
+                    resetPolling()
+                    heroState
+                }
+
+                Calendar.getInstance().timeInMillis > heroState.nextCalcTime -> {
+                    //log("3_$heroState")
+                    heroState.calculateActionsRecursiveAndGet()
+                }
+
+                Calendar.getInstance().timeInMillis <= heroState.nextCalcTime -> {
+                    //log("4_$heroState")
+                    heroState
+                }
+
+                else -> {
+                    //log("5_$heroState")
+                    heroState
                 }
             }
         }
     }
 
-    fun stopActionsCalculation() {
-        actionCountingJob?.cancel()
-    }
-
-    private fun calculateActions() {
-        runCatching {
-            heroStateStore.updateState { heroState ->
-                heroState.calculateActionsRecursiveAndGet()
-            }
-        }.onFailure { exc ->
-            stopActionsCalculation()
-        }
-    }
-
+    //-----------------------------------------------------------------------------------------------------------------
     companion object {
         const val POLLING_INTERVAL = 15000L
         const val POLLING_RETRY_DELAY = 5000L

@@ -1,6 +1,5 @@
 package ru.lemonapes.dungler.navigation.craft
 
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +30,7 @@ class CraftViewModel @Inject constructor(
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
             val (createItems, upgradeItems, reagents, heroState) = CraftItemResponseMapper(getCraftItems())
-            heroStateRepository.setNewHeroState(viewModelScope, heroState)
+            heroStateRepository.setNewHeroState(heroState)
 
             updateState { state ->
                 state.copy(
@@ -47,7 +46,7 @@ class CraftViewModel @Inject constructor(
     override fun actionCreateItem(gearId: GearId) = withActualState {
         launch(Dispatchers.IO + ceh) {
             val (createItems, upgradeItems, reagents, heroState) = CraftItemResponseMapper(postCreateItem(gearId = gearId))
-            heroStateRepository.setNewHeroState(viewModelScope, heroState)
+            heroStateRepository.setNewHeroState(heroState)
 
             updateState { state ->
                 state.copy(
@@ -62,7 +61,7 @@ class CraftViewModel @Inject constructor(
     override fun actionUpgradeItem(gearId: GearId) = withActualState {
         launch(Dispatchers.IO + ceh) {
             val (createItems, upgradeItems, reagents, heroState) = CraftItemResponseMapper(postUpgradeItem(gearId = gearId))
-            heroStateRepository.setNewHeroState(viewModelScope, heroState)
+            heroStateRepository.setNewHeroState(heroState)
 
             updateState { state ->
                 state.copy(

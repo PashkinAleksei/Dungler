@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
-        mainViewModel.actionStopPolling()
+        mainViewModel.actionStop()
     }
 
     override fun onDestroy() {
