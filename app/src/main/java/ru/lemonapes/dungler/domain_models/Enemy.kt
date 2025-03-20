@@ -31,5 +31,19 @@ data class Enemy(
                     ReagentId.LINEN_CLOTH to 1
                 )
             )
+        val DEAD_MOCK
+            get() = Enemy(
+                image = R.drawable.img_giant_rat,
+                enemyId = EnemyTypeId.GIANT_RAT,
+                health = 0,
+                totalHealth = 100,
+                damageMin = 1,
+                damageMax = 2,
+                level = 1,
+                loot = mapOf(
+                    ReagentId.COPPER to 1,
+                    ReagentId.LINEN_CLOTH to 1
+                )
+            )
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -173,14 +175,25 @@ private fun Enemy.HealthBar(
             strokeCap = StrokeCap.Square,
             drawStopIndicator = {}
         )
-        UIText(
-            modifier = Modifier
-                .fillMaxSize(),
-            textAlign = TextAlign.Center,
-            text = healthText,
-            color = LocalThemeColors.current.barsTextColor,
-            textStyle = LocalThemeTypographies.current.regular12
-        )
+        if (isAlive) {
+            UIText(
+                modifier = Modifier
+                    .fillMaxSize(),
+                textAlign = TextAlign.Center,
+                text = healthText,
+                color = LocalThemeColors.current.barsTextColor,
+                textStyle = LocalThemeTypographies.current.regular12
+            )
+        } else {
+            Icon(
+                modifier = Modifier
+                    .padding(1.dp)
+                    .fillMaxHeight(),
+                painter = painterResource(id = R.drawable.skull),
+                contentDescription = stringResource(R.string.dungeon_exit),
+                tint = LocalThemeColors.current.barsTextColor
+            )
+        }
     }
 }
 
@@ -188,6 +201,6 @@ private fun Enemy.HealthBar(
 @Composable
 fun EnemyViewPreview() {
     DunglerTheme(darkTheme = true) {
-        EnemyView(enemy = Enemy.MOCK)
+        EnemyView(enemy = Enemy.DEAD_MOCK)
     }
 }

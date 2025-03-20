@@ -2,7 +2,10 @@ package ru.lemonapes.dungler.main_activity
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.lemonapes.dungler.mappers.HeroStateResponseMapper
+import ru.lemonapes.dungler.network.endpoints.setHeroHomeLocation
 import ru.lemonapes.dungler.parent_view_model.ParentViewModel
 import ru.lemonapes.dungler.parent_view_model.State
 import ru.lemonapes.dungler.parent_view_model.ViewModelAction
@@ -25,6 +28,7 @@ enum class MainRoute {
 
 interface MainViewModelAction : ViewModelAction {
     fun actionStop()
+    fun actionDungeonExit()
 }
 
 @HiltViewModel
@@ -49,6 +53,13 @@ class MainViewModel @Inject constructor(
     override fun actionStop() {
         heroStateRepository.stopPolling()
         heroStateRepository.stopActionsCalculation()
+    }
+
+    override fun actionDungeonExit() = withActualState {
+        launch(Dispatchers.IO + ceh) {
+            val heroState = HeroStateResponseMapper(setHeroHomeLocation())
+            heroStateRepository.setNewHeroState(heroState)
+        }
     }
 
     override fun actionStart() {
