@@ -28,19 +28,21 @@ class HeroStateRepository @Inject constructor(
     private val heroStateStore: HeroStateStore,
 ) {
 
-    val ceh = CoroutineExceptionHandler { _, throwable ->
+    val heroStateFlow
+        get() = heroStateStore.heroStateFlow
+
+    private val ceh = CoroutineExceptionHandler { _, throwable ->
+        log("$throwable")
         throwable.printStackTrace()
     }
 
     private fun getPollingExceptionHandler(coroutineScope: CoroutineScope) = CoroutineExceptionHandler { _, throwable ->
+        log("$throwable")
         throwable.printStackTrace()
         startPolling(coroutineScope = coroutineScope, isRetry = true)
     }
 
-    val heroStateFlow
-        get() = heroStateStore.heroStateFlow
-
-    private val pollingResetChannel = Channel<ChannelAction>(Channel.CONFLATED)
+    private var pollingResetChannel: Channel<ChannelAction>? = null
 
     @Volatile
     private var isActionCountingActive = true
@@ -53,7 +55,8 @@ class HeroStateRepository @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun startPolling(coroutineScope: CoroutineScope, isRetry: Boolean = false) {
-        //log("startPolling")
+        //log("startPolling coroutineScope")
+        pollingResetChannel = Channel(Channel.CONFLATED)
         pollingJob?.cancel()
         pollingJob = coroutineScope.launch(Dispatchers.IO + getPollingExceptionHandler(coroutineScope)) {
             if (isRetry) {
@@ -70,7 +73,7 @@ class HeroStateRepository @Inject constructor(
                 //but have opportunity to make it immediately using resetChannel
                 select {
                     onTimeout(POLLING_INTERVAL) { }
-                    pollingResetChannel.onReceive { action ->
+                    pollingResetChannel?.onReceive { action ->
                         when (action) {
                             ChannelAction.RESET -> {}
                             ChannelAction.DELAY -> delay(POLLING_INTERVAL)
@@ -82,11 +85,11 @@ class HeroStateRepository @Inject constructor(
     }
 
     private fun resetPolling() {
-        pollingResetChannel.trySend(ChannelAction.RESET)
+        pollingResetChannel?.trySend(ChannelAction.RESET)
     }
 
     private fun delayPolling() {
-        pollingResetChannel.trySend(ChannelAction.DELAY)
+        pollingResetChannel?.trySend(ChannelAction.DELAY)
     }
 
     fun stopPolling() {
@@ -97,7 +100,7 @@ class HeroStateRepository @Inject constructor(
     private suspend fun fetchHeroState() {
         //log("start fetching HeroState")
         heroStateStore.heroState = HeroStateResponseMapper(getHeroState())
-        isActionCountingActive = true
+        resumeActionsCalculation()
         log("HeroState fetched ${heroStateStore.heroState}")
         resumeActionsCalculation()
     }
@@ -119,7 +122,7 @@ class HeroStateRepository @Inject constructor(
 
     //-----------------------------------------------------------------------------------------------------------------
     fun startActionsCalculation(coroutineScope: CoroutineScope) {
-        isActionCountingActive = true
+        resumeActionsCalculation()
         actionCalculationJob?.cancel()
         actionCalculationJob = coroutineScope.launch(Dispatchers.Default + ceh) {
             while (isActive) {
@@ -154,7 +157,7 @@ class HeroStateRepository @Inject constructor(
                 heroState.nextCalcTime == 0L ||
                         heroState.isLoading ||
                         heroState.actions.firstOrNull() is Action.ActualStateAction -> {
-                    //log("1_$heroState")
+                    //log("1_heroState")
                     pauseActionsCalculation()
                     heroState
                 }

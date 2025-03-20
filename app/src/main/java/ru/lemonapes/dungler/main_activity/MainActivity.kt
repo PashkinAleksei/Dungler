@@ -22,12 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.BottomBar
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.navigation.Screens
@@ -36,7 +34,6 @@ import ru.lemonapes.dungler.navigation.craft.craftNavigation
 import ru.lemonapes.dungler.navigation.dungeon.dungeonNavigation
 import ru.lemonapes.dungler.navigation.dungeon_list.dungeonListNavigation
 import ru.lemonapes.dungler.navigation.inventory.inventoryNavigation
-import ru.lemonapes.dungler.network.HttpClientProvider
 import ru.lemonapes.dungler.repositories.HeroStateRepository
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import javax.inject.Inject
@@ -76,13 +73,6 @@ class MainActivity : ComponentActivity() {
     override fun onStop() {
         super.onStop()
         mainViewModel.actionStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mainViewModel.viewModelScope.launch {
-            HttpClientProvider.close()
-        }
     }
 }
 
