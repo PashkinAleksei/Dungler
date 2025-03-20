@@ -3,6 +3,7 @@ package ru.lemonapes.dungler.network.models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.lemonapes.dungler.domain_models.EnemyTypeId
+import ru.lemonapes.dungler.domain_models.ReagentId
 
 @Serializable
 data class ServerEnemy(
@@ -12,4 +13,5 @@ data class ServerEnemy(
     @SerialName("damage_max") val damageMax: Int,
     @SerialName("max_health") val maxHealth: Int,
     @SerialName("level") val level: Int,
+    @SerialName("loot") val loot: Map<ReagentId, Int> = emptyMap(),
 )

@@ -17,7 +17,8 @@ object EnemyMapper : (ServerEnemy) -> Enemy {
             damageMin = serverEnemy.damageMin,
             damageMax = serverEnemy.damageMax,
             totalHealth = serverEnemy.maxHealth,
-            level = serverEnemy.level
+            level = serverEnemy.level,
+            loot = serverEnemy.loot
         )
     }
 }

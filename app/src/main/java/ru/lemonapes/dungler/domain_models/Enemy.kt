@@ -11,6 +11,7 @@ data class Enemy(
     val damageMax: Int,
     val totalHealth: Int,
     val level: Int,
+    val loot: Map<ReagentId, Int> = emptyMap(),
 ) {
     companion object {
         val MOCK
@@ -21,7 +22,11 @@ data class Enemy(
                 totalHealth = 100,
                 damageMin = 1,
                 damageMax = 2,
-                level = 1
+                level = 1,
+                loot = mapOf(
+                    ReagentId.COPPER to 1,
+                    ReagentId.LINEN_CLOTH to 1
+                )
             )
     }
 }
