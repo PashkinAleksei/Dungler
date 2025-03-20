@@ -17,6 +17,8 @@ class DungeonViewModel @Inject constructor(
 ) : ParentViewModel<DungeonState>(DungeonState.EMPTY, heroStateRepository),
     DungeonViewModelAction {
 
+    val heroStateFlow = heroStateRepository.heroStateFlow
+
     init {
         viewModelScope.launch {
             heroStateRepository.heroStateFlow.collect { heroState ->

@@ -174,7 +174,7 @@ data class LimonApesTypographies(
             fontWeight = FontWeight.W700,
             fontFamily = fontsMuseoSansCyrl,
             fontSize = 14.sp,
-            lineHeight = 21.sp,
+            lineHeight = 16.sp,
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Center,
                 trim = LineHeightStyle.Trim.None
@@ -186,7 +186,7 @@ data class LimonApesTypographies(
             fontWeight = FontWeight.W300,
             fontFamily = fontsMuseoSansCyrl,
             fontSize = 14.sp,
-            lineHeight = 21.sp,
+            lineHeight = 16.sp,
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Center,
                 trim = LineHeightStyle.Trim.None
@@ -210,7 +210,7 @@ data class LimonApesTypographies(
             fontWeight = FontWeight.W700,
             fontFamily = fontsMuseoSansCyrl,
             fontSize = 14.sp,
-            lineHeight = 21.sp,
+            lineHeight = 16.sp,
             textDecoration = TextDecoration.Underline,
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Center,
@@ -223,7 +223,7 @@ data class LimonApesTypographies(
             fontWeight = FontWeight.W300,
             fontFamily = fontsMuseoSansCyrl,
             fontSize = 14.sp,
-            lineHeight = 21.sp,
+            lineHeight = 16.sp,
             textDecoration = TextDecoration.Underline,
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Center,
@@ -236,7 +236,7 @@ data class LimonApesTypographies(
             fontWeight = FontWeight.W700,
             fontFamily = fontsMuseoSansCyrl,
             fontSize = 12.sp,
-            lineHeight = 16.sp,
+            lineHeight = 14.sp,
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Center,
                 trim = LineHeightStyle.Trim.None
@@ -248,7 +248,7 @@ data class LimonApesTypographies(
             fontWeight = FontWeight.W300,
             fontFamily = fontsMuseoSansCyrl,
             fontSize = 12.sp,
-            lineHeight = 16.sp,
+            lineHeight = 14.sp,
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Center,
                 trim = LineHeightStyle.Trim.None

@@ -34,59 +34,62 @@ fun HeroTopBar(
     modifier: Modifier = Modifier,
     heroState: HeroState,
 ) {
-    val levelText = if (heroState.isLoading) {
-        null
-    } else {
-        heroState.level?.toString()
-    } ?: "??"
-
     Row(
         modifier = modifier.padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(LocalThemeColors.current.surfaceColor),
-            contentAlignment = Alignment.Center
-        ) {
-            UIText(
-                textAlign = TextAlign.Center,
-                text = levelText,
-                color = LocalThemeColors.current.barsTextColor,
-                textStyle = LocalThemeTypographies.current.bold24
-            )
-        }
-
+        heroState.LevelSurface()
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            HealthBar(heroState = heroState)
+            heroState.HealthBar()
             Spacer(modifier = Modifier.height(1.dp))
-            ExperienceBar(heroState = heroState)
+            heroState.ExperienceBar()
         }
     }
 }
 
 @Composable
-private fun HealthBar(
+private fun HeroState.LevelSurface() {
+    val levelText = if (isLoading) {
+        null
+    } else {
+        level?.toString()
+    } ?: "??"
+
+    Box(
+        modifier = Modifier
+            .size(48.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(LocalThemeColors.current.surfaceColor),
+        contentAlignment = Alignment.Center
+    ) {
+        UIText(
+            textAlign = TextAlign.Center,
+            text = levelText,
+            color = LocalThemeColors.current.barsTextColor,
+            textStyle = LocalThemeTypographies.current.bold24
+        )
+    }
+}
+
+@Composable
+private fun HeroState.HealthBar(
     modifier: Modifier = Modifier,
-    heroState: HeroState,
 ) {
-    val healthProgress = if (heroState.isLoading) {
+    val healthProgress = if (isLoading) {
         0f
     } else {
-        heroState.health?.let { hp ->
-            heroState.totalHealth?.let { tHp ->
+        health?.let { hp ->
+            totalHealth?.let { tHp ->
                 hp.toFloat().div(tHp.toFloat())
             }
         }
     }
-    val healthText = if (heroState.isLoading) {
+    val healthText = if (isLoading) {
         null
     } else {
-        heroState.health?.let { hp ->
-            heroState.totalHealth?.let { tHp ->
+        health?.let { hp ->
+            totalHealth?.let { tHp ->
                 "$hp/$tHp"
             }
         }
@@ -119,18 +122,17 @@ private fun HealthBar(
 }
 
 @Composable
-private fun ExperienceBar(
+private fun HeroState.ExperienceBar(
     modifier: Modifier = Modifier,
-    heroState: HeroState,
 ) {
-    val experienceText = heroState.experience?.let { hp ->
-        heroState.totalExperience?.let { tHp ->
+    val experienceText = experience?.let { hp ->
+        totalExperience?.let { tHp ->
             "$hp/$tHp"
         }
     } ?: "??/??"
 
-    val experienceProgress = heroState.experience?.let { exp ->
-        heroState.totalExperience?.let { tExp ->
+    val experienceProgress = experience?.let { exp ->
+        totalExperience?.let { tExp ->
             exp.toFloat().div(tExp.toFloat())
         }
     }

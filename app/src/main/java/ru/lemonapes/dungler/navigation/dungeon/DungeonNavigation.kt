@@ -9,12 +9,14 @@ import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.StateListener
 
 fun NavGraphBuilder.dungeonNavigation() {
-    composable<Screens.Dungeon>() {
+    composable<Screens.Dungeon> {
         val model: DungeonViewModel = hiltViewModel()
         val state = model.observeState().collectAsState().value
+        val heroState = model.heroStateFlow.collectAsState().value
         ActionOnStart(model::actionStart)
         DungeonView(
             state = state,
+            heroState = heroState,
             listener = DungeonListener(
                 onRetryClick = {
                     model.actionStart()
