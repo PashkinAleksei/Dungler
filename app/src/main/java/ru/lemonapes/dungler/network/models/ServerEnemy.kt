@@ -13,5 +13,5 @@ data class ServerEnemy(
     @SerialName("damage_max") val damageMax: Int,
     @SerialName("max_health") val maxHealth: Int,
     @SerialName("level") val level: Int,
-    @SerialName("loot") val loot: Map<ReagentId, Int> = emptyMap(),
+    @SerialName("loot") val loot: Map<ReagentId, Int>? = null,
 )

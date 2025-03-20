@@ -75,9 +75,12 @@ data class HeroState(
                     newDungeonState = dungeonState?.copy(enemies = newEnemies)
                 }
 
-                is Action.NextHallAction -> {}
-
-                is Action.ActualStateAction -> {}
+                is Action.NextHallAction,
+                is Action.TakeLootAction,
+                is Action.ActualStateAction,
+                    -> {
+                    //do nothing
+                }
             }
         }
         return copy(
@@ -129,6 +132,7 @@ sealed class Action {
     ) : Action()
 
     data object NextHallAction : Action()
+    data object TakeLootAction : Action()
     data object HeroIsDeadAction : Action()
     data object ActualStateAction : Action()
 }

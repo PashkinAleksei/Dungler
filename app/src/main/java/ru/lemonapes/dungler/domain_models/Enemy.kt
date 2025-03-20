@@ -13,6 +13,9 @@ data class Enemy(
     val level: Int,
     val loot: Map<ReagentId, Int> = emptyMap(),
 ) {
+    val isAlive
+        get() = health > 0
+
     companion object {
         val MOCK
             get() = Enemy(

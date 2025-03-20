@@ -18,7 +18,7 @@ object EnemyMapper : (ServerEnemy) -> Enemy {
             damageMax = serverEnemy.damageMax,
             totalHealth = serverEnemy.maxHealth,
             level = serverEnemy.level,
-            loot = serverEnemy.loot
+            loot = serverEnemy.loot ?: emptyMap()
         )
     }
 }

@@ -27,6 +27,7 @@ data class ServerHeroState(
 
 @Serializable
 enum class ActionType {
+    TAKE_LOOT,
     NEXT_HALL,
     HEAL_EFFECT,
     HERO_IS_DEAD,

@@ -28,6 +28,9 @@
     <string name="green_knight_sword_name">Меч зеленого рыцаря</string>
 
     <string name="enemy">Противник</string>
+    <string name="corpse">(Труп)</string>
+    <string name="loot_label">Есть добыча</string>
+
     <string name="unknown_enemy_name">Неопознанный предмет</string>
     <string name="giant_rat_name">Гигантская крыса</string>
     <string name="bat_name">Летучая мышь</string>

@@ -43,6 +43,7 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
                     )
 
                     ActionType.NEXT_HALL -> Action.NextHallAction
+                    ActionType.TAKE_LOOT -> Action.TakeLootAction
                     ActionType.HERO_IS_DEAD -> Action.HeroIsDeadAction
                     ActionType.ACTUAL_STATE -> Action.ActualStateAction
                 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -40,8 +42,8 @@ fun EnemyView(
     Card(modifier, shape = RoundedCornerShape(12.dp)) {
         Box(
             modifier = modifier
-                .padding(6.dp)
-                .aspectRatio(1f)
+                .padding(3.dp)
+                .aspectRatio(0.75f)
                 .fillMaxWidth(),
         ) {
             Surface(shape = RoundedCornerShape(8.dp)) {
@@ -51,12 +53,15 @@ fun EnemyView(
                     contentScale = ContentScale.Crop,
                 )
             }
+            val enemyName = stringResource(id = enemy.enemyId.enemyName).run {
+                if (enemy.isAlive) this else this + " " + stringResource(R.string.corpse)
+            }
             UIText(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 6.dp)
                     .padding(top = 4.dp),
-                text = stringResource(id = enemy.enemyId.enemyName),
+                text = enemyName,
                 textStyle = LocalThemeTypographies.current.regular14Compact,
                 textAlign = TextAlign.Center,
             )
@@ -65,7 +70,16 @@ fun EnemyView(
                 contentAlignment = Alignment.BottomCenter,
             ) {
                 Column {
-                    Row {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        enemy.LootLabel(
+                            Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(end = 6.dp)
+                        )
+                    }
+                    Row(Modifier.padding(top = 2.dp)) {
                         enemy.LevelLabel(Modifier.padding(start = 6.dp))
                         Spacer(Modifier.weight(1f))
                         enemy.AttackLabel(Modifier.padding(end = 6.dp))
@@ -112,6 +126,25 @@ private fun Enemy.AttackLabel(modifier: Modifier = Modifier) {
             ),
             textStyle = LocalThemeTypographies.current.regular14,
         )
+    }
+}
+
+@Composable
+private fun Enemy.LootLabel(modifier: Modifier = Modifier) {
+    if (!isAlive && loot.isNotEmpty()) {
+        Surface(
+            modifier = modifier,
+            shape = RoundedCornerShape(4.dp),
+            color = LocalThemeColors.current.surfaceSemiTransparentColor
+        ) {
+            Image(
+                modifier = Modifier
+                    .size(30.dp),
+                painter = painterResource(R.drawable.ic_backpack),
+                colorFilter = ColorFilter.tint(LocalThemeColors.current.primaryTextColor),
+                contentDescription = stringResource(id = R.string.loot_label),
+            )
+        }
     }
 }
 
