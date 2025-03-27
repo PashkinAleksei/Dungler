@@ -2,6 +2,7 @@ package ru.lemonapes.dungler.navigation.character
 
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
+import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
@@ -13,6 +14,7 @@ data class CharacterViewState(
     override val isLoading: Boolean = true,
 
     val gears: ImmutableMap<GearType, Gear> = persistentMapOf(),
+    val food: Food? = null,
     val stats: ImmutableMap<StatId, Int> = persistentMapOf(),
     val dialogEquipmentState: DialogEquipmentState? = null,
 ) : State {
@@ -21,6 +23,7 @@ data class CharacterViewState(
         val MOCK
             get() = CharacterViewState(
                 gears = persistentMapOf(GearType.CHEST to Gear.MOCK_1),
+                food = Food.MOCK,
                 stats = persistentMapOf(
                     StatId.STRENGTH to 17,
                     StatId.STAMINA to 12,

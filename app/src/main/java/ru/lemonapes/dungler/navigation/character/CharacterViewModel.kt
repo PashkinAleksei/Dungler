@@ -55,13 +55,14 @@ class CharacterViewModel @Inject constructor(
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
-            val (gears, stats, heroState) = EquipmentResponseMapper(getEquipment())
-            heroStateRepository.setNewHeroState(heroState)
+            val result = EquipmentResponseMapper(getEquipment())
+            heroStateRepository.setNewHeroState(result.heroState)
 
             updateState { state ->
                 state.copy(
-                    gears = gears,
-                    stats = stats,
+                    gears = result.gears,
+                    food = result.food,
+                    stats = result.stats,
                     isLoading = false,
                     dialogEquipmentState = null
                 )
@@ -98,13 +99,14 @@ class CharacterViewModel @Inject constructor(
     override fun actionEquip(gear: Gear) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val (gears, stats, heroState) = EquipmentResponseMapper(patchEquipItem(gear))
-            heroStateRepository.setNewHeroState(heroState)
+            val result = EquipmentResponseMapper(patchEquipItem(gear))
+            heroStateRepository.setNewHeroState(result.heroState)
             if (isActive) {
                 updateState { state ->
                     state.copy(
-                        gears = gears,
-                        stats = stats,
+                        gears = result.gears,
+                        food = result.food,
+                        stats = result.stats,
                         dialogEquipmentState = null
                     )
                 }
@@ -115,13 +117,14 @@ class CharacterViewModel @Inject constructor(
     override fun actionDeEquip(gearType: GearType) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val (gears, stats, heroState) = EquipmentResponseMapper(patchDeEquipItem(gearType))
-            heroStateRepository.setNewHeroState(heroState)
+            val result = EquipmentResponseMapper(patchDeEquipItem(gearType))
+            heroStateRepository.setNewHeroState(result.heroState)
             if (isActive) {
                 updateState { state ->
                     state.copy(
-                        gears = gears,
-                        stats = stats,
+                        gears = result.gears,
+                        food = result.food,
+                        stats = result.stats,
                         dialogEquipmentState = null
                     )
                 }

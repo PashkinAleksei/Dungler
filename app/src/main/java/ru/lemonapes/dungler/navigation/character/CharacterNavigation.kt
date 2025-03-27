@@ -4,6 +4,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.navigation.Screens
@@ -22,6 +23,9 @@ fun NavGraphBuilder.characterNavigation() {
             listener = CharacterListener(
                 onGearClick = { gearType, gear ->
                     model.actionGearClick(gearType, gear)
+                },
+                onFoodClick = {
+
                 },
                 onRetryClick = {
                     model.actionStart()
@@ -57,12 +61,14 @@ fun NavGraphBuilder.characterNavigation() {
 class CharacterListener(
     override val onRetryClick: () -> Unit,
     val onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
+    val onFoodClick: (food: Food) -> Unit,
 ) : StateListener {
     companion object {
         val EMPTY
             get() = CharacterListener(
                 onRetryClick = {},
                 onGearClick = { _, _ -> },
+                onFoodClick = {},
             )
     }
 }
