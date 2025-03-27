@@ -3,6 +3,7 @@ package ru.lemonapes.dungler.ui.item_comparison_dialog
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import ru.lemonapes.dungler.domain_models.CreateFood
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.parent_view_model.State
 
@@ -12,6 +13,7 @@ data class DialogEquipmentState(
 
     val status: DialogEquipmentStateStatus,
     val equippedGear: Gear? = null,
+    val equippedFood: CreateFood? = null,
     val gearToCompare: Gear? = null,
     val inventoryList: ImmutableList<Gear> = persistentListOf(),
 ) : State {

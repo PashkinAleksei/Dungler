@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import ru.lemonapes.dungler.domain_models.CreateFood
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.mappers.EquipmentResponseMapper
@@ -24,6 +25,7 @@ import javax.inject.Inject
 
 interface CharViewModelAction : ViewModelAction {
     fun actionGearClick(gearType: GearType, gear: Gear?)
+    fun actionFoodClick(food: CreateFood?)
 
     //Dialog actions
     fun actionGearCompareClick(gear: Gear)
@@ -82,6 +84,19 @@ class CharacterViewModel @Inject constructor(
             }
         } else {
             actionShowInventoryClick(gearType)
+        }
+    }
+
+    override fun actionFoodClick(food: CreateFood?) {
+        if (food != null) {
+            updateState { state ->
+                state.copy(
+                    dialogEquipmentState = DialogEquipmentState(
+                        equippedFood = food,
+                        status = DialogEquipmentStateStatus.EQUIPPED
+                    )
+                )
+            }
         }
     }
 

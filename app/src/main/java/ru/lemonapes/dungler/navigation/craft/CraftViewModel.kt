@@ -4,6 +4,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.lemonapes.dungler.domain_models.CreateFood
 import ru.lemonapes.dungler.domain_models.GearId
 import ru.lemonapes.dungler.mappers.CraftItemResponseMapper
 import ru.lemonapes.dungler.navigation.craft.CraftViewState.CraftSwitchState
@@ -17,6 +18,7 @@ import javax.inject.Inject
 
 interface CraftAction : ViewModelAction {
     fun actionCreateItem(gearId: GearId)
+    fun actionCreateFood(food: CreateFood)
     fun actionUpgradeItem(gearId: GearId)
     fun switchClick(state: CraftSwitchState)
 }
@@ -29,12 +31,13 @@ class CraftViewModel @Inject constructor(
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
-            val (createItems, upgradeItems, reagents, heroState) = CraftItemResponseMapper(getCraftItems())
+            val (createItems, createFood, upgradeItems, reagents, heroState) = CraftItemResponseMapper(getCraftItems())
             heroStateRepository.setNewHeroState(heroState)
 
             updateState { state ->
                 state.copy(
                     createItems = createItems,
+                    createFood = createFood,
                     upgradeItems = upgradeItems,
                     reagents = reagents,
                     isLoading = false,
@@ -45,12 +48,17 @@ class CraftViewModel @Inject constructor(
 
     override fun actionCreateItem(gearId: GearId) = withActualState {
         launch(Dispatchers.IO + ceh) {
-            val (createItems, upgradeItems, reagents, heroState) = CraftItemResponseMapper(postCreateItem(gearId = gearId))
+            val (createItems, createFood, upgradeItems, reagents, heroState) = CraftItemResponseMapper(
+                postCreateItem(
+                    gearId = gearId
+                )
+            )
             heroStateRepository.setNewHeroState(heroState)
 
             updateState { state ->
                 state.copy(
                     createItems = createItems,
+                    createFood = createFood,
                     upgradeItems = upgradeItems,
                     reagents = reagents.toPersistentMap()
                 )
@@ -58,14 +66,35 @@ class CraftViewModel @Inject constructor(
         }
     }
 
-    override fun actionUpgradeItem(gearId: GearId) = withActualState {
-        launch(Dispatchers.IO + ceh) {
-            val (createItems, upgradeItems, reagents, heroState) = CraftItemResponseMapper(postUpgradeItem(gearId = gearId))
+    override fun actionCreateFood(food: CreateFood) = withActualState {
+        /*launch(Dispatchers.IO + ceh) {
+            val (createItems, createFood, upgradeItems, reagents, heroState) = CraftItemResponseMapper(postCreateFood(foodId = foodId))
             heroStateRepository.setNewHeroState(heroState)
 
             updateState { state ->
                 state.copy(
                     createItems = createItems,
+                    createFood = createFood,
+                    upgradeItems = upgradeItems,
+                    reagents = reagents.toPersistentMap()
+                )
+            }
+        }*/
+    }
+
+    override fun actionUpgradeItem(gearId: GearId) = withActualState {
+        launch(Dispatchers.IO + ceh) {
+            val (createItems, createFood, upgradeItems, reagents, heroState) = CraftItemResponseMapper(
+                postUpgradeItem(
+                    gearId = gearId
+                )
+            )
+            heroStateRepository.setNewHeroState(heroState)
+
+            updateState { state ->
+                state.copy(
+                    createItems = createItems,
+                    createFood = createFood,
                     upgradeItems = upgradeItems,
                     reagents = reagents.toPersistentMap()
                 )

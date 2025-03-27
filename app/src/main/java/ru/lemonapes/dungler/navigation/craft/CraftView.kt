@@ -40,8 +40,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableList
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.CraftGear
+import ru.lemonapes.dungler.domain_models.CreateFood
 import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.domain_models.UpgradeGear
@@ -88,7 +90,10 @@ fun CraftView(modifier: Modifier = Modifier, state: CraftViewState, listener: Cr
 @Composable
 fun CraftGearView(craftState: CraftViewState, craftListener: CraftListener) {
     val (craftItems, buttonText) = when (craftState.switchState) {
-        CREATE -> Pair(craftState.createItems, R.string.craft_create_button_text)
+        CREATE -> Pair(
+            (craftState.createItems + craftState.createFood).toImmutableList(),
+            R.string.craft_create_button_text
+        )
         UPGRADE -> Pair(craftState.upgradeItems, R.string.craft_upgrade_button_text)
     }
     var selectedItemIndex by remember(craftState.switchState, craftItems.size) { mutableIntStateOf(0) }
@@ -108,7 +113,10 @@ fun CraftGearView(craftState: CraftViewState, craftListener: CraftListener) {
                 craftItem = craftItems[selectedItemIndex],
                 reagentMap = craftState.reagents,
                 craftItemFun = {
-                    craftListener.craftItem(craftItems[selectedItemIndex])
+                    when (craftItems[selectedItemIndex]) {
+                        is CreateFood -> craftListener.craftFood(craftItems[selectedItemIndex] as CreateFood)
+                        is CraftGear -> craftListener.craftItem(craftItems[selectedItemIndex] as CraftGear)
+                    }
                 },
                 buttonText = buttonText
             )
@@ -141,7 +149,7 @@ private fun CraftViewState.HandleError(viewEvent: (CraftViewEvent) -> Unit) {
 
 @Composable
 private fun CraftPanel(
-    craftItem: CraftGear,
+    craftItem: Any,
     reagentMap: ImmutableMap<ReagentId, Int>,
     craftItemFun: () -> Unit,
     @StringRes buttonText: Int,
@@ -157,7 +165,10 @@ private fun CraftPanel(
                 .wrapContentHeight()
                 .padding(8.dp)
         ) {
-            craftItem.CraftItemInfo()
+            when (craftItem) {
+                is CraftGear -> craftItem.CraftItemInfo()
+                is CreateFood -> craftItem.CraftItemInfo()
+            }
             ReagentList(craftItem, reagentMap)
             Button(
                 modifier = Modifier
@@ -240,7 +251,47 @@ private fun CraftGear.CraftItemInfo() {
 }
 
 @Composable
-private fun ReagentList(item: CraftGear, reagentMap: ImmutableMap<ReagentId, Int>) {
+private fun CreateFood.CraftItemInfo() {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(bottom = 7.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier.wrapContentSize(),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            Image(
+                modifier = Modifier
+                    .border(2.dp, Color.Gray)
+                    .border(3.dp, Color.LightGray)
+                    .size(120.dp)
+                    .background(LocalThemeColors.current.imageBackground)
+                    .padding(4.dp),
+                painter = painterResource(foodId.image),
+                contentDescription = stringResource(id = foodId.foodName),
+            )
+        }
+        UIText(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
+            text = stringResource(foodId.foodName),
+            textStyle = LocalThemeTypographies.current.regular20,
+            maxLines = 3
+        )
+    }
+}
+
+@Composable
+private fun ReagentList(item: Any, reagentMap: ImmutableMap<ReagentId, Int>) {
+    val reagents = when (item) {
+        is CraftGear -> item.reagents
+        is CreateFood -> item.reagents
+        else -> persistentMapOf()
+    }
     LazyVerticalGrid(
         GridCells.Fixed(3),
         Modifier
@@ -248,11 +299,11 @@ private fun ReagentList(item: CraftGear, reagentMap: ImmutableMap<ReagentId, Int
             .wrapContentHeight(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        items(item.reagents.toList()) { item ->
+        items(reagents.toList()) { (reagentId, countRequired) ->
             ReagentItem(
-                reagentId = item.first,
-                countRequired = item.second,
-                countInBag = reagentMap[item.first] ?: 0
+                reagentId = reagentId,
+                countRequired = countRequired,
+                countInBag = reagentMap[reagentId] ?: 0
             )
         }
     }
@@ -263,7 +314,7 @@ private fun CraftList(
     modifier: Modifier,
     selectedItemIndex: Int,
     selectCraftItem: (index: Int) -> Unit,
-    craftList: ImmutableList<CraftGear>,
+    craftList: ImmutableList<Any>,
 ) {
     LazyColumn(modifier.fillMaxWidth()) {
         itemsIndexed(craftList) { index, item ->
@@ -275,9 +326,13 @@ private fun CraftList(
 }
 
 @Composable
-private fun CraftListItemView(item: CraftGear, isSelected: Boolean, click: () -> Unit) {
+private fun CraftListItemView(item: Any, isSelected: Boolean, click: () -> Unit) {
     UIText(
-        text = stringResource(item.gearId.gearName),
+        text = when (item) {
+            is CraftGear -> stringResource(item.gearId.gearName)
+            is CreateFood -> stringResource(item.foodId.foodName)
+            else -> ""
+        },
         color = if (isSelected) LocalThemeColors.current.positiveTextColor else LocalThemeColors.current.primaryTextColor,
         textStyle = LocalThemeTypographies.current.regular24,
         modifier = Modifier

@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import ru.lemonapes.dungler.domain_models.CraftGear
+import ru.lemonapes.dungler.domain_models.CreateFood
 import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.UpgradeGear
 import ru.lemonapes.dungler.navigation.Screens
@@ -22,6 +23,9 @@ fun NavGraphBuilder.craftNavigation() {
         CraftView(
             state = state,
             listener = CraftListener(
+                onRetryClick = {
+                    model.actionStart()
+                },
                 switchClick = {
                     model.switchClick(it)
                 },
@@ -31,8 +35,8 @@ fun NavGraphBuilder.craftNavigation() {
                         is UpgradeGear -> model.actionUpgradeItem(item.gearId)
                     }
                 },
-                onRetryClick = {
-                    model.actionStart()
+                craftFood = { food ->
+                    model.actionCreateFood(food)
                 }
             )
         )
@@ -42,9 +46,10 @@ fun NavGraphBuilder.craftNavigation() {
 class CraftListener(
     override val onRetryClick: () -> Unit,
     val switchClick: (state: CraftSwitchState) -> Unit,
-    val craftItem: (item: CraftGear) -> Unit,
+    val craftItem: (gear: CraftGear) -> Unit,
+    val craftFood: (food: CreateFood) -> Unit,
 ) : StateListener {
     companion object {
-        val EMPTY get() = CraftListener({}, {}, {})
+        val EMPTY get() = CraftListener({}, {}, {}, {})
     }
 }

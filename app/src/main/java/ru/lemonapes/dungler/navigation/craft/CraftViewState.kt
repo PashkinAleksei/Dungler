@@ -4,6 +4,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import ru.lemonapes.dungler.domain_models.CreateFood
 import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.domain_models.UpgradeGear
@@ -14,6 +15,7 @@ data class CraftViewState(
     override val isLoading: Boolean = true,
 
     val createItems: ImmutableList<CreateGear> = persistentListOf(),
+    val createFood: ImmutableList<CreateFood> = persistentListOf(),
     val upgradeItems: ImmutableList<UpgradeGear> = persistentListOf(),
     val reagents: ImmutableMap<ReagentId, Int> = persistentMapOf(),
     val switchState: CraftSwitchState = CraftSwitchState.CREATE,
