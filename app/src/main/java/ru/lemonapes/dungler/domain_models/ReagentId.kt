@@ -19,4 +19,7 @@ enum class ReagentId(
 
     @SerialName("topaz")
     TOPAZ(R.string.topaz_name, R.drawable.topaz),
+
+    @SerialName("apple")
+    APPLE(R.string.apple_name, R.drawable.apple),
 }

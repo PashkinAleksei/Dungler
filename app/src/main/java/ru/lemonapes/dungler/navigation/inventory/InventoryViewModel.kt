@@ -20,11 +20,12 @@ class InventoryViewModel @Inject constructor(
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
-            val (gears, reagents) = InventoryResponseMapper(getInventory())
+            val (gears, food, reagents) = InventoryResponseMapper(getInventory())
 
             updateState { state ->
                 state.copy(
                     gears = gears,
+                    food = food,
                     reagents = reagents,
                     isLoading = false,
                 )

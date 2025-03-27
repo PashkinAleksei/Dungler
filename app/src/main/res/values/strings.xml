@@ -40,9 +40,11 @@
     <string name="wild_dog_name">Дикая собака</string>
     <string name="crocolisk_name">Кроколиск</string>
 
+    <string name="apple_salad_name">Яблочный салат</string>
     <string name="linen_cloth_name">Льняная ткань</string>
     <string name="copper_name">Медная руда</string>
     <string name="topaz_name">Топаз</string>
+    <string name="apple_name">Яблоко</string>
 
     <string name="stat_strength">Сила</string>
     <string name="stat_stamina">Выносливость</string>

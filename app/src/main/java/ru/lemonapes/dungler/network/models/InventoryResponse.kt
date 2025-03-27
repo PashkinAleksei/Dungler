@@ -6,5 +6,6 @@ import ru.lemonapes.dungler.domain_models.ReagentId
 @Serializable
 data class InventoryResponse(
     val gears: List<ServerGear>? = null,
+    val food: List<ServerFood>? = null,
     val reagents: Map<ReagentId, Int>? = null,
 )

@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.ui.StateCheck
@@ -66,6 +67,7 @@ fun InventoryView(
                     }
                 }
             }
+
             items(state.reagents.toList()) { (reagentId, count) ->
                 Box(
                     Modifier
@@ -83,6 +85,24 @@ fun InventoryView(
                     }
                 }
             }
+
+            items(state.food) { food ->
+                Box(
+                    Modifier
+                        .aspectRatio(1f)
+                        .padding(horizontal = 1.dp, vertical = 1.dp)
+                ) {
+                    Surface {
+                        ImageWithCounter(
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .background(LocalThemeColors.current.imageBackground),
+                            painter = painterResource(food.id.image),
+                            counter = food.count
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -94,6 +114,7 @@ fun BagViewPreview() {
         InventoryView(
             state = InventoryState(
                 gears = persistentListOf(Gear.MOCK_1),
+                food = persistentListOf(Food.MOCK),
                 reagents = persistentMapOf(ReagentId.LINEN_CLOTH to 99),
             ),
             listener = InventoryListener.EMPTY

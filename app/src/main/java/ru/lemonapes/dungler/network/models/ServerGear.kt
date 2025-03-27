@@ -8,6 +8,7 @@ import ru.lemonapes.dungler.domain_models.StatId
 @Serializable
 data class ServerGear(
     @SerialName("gear_id") val gearId: GearId,
+    @SerialName("gear_type") val gearType: String,
     val level: Int,
     val stats: Map<StatId, Int>,
     @SerialName("is_equipped") val isEquipped: Boolean,
