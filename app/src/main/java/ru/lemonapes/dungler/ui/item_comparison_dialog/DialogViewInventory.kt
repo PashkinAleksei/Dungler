@@ -27,7 +27,7 @@ import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 
 @Composable
 fun InventoryDialogView(
-    state: DialogEquipmentState,
+    state: DialogEquipmentState.GearInventory,
     listener: EquipmentChangingDialogListener,
 ) {
     val columns = 4

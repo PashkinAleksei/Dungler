@@ -11,4 +11,6 @@ data class ServerFood(
     @SerialName("health_regen_amount")
     val healthRegenAmount: Int,
     val count: Int,
+    @SerialName("is_equipped")
+    val isEquipped: Boolean,
 ) 

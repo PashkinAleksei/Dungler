@@ -24,8 +24,8 @@ fun NavGraphBuilder.characterNavigation() {
                 onGearClick = { gearType, gear ->
                     model.actionGearClick(gearType, gear)
                 },
-                onFoodClick = {
-
+                onFoodClick = { food ->
+                    model.actionFoodClick(food)
                 },
                 onRetryClick = {
                     model.actionStart()
@@ -48,7 +48,7 @@ fun NavGraphBuilder.characterNavigation() {
                     model.actionDeEquip(gearType)
                 },
                 backToInventoryClick = {
-                    model.actionBackToInventoryClick()
+                    model.actionDialogBackClick()
                 },
                 onRetryClick = {
                     model.actionShowInventoryReload()

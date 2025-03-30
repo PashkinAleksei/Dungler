@@ -38,29 +38,31 @@ fun EquipmentChangingDialog(
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                when (dialogEquipmentState.status) {
-                    DialogEquipmentStateStatus.EQUIPPED -> {
-                        dialogEquipmentState.equippedGear?.let { gear ->
-                            ItemDescriptionDialogView(gear, listener)
-                        }
-                    }
+                when (dialogEquipmentState) {
+                    is DialogEquipmentState.GearShowEquipped ->
+                        ItemDescriptionDialogView(dialogEquipmentState.equippedGear, listener)
 
-                    DialogEquipmentStateStatus.INVENTORY -> {
+                    is DialogEquipmentState.GearInventory -> {
                         InventoryDialogView(state = dialogEquipmentState, listener = listener)
                     }
 
-                    DialogEquipmentStateStatus.COMPARISON -> {
-                        dialogEquipmentState.gearToCompare?.let { gearToCompare ->
-                            DialogViewItemComparison(
-                                gearToCompare = gearToCompare,
-                                equippedGear = dialogEquipmentState.equippedGear,
-                                listener = listener
-                            )
-                        }
+                    is DialogEquipmentState.GearComparison -> {
+                        DialogViewItemComparison(
+                            gearToCompare = dialogEquipmentState.gearToCompare,
+                            equippedGear = dialogEquipmentState.equippedGear,
+                            listener = listener
+                        )
                     }
+
+                    is DialogEquipmentState.FoodComparison -> {}
+                    is DialogEquipmentState.FoodInventory -> {}
+                    is DialogEquipmentState.FoodShowEquipped -> {}
                 }
             }
-            if (dialogEquipmentState.status == DialogEquipmentStateStatus.COMPARISON) {
+            if (dialogEquipmentState is DialogEquipmentState.GearComparison ||
+                (dialogEquipmentState is DialogEquipmentState.GearInventory &&
+                        dialogEquipmentState.equippedGear != null)
+            ) {
                 IconButton(
                     modifier = Modifier.align(Alignment.TopStart),
                     onClick = listener.backToInventoryClick

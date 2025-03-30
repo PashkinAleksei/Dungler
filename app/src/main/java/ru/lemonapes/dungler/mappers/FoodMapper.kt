@@ -8,6 +8,7 @@ object FoodMapper : (ServerFood) -> Food {
         Food(
             id = serverFood.id,
             healthRegenAmount = serverFood.healthRegenAmount,
-            count = serverFood.count
+            count = serverFood.count,
+            isEquipped = serverFood.isEquipped
         )
 } 
