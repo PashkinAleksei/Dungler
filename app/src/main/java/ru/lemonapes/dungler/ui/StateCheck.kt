@@ -26,4 +26,13 @@ fun StateCheck(
     }
 }
 
-interface StateListener : ErrorListener
+class StateListener(
+    override val onRetryClick: () -> Unit,
+) : ErrorListener {
+    companion object {
+        val MOCK
+            get() = StateListener(
+                onRetryClick = {},
+            )
+    }
+}

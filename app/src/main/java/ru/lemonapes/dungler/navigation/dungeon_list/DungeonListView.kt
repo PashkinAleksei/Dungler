@@ -27,7 +27,7 @@ fun DungeonListView(
     StateCheck(
         modifier = modifier,
         state = state,
-        listener = listener
+        listener = listener.stateListener
     ) {
         Column(
             modifier = Modifier
@@ -55,6 +55,6 @@ fun DungeonListView(
 @Composable
 private fun DungeonListScreenPreview() {
     DunglerTheme(darkTheme = true) {
-        DungeonListView(state = DungeonListState.MOCK, listener = DungeonListListener.EMPTY)
+        DungeonListView(state = DungeonListState.MOCK, listener = DungeonListListener.MOCK)
     }
 }

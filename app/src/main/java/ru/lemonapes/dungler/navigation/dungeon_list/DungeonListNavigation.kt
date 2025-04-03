@@ -17,9 +17,11 @@ fun NavGraphBuilder.dungeonListNavigation() {
         DungeonListView(
             state = state,
             listener = DungeonListListener(
-                onRetryClick = {
-                    model.actionStart()
-                },
+                stateListener = StateListener(
+                    onRetryClick = {
+                        model.actionStart()
+                    },
+                ),
                 onEnterDungeonsClick = { dungeonId ->
                     model.actionEnterDungeons(dungeonId)
                 }
@@ -29,13 +31,13 @@ fun NavGraphBuilder.dungeonListNavigation() {
 }
 
 class DungeonListListener(
-    override val onRetryClick: () -> Unit,
+    val stateListener: StateListener,
     val onEnterDungeonsClick: (dungeonId: String) -> Unit,
-) : StateListener {
+) {
     companion object {
-        val EMPTY
+        val MOCK
             get() = DungeonListListener(
-                onRetryClick = {},
+                stateListener = StateListener.MOCK,
                 onEnterDungeonsClick = {}
             )
     }

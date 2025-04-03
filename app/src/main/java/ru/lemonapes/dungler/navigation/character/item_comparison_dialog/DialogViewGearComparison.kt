@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.ui.item_comparison_dialog
+package ru.lemonapes.dungler.navigation.character.item_comparison_dialog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Gear
-import ru.lemonapes.dungler.navigation.character.EquipmentChangingDialogListener
+import ru.lemonapes.dungler.navigation.character.GearChangingDialogListener
 import ru.lemonapes.dungler.ui.StatItem
 import ru.lemonapes.dungler.ui.StatItemWithComparison
 import ru.lemonapes.dungler.ui.UIText
@@ -28,10 +28,10 @@ import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
-fun DialogViewItemComparison(
+fun DialogViewGearComparison(
     gearToCompare: Gear,
     equippedGear: Gear? = null,
-    listener: EquipmentChangingDialogListener,
+    listener: GearChangingDialogListener,
 ) {
     Column {
         GearToCompareDescription(
@@ -51,7 +51,7 @@ fun DialogViewItemComparison(
 private fun GearToCompareDescription(
     gearToCompare: Gear,
     equippedGear: Gear?,
-    listener: EquipmentChangingDialogListener,
+    listener: GearChangingDialogListener,
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
@@ -153,10 +153,10 @@ private fun EquippedGearDescription(
 @Composable
 private fun ItemDescriptionDialogViewPreview() {
     DunglerTheme(darkTheme = true) {
-        DialogViewItemComparison(
+        DialogViewGearComparison(
             gearToCompare = Gear.MOCK_2,
             equippedGear = Gear.MOCK_1,
-            listener = EquipmentChangingDialogListener.EMPTY
+            listener = GearChangingDialogListener.MOCK
         )
     }
 }

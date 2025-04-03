@@ -5,7 +5,8 @@
     <string name="gear_name_level">\n(Уровень %s)</string>
     <string name="change_item">Заменить</string>
     <string name="equip_item">Экипировать</string>
-    <string name="deequip_item">Снять</string>
+    <string name="de_equip_gear">Снять</string>
+    <string name="de_equip_food">Убрать</string>
     <string name="error_text">Произошла ошибка!</string>
     <string name="error_button_text">Повторить</string>
 
@@ -41,6 +42,8 @@
     <string name="crocolisk_name">Кроколиск</string>
 
     <string name="apple_salad_name">Яблочный салат</string>
+    <string name="monster_leg_name">Лапка монстра</string>
+    <string name="monster_leg_food_name">Жаренная лапка монстра</string>
     <string name="linen_cloth_name">Льняная ткань</string>
     <string name="copper_name">Медная руда</string>
     <string name="topaz_name">Топаз</string>
@@ -59,6 +62,7 @@
     <string name="stat_dodge_chance">Шанс уклонения</string>
     <string name="stat_crit_chance">Шанс критического удара</string>
     <string name="min_hero_level">Минимальный уровень героя</string>
+    <string name="food_health_regen_amount">Регенерация здоровья в секунду</string>
     <string name="unknown_stat">Неопознанная характеристика</string>
 
     <string name="castle_dungeons_title">Замковые подземелья</string>

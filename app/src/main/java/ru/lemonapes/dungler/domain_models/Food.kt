@@ -7,11 +7,18 @@ data class Food(
     val isEquipped: Boolean,
 ) {
     companion object {
-        val MOCK
+        val MOCK_1
             get() = Food(
                 id = FoodId.APPLE_SALAD,
-                healthRegenAmount = 10,
+                healthRegenAmount = 3,
                 count = 5,
+                isEquipped = false
+            )
+        val MOCK_2
+            get() = Food(
+                id = FoodId.MONSTER_LEG,
+                healthRegenAmount = 5,
+                count = 15,
                 isEquipped = false
             )
     }

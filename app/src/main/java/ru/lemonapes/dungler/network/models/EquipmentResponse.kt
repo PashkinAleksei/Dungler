@@ -15,5 +15,5 @@ data class EquipmentResponse(
 @Serializable
 data class Equipment(
     @SerialName("gears") val gears: Map<GearType, ServerGear>? = null,
-    @SerialName("food") val food: List<ServerFood>? = null,
+    @SerialName("food") val food: ServerFood? = null,
 )

@@ -28,7 +28,7 @@ fun DungeonView(
     StateCheck(
         modifier = modifier,
         state = state,
-        listener = listener
+        listener = listener.stateListener
     ) {
         Column {
             Row(Modifier.padding(top = 8.dp)) {

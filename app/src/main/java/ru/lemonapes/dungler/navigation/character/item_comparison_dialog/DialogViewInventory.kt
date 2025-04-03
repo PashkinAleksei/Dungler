@@ -1,6 +1,5 @@
-package ru.lemonapes.dungler.ui.item_comparison_dialog
+package ru.lemonapes.dungler.navigation.character.item_comparison_dialog
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,20 +14,20 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ru.lemonapes.dungler.navigation.character.EquipmentChangingDialogListener
+import kotlinx.collections.immutable.ImmutableList
+import ru.lemonapes.dungler.parent_view_model.State
 import ru.lemonapes.dungler.ui.StateCheck
-import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
-import ru.lemonapes.dungler.ui.theme.DunglerTheme
+import ru.lemonapes.dungler.ui.StateListener
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 
 @Composable
-fun InventoryDialogView(
-    state: DialogEquipmentState.GearInventory,
-    listener: EquipmentChangingDialogListener,
+fun <T> DialogViewInventory(
+    state: State,
+    inventoryList: ImmutableList<T>,
+    listener: StateListener,
+    onItemClick: (T) -> Unit,
+    inventoryItem: @Composable (T) -> Unit,
 ) {
     val columns = 4
     val rows = 4
@@ -39,7 +38,6 @@ fun InventoryDialogView(
         val cellWidth = (maxWidth / columns)
         // Высота грида равна высоте 4 строк, при условии, что ячейка квадратная
         val gridHeight = cellWidth * rows
-        val inventoryList = state.inventoryList
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -64,18 +62,10 @@ fun InventoryDialogView(
                                     .background(LocalThemeColors.current.secondaryTextColor)
                                     .padding(horizontal = 1.dp, vertical = 1.dp)
                             ) {
-                                val border = if (gear.isEquipped) BorderStroke(3.dp, Color.Yellow) else null
                                 Surface(
-                                    modifier = Modifier.clickable { listener.gearCompareClick(gear) },
-                                    border = border
+                                    modifier = Modifier.clickable { onItemClick(gear) },
                                 ) {
-                                    ImageWithCounter(
-                                        modifier = Modifier
-                                            .padding(2.dp)
-                                            .background(LocalThemeColors.current.imageBackground),
-                                        painter = painterResource(gear.image),
-                                        counter = gear.level
-                                    )
+                                    inventoryItem(gear)
                                 }
                             }
                         } else {
@@ -94,16 +84,3 @@ fun InventoryDialogView(
         }
     }
 }
-
-
-@Preview
-@Composable
-private fun InventoryDialogPreview() {
-    DunglerTheme(darkTheme = true) {
-        InventoryDialogView(
-            listener = EquipmentChangingDialogListener.EMPTY,
-            state = DialogEquipmentState.INVENTORY_MOCK_SMALL
-        )
-    }
-}
-

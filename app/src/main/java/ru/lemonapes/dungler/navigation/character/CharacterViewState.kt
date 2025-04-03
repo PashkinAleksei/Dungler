@@ -6,8 +6,8 @@ import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
+import ru.lemonapes.dungler.navigation.character.item_comparison_dialog.DialogEquipmentState
 import ru.lemonapes.dungler.parent_view_model.State
-import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
 
 data class CharacterViewState(
     override val error: Throwable? = null,
@@ -23,7 +23,7 @@ data class CharacterViewState(
         val MOCK
             get() = CharacterViewState(
                 gears = persistentMapOf(GearType.CHEST to Gear.MOCK_1),
-                food = Food.MOCK,
+                food = Food.MOCK_1,
                 stats = persistentMapOf(
                     StatId.STRENGTH to 17,
                     StatId.STAMINA to 12,

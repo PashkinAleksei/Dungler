@@ -13,4 +13,7 @@ enum class FoodId(
 ) {
     @SerialName("apple_salad")
     APPLE_SALAD(R.string.apple_salad_name, R.drawable.apple_salad),
+
+    @SerialName("monster_leg")
+    MONSTER_LEG(R.string.monster_leg_food_name, R.drawable.monster_leg),
 }

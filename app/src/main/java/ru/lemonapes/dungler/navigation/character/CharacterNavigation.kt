@@ -24,74 +24,126 @@ fun NavGraphBuilder.characterNavigation() {
                 onGearClick = { gearType, gear ->
                     model.actionGearClick(gearType, gear)
                 },
-                onFoodClick = { food ->
-                    model.actionFoodClick(food)
+                onFoodClick = {
+                    model.actionFoodClick()
                 },
-                onRetryClick = {
-                    model.actionStart()
-                },
-            ),
-            equipmentChangingDialogListener = EquipmentChangingDialogListener(
-                gearShowInventoryClick = { gearType ->
-                    model.actionShowInventoryClick(gearType)
-                },
-                gearCompareClick = { gear ->
-                    model.actionGearCompareClick(gear)
-                },
-                onGearDescriptionDialogDismiss = {
-                    model.actionGearDescriptionDialogDismiss()
-                },
-                gearEquipClick = { gear ->
-                    model.actionEquip(gear)
-                },
-                gearDeEquipClick = { gearType ->
-                    model.actionDeEquip(gearType)
-                },
-                backToInventoryClick = {
-                    model.actionDialogBackClick()
-                },
-                onRetryClick = {
-                    model.actionShowInventoryReload()
-                },
+                stateListener = StateListener(
+                    onRetryClick = {
+                        model.actionStart()
+                    },
+                ),
+                equipmentChangingDialogListener = EquipmentChangingDialogListener(
+                    gearListener = GearChangingDialogListener(
+                        gearShowInventoryClick = { gearType ->
+                            model.actionShowGearInventoryClick(gearType)
+                        },
+                        gearCompareClick = { gear ->
+                            model.actionGearCompareClick(gear)
+                        },
+                        gearEquipClick = { gear ->
+                            model.actionEquip(gear)
+                        },
+                        gearDeEquipClick = { gearType ->
+                            model.actionGearDeEquip(gearType)
+                        },
+                    ),
+                    foodListener = FoodChangingDialogListener(
+                        foodCompareClick = { food ->
+                            model.actionFoodCompareClick(food)
+                        },
+                        foodEquipClick = { food ->
+                            model.actionFoodEquip(food)
+                        },
+                        foodShowInventoryClick = {
+                            model.actionShowFoodInventoryClick()
+                        },
+                        foodDeEquipClick = {
+                            model.actionFoodDeEquip()
+                        },
+                    ),
+                    stateListener = StateListener(
+                        onRetryClick = {
+                            model.actionShowInventoryReload()
+                        },
+                    ),
+                    backToInventoryClick = {
+                        model.actionDialogBackClick()
+                    },
+                    onDismiss = {
+                        model.actionGearDescriptionDialogDismiss()
+                    },
+                ),
             ),
         )
     }
 }
 
 class CharacterListener(
-    override val onRetryClick: () -> Unit,
     val onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
-    val onFoodClick: (food: Food) -> Unit,
-) : StateListener {
+    val onFoodClick: () -> Unit,
+    val stateListener: StateListener,
+    val equipmentChangingDialogListener: EquipmentChangingDialogListener,
+) {
     companion object {
-        val EMPTY
+        val MOCK
             get() = CharacterListener(
-                onRetryClick = {},
                 onGearClick = { _, _ -> },
                 onFoodClick = {},
+                stateListener = StateListener.MOCK,
+                equipmentChangingDialogListener = EquipmentChangingDialogListener.MOCK,
             )
     }
 }
 
 class EquipmentChangingDialogListener(
-    override val onRetryClick: () -> Unit,
+    val gearListener: GearChangingDialogListener,
+    val foodListener: FoodChangingDialogListener,
+    val stateListener: StateListener,
+    val onDismiss: () -> Unit,
+    val backToInventoryClick: () -> Unit,
+) {
+    companion object {
+        val MOCK
+            get() = EquipmentChangingDialogListener(
+                gearListener = GearChangingDialogListener.MOCK,
+                foodListener = FoodChangingDialogListener.MOCK,
+                stateListener = StateListener.MOCK,
+                onDismiss = {},
+                backToInventoryClick = {},
+            )
+    }
+}
+
+open class GearChangingDialogListener(
     val gearShowInventoryClick: (gearType: GearType) -> Unit,
-    val onGearDescriptionDialogDismiss: () -> Unit,
     val gearCompareClick: (gear: Gear) -> Unit,
     val gearEquipClick: (gear: Gear) -> Unit,
     val gearDeEquipClick: (gearType: GearType) -> Unit,
-    val backToInventoryClick: () -> Unit,
-) : StateListener {
+) {
     companion object {
-        val EMPTY
-            get() = EquipmentChangingDialogListener(
-                onRetryClick = {},
+        val MOCK
+            get() = GearChangingDialogListener(
                 gearShowInventoryClick = {},
-                onGearDescriptionDialogDismiss = {},
                 gearCompareClick = {},
                 gearEquipClick = {},
                 gearDeEquipClick = {},
-                backToInventoryClick = {},
+            )
+    }
+}
+
+open class FoodChangingDialogListener(
+    val foodCompareClick: (food: Food) -> Unit,
+    val foodEquipClick: (food: Food) -> Unit,
+    val foodShowInventoryClick: () -> Unit,
+    val foodDeEquipClick: () -> Unit,
+) {
+    companion object {
+        val MOCK
+            get() = FoodChangingDialogListener(
+                foodCompareClick = {},
+                foodEquipClick = {},
+                foodShowInventoryClick = {},
+                foodDeEquipClick = {},
             )
     }
 }

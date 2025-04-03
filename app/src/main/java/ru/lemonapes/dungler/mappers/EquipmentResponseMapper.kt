@@ -10,7 +10,7 @@ object EquipmentResponseMapper : (EquipmentResponse) -> EquipmentMappingResult {
             GearMapper(serverGear)
         }
 
-        val food = response.equipment?.food?.firstOrNull()?.let(FoodMapper)
+        val food = response.equipment?.food?.let(FoodMapper)
 
         return EquipmentMappingResult(
             gears = gears?.toImmutableMap() ?: persistentMapOf(),

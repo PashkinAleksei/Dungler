@@ -63,7 +63,7 @@ fun CraftView(modifier: Modifier = Modifier, state: CraftViewState, listener: Cr
     StateCheck(
         modifier = modifier,
         state = state,
-        listener = listener
+        listener = listener.stateListener
     ) {
         Column(modifier) {
             SwitchButton(

@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.ui.item_comparison_dialog
+package ru.lemonapes.dungler.navigation.character.item_comparison_dialog
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,12 +23,12 @@ import ru.lemonapes.dungler.navigation.character.EquipmentChangingDialogListener
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 
 @Composable
-fun EquipmentChangingDialog(
+fun DialogEquipmentChanging(
     dialogEquipmentState: DialogEquipmentState,
     listener: EquipmentChangingDialogListener,
 ) {
     Dialog(
-        onDismissRequest = listener.onGearDescriptionDialogDismiss,
+        onDismissRequest = listener.onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Box(Modifier.fillMaxWidth()) {
@@ -40,28 +40,43 @@ fun EquipmentChangingDialog(
             ) {
                 when (dialogEquipmentState) {
                     is DialogEquipmentState.GearShowEquipped ->
-                        ItemDescriptionDialogView(dialogEquipmentState.equippedGear, listener)
+                        DialogViewGearDescription(dialogEquipmentState.equippedGear, listener.gearListener)
 
                     is DialogEquipmentState.GearInventory -> {
-                        InventoryDialogView(state = dialogEquipmentState, listener = listener)
+                        DialogViewGearListInventory(state = dialogEquipmentState, listener = listener)
                     }
 
                     is DialogEquipmentState.GearComparison -> {
-                        DialogViewItemComparison(
+                        DialogViewGearComparison(
                             gearToCompare = dialogEquipmentState.gearToCompare,
                             equippedGear = dialogEquipmentState.equippedGear,
-                            listener = listener
+                            listener = listener.gearListener
                         )
                     }
 
-                    is DialogEquipmentState.FoodComparison -> {}
-                    is DialogEquipmentState.FoodInventory -> {}
-                    is DialogEquipmentState.FoodShowEquipped -> {}
+                    is DialogEquipmentState.FoodShowEquipped -> {
+                        DialogViewFoodDescription(dialogEquipmentState.equippedFood, listener.foodListener)
+                    }
+
+                    is DialogEquipmentState.FoodInventory -> {
+                        DialogViewFoodListInventory(state = dialogEquipmentState, listener = listener)
+                    }
+
+                    is DialogEquipmentState.FoodComparison -> {
+                        DialogViewFoodComparison(
+                            foodToCompare = dialogEquipmentState.foodToCompare,
+                            equippedFood = dialogEquipmentState.equippedFood,
+                            listener = listener.foodListener
+                        )
+                    }
                 }
             }
             if (dialogEquipmentState is DialogEquipmentState.GearComparison ||
                 (dialogEquipmentState is DialogEquipmentState.GearInventory &&
-                        dialogEquipmentState.equippedGear != null)
+                        dialogEquipmentState.equippedGear != null) ||
+                dialogEquipmentState is DialogEquipmentState.FoodComparison ||
+                (dialogEquipmentState is DialogEquipmentState.FoodInventory &&
+                        dialogEquipmentState.equippedFood != null)
             ) {
                 IconButton(
                     modifier = Modifier.align(Alignment.TopStart),
@@ -77,7 +92,7 @@ fun EquipmentChangingDialog(
             }
             IconButton(
                 modifier = Modifier.align(Alignment.TopEnd),
-                onClick = listener.onGearDescriptionDialogDismiss
+                onClick = listener.onDismiss
             ) {
                 Icon(
                     modifier = Modifier.size(64.dp),
@@ -94,9 +109,9 @@ fun EquipmentChangingDialog(
 @Composable
 private fun EquipmentChangingDialogDescriptionPreview() {
     DunglerTheme(darkTheme = true) {
-        EquipmentChangingDialog(
-            dialogEquipmentState = DialogEquipmentState.DESCRIPTION_MOCK,
-            listener = EquipmentChangingDialogListener.EMPTY,
+        DialogEquipmentChanging(
+            dialogEquipmentState = DialogEquipmentState.GEAR_DESCRIPTION_MOCK,
+            listener = EquipmentChangingDialogListener.MOCK,
         )
     }
 }
@@ -105,9 +120,9 @@ private fun EquipmentChangingDialogDescriptionPreview() {
 @Composable
 private fun EquipmentChangingDialogInventoryPreview() {
     DunglerTheme(darkTheme = true) {
-        EquipmentChangingDialog(
-            dialogEquipmentState = DialogEquipmentState.INVENTORY_MOCK_SMALL,
-            listener = EquipmentChangingDialogListener.EMPTY,
+        DialogEquipmentChanging(
+            dialogEquipmentState = DialogEquipmentState.GEAR_INVENTORY_MOCK_SMALL,
+            listener = EquipmentChangingDialogListener.MOCK,
         )
     }
 }
@@ -116,9 +131,42 @@ private fun EquipmentChangingDialogInventoryPreview() {
 @Composable
 private fun EquipmentChangingDialogComparisonPreview() {
     DunglerTheme(darkTheme = true) {
-        EquipmentChangingDialog(
-            dialogEquipmentState = DialogEquipmentState.COMPARISON_MOCK,
-            listener = EquipmentChangingDialogListener.EMPTY,
+        DialogEquipmentChanging(
+            dialogEquipmentState = DialogEquipmentState.GEAR_COMPARISON_MOCK,
+            listener = EquipmentChangingDialogListener.MOCK,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun FoodDescriptionDialogPreview() {
+    DunglerTheme(darkTheme = true) {
+        DialogEquipmentChanging(
+            dialogEquipmentState = DialogEquipmentState.FOOD_DESCRIPTION_MOCK,
+            listener = EquipmentChangingDialogListener.MOCK,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun FoodInventoryDialogPreview() {
+    DunglerTheme(darkTheme = true) {
+        DialogEquipmentChanging(
+            dialogEquipmentState = DialogEquipmentState.FOOD_INVENTORY_MOCK_SMALL,
+            listener = EquipmentChangingDialogListener.MOCK,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun FoodComparisonDialogPreview() {
+    DunglerTheme(darkTheme = true) {
+        DialogEquipmentChanging(
+            dialogEquipmentState = DialogEquipmentState.FOOD_COMPARISON_MOCK,
+            listener = EquipmentChangingDialogListener.MOCK,
         )
     }
 }

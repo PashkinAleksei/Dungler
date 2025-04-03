@@ -48,7 +48,7 @@ abstract class ParentViewModel<S : State>(
         _state.update { with(viewModelScope) { actionBlock(_state.value) } }
     }
 
-    private fun Throwable.handleResponseError() {
+    fun Throwable.handleResponseError() {
         if (this is NetworkException) {
             when (errorCode) {
                 ResponseErrorCode.HERO_IN_A_DUNGEON -> heroStateRepository.heroInDungeonError()

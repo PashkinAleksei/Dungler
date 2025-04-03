@@ -23,9 +23,11 @@ fun NavGraphBuilder.craftNavigation() {
         CraftView(
             state = state,
             listener = CraftListener(
-                onRetryClick = {
-                    model.actionStart()
-                },
+                stateListener = StateListener(
+                    onRetryClick = {
+                        model.actionStart()
+                    },
+                ),
                 switchClick = {
                     model.switchClick(it)
                 },
@@ -44,12 +46,12 @@ fun NavGraphBuilder.craftNavigation() {
 }
 
 class CraftListener(
-    override val onRetryClick: () -> Unit,
+    val stateListener: StateListener,
     val switchClick: (state: CraftSwitchState) -> Unit,
     val craftItem: (gear: CraftGear) -> Unit,
     val craftFood: (food: CreateFood) -> Unit,
-) : StateListener {
+) {
     companion object {
-        val EMPTY get() = CraftListener({}, {}, {}, {})
+        val EMPTY get() = CraftListener(StateListener.MOCK, {}, {}, {})
     }
 }

@@ -34,7 +34,7 @@ fun InventoryView(
     StateCheck(
         modifier = modifier,
         state = state,
-        listener = listener
+        listener = listener.stateListener
     ) {
         LazyVerticalGrid(
             modifier = modifier
@@ -114,8 +114,9 @@ fun BagViewPreview() {
         InventoryView(
             state = InventoryState(
                 gears = persistentListOf(Gear.MOCK_1),
-                food = persistentListOf(Food.MOCK),
+                food = persistentListOf(Food.MOCK_1),
                 reagents = persistentMapOf(ReagentId.LINEN_CLOTH to 99),
+                isLoading = false,
             ),
             listener = InventoryListener.EMPTY
         )

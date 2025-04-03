@@ -15,14 +15,22 @@ fun NavGraphBuilder.inventoryNavigation() {
         val state = model.observeState().collectAsState().value
         ActionLoadingOnStop(model)
         ActionOnStart(model::actionStart)
-        InventoryView(state = state, listener = InventoryListener { model.actionStart() })
+        InventoryView(
+            state = state, listener = InventoryListener(
+                stateListener = StateListener(
+                    onRetryClick = {
+                        model.actionStart()
+                    },
+                ),
+            )
+        )
     }
 }
 
 class InventoryListener(
-    override val onRetryClick: () -> Unit,
-) : StateListener {
+    val stateListener: StateListener,
+) {
     companion object {
-        val EMPTY get() = InventoryListener {}
+        val EMPTY get() = InventoryListener(StateListener.MOCK)
     }
 }

@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.ui.item_comparison_dialog
+package ru.lemonapes.dungler.navigation.character.item_comparison_dialog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
-import ru.lemonapes.dungler.domain_models.Gear
-import ru.lemonapes.dungler.navigation.character.EquipmentChangingDialogListener
+import ru.lemonapes.dungler.domain_models.Food
+import ru.lemonapes.dungler.navigation.character.FoodChangingDialogListener
 import ru.lemonapes.dungler.ui.StatItem
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
@@ -27,9 +27,9 @@ import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 
 @Composable
-fun ItemDescriptionDialogView(
-    gear: Gear,
-    listener: EquipmentChangingDialogListener,
+fun DialogViewFoodDescription(
+    food: Food,
+    listener: FoodChangingDialogListener,
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
@@ -47,15 +47,12 @@ fun ItemDescriptionDialogView(
                         shape = RoundedCornerShape(12.dp)
                     )
                     .padding(4.dp),
-                painter = painterResource(gear.image),
+                painter = painterResource(food.id.image),
                 contentDescription = stringResource(id = R.string.reagent_icon_description),
             )
             UIText(
                 modifier = Modifier.padding(start = 12.dp, top = 4.dp),
-                text = stringResource(gear.gearId.gearName) + stringResource(
-                    R.string.gear_name_level,
-                    gear.level
-                ),
+                text = stringResource(food.id.foodName),
                 textStyle = LocalThemeTypographies.current.regular18
             )
         }
@@ -66,9 +63,7 @@ fun ItemDescriptionDialogView(
             thickness = 2.dp,
             color = LocalThemeColors.current.secondaryTextColor,
         )
-        gear.stats.forEach { (stat, count) ->
-            StatItem(stat.statName, count.toString())
-        }
+        StatItem(R.string.food_health_regen_amount, food.healthRegenAmount.toString())
         Row(
             modifier = Modifier
                 .padding(top = 12.dp),
@@ -77,17 +72,17 @@ fun ItemDescriptionDialogView(
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 6.dp),
-                onClick = { listener.gearDeEquipClick(gear.gearId.gearType) }) {
+                onClick = { listener.foodDeEquipClick() }) {
                 UIText(
                     textStyle = LocalThemeTypographies.current.regular20,
-                    text = stringResource(R.string.deequip_item)
+                    text = stringResource(R.string.de_equip_food)
                 )
             }
             Button(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 6.dp),
-                onClick = { listener.gearShowInventoryClick(gear.gearId.gearType) }) {
+                onClick = { listener.foodShowInventoryClick() }) {
                 UIText(
                     textStyle = LocalThemeTypographies.current.regular20,
                     text = stringResource(R.string.change_item)
@@ -101,9 +96,9 @@ fun ItemDescriptionDialogView(
 @Composable
 private fun ItemDescriptionDialogViewPreview() {
     DunglerTheme(darkTheme = true) {
-        ItemDescriptionDialogView(
-            gear = Gear.MOCK_1,
-            listener = EquipmentChangingDialogListener.EMPTY,
+        DialogViewFoodDescription(
+            food = Food.MOCK_1,
+            listener = FoodChangingDialogListener.MOCK,
         )
     }
 }

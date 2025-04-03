@@ -18,21 +18,23 @@ fun NavGraphBuilder.dungeonNavigation() {
             state = state,
             heroState = heroState,
             listener = DungeonListener(
-                onRetryClick = {
-                    model.actionStart()
-                },
+                stateListener = StateListener(
+                    onRetryClick = {
+                        model.actionStart()
+                    },
+                ),
             )
         )
     }
 }
 
 class DungeonListener(
-    override val onRetryClick: () -> Unit,
-) : StateListener {
+    val stateListener: StateListener,
+) {
     companion object {
         val EMPTY
             get() = DungeonListener(
-                onRetryClick = {},
+                stateListener = StateListener.MOCK
             )
     }
 }

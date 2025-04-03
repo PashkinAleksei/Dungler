@@ -11,32 +11,39 @@ import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.mappers.EquipmentResponseMapper
+import ru.lemonapes.dungler.mappers.FoodToEquipResponseMapper
 import ru.lemonapes.dungler.mappers.GearsToEquipResponseMapper
-import ru.lemonapes.dungler.network.endpoints.equipmentFood
+import ru.lemonapes.dungler.navigation.character.item_comparison_dialog.DialogEquipmentState
 import ru.lemonapes.dungler.network.endpoints.getEquipment
+import ru.lemonapes.dungler.network.endpoints.getFoodToEquip
 import ru.lemonapes.dungler.network.endpoints.getGearsToEquip
-import ru.lemonapes.dungler.network.endpoints.patchDeEquipItem
+import ru.lemonapes.dungler.network.endpoints.patchDeEquipFood
+import ru.lemonapes.dungler.network.endpoints.patchDeEquipGear
+import ru.lemonapes.dungler.network.endpoints.patchEquipFood
 import ru.lemonapes.dungler.network.endpoints.patchEquipGear
 import ru.lemonapes.dungler.parent_view_model.ParentViewModel
 import ru.lemonapes.dungler.parent_view_model.ViewModelAction
 import ru.lemonapes.dungler.repositories.HeroStateRepository
-import ru.lemonapes.dungler.ui.item_comparison_dialog.DialogEquipmentState
 import javax.inject.Inject
 
 interface CharViewModelAction : ViewModelAction {
     fun actionGearClick(gearType: GearType, gear: Gear?)
-    fun actionFoodClick(food: Food?)
+    fun actionFoodClick()
 
     //Dialog actions
     fun actionGearCompareClick(gear: Gear)
+    fun actionFoodCompareClick(food: Food)
     fun actionEquip(gear: Gear)
     fun actionFoodEquip(food: Food)
-    fun actionDeEquip(gearType: GearType)
-    fun actionShowInventoryClick(gearType: GearType)
+    fun actionGearDeEquip(gearType: GearType)
+    fun actionFoodDeEquip()
+    fun actionShowGearInventoryClick(gearType: GearType)
+    fun actionShowFoodInventoryClick()
     fun actionShowInventoryReload()
-    fun actionDialogBackClick()
     fun actionGearDescriptionDialogDismiss()
+
     fun actionDialogError(throwable: Throwable)
+    fun actionDialogBackClick()
     fun inventoryDialogError(throwable: Throwable)
 }
 
@@ -46,10 +53,14 @@ class CharacterViewModel @Inject constructor(
 ) : ParentViewModel<CharacterViewState>(CharacterViewState.EMPTY, heroStateRepository), CharViewModelAction {
 
     private val dialogCeh = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+        throwable.handleResponseError()
         actionDialogError(throwable)
     }
 
     private val inventoryCeh = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+        throwable.handleResponseError()
         inventoryDialogError(throwable)
     }
 
@@ -83,19 +94,23 @@ class CharacterViewModel @Inject constructor(
                 )
             }
         } else {
-            actionShowInventoryClick(gearType)
+            actionShowGearInventoryClick(gearType)
         }
     }
 
-    override fun actionFoodClick(food: Food?) {
-        if (food != null) {
+    override fun actionFoodClick() {
+        if (observeState().value.food != null) {
             updateState { state ->
-                state.copy(
-                    dialogEquipmentState = DialogEquipmentState.FoodShowEquipped(
-                        equippedFood = food,
+                state.food?.let { food ->
+                    state.copy(
+                        dialogEquipmentState = DialogEquipmentState.FoodShowEquipped(
+                            equippedFood = food,
+                        )
                     )
-                )
+                } ?: state
             }
+        } else {
+            actionShowFoodInventoryClick()
         }
     }
 
@@ -107,6 +122,20 @@ class CharacterViewModel @Inject constructor(
                 dialogEquipmentState = DialogEquipmentState.GearComparison(
                     equippedGear = equippedGear,
                     gearToCompare = gear,
+                    inventoryList = inventoryList
+                )
+            )
+        }
+    }
+
+    override fun actionFoodCompareClick(food: Food) {
+        updateState { state ->
+            val equippedFood = (state.dialogEquipmentState as DialogEquipmentState.FoodInventory).equippedFood
+            val inventoryList = state.dialogEquipmentState.inventoryList
+            state.copy(
+                dialogEquipmentState = DialogEquipmentState.FoodComparison(
+                    equippedFood = equippedFood,
+                    foodToCompare = food,
                     inventoryList = inventoryList
                 )
             )
@@ -134,7 +163,7 @@ class CharacterViewModel @Inject constructor(
     override fun actionFoodEquip(food: Food) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val result = EquipmentResponseMapper(equipmentFood(food.id))
+            val result = EquipmentResponseMapper(patchEquipFood(food.id))
             heroStateRepository.setNewHeroState(result.heroState)
             if (isActive) {
                 updateState { state ->
@@ -149,10 +178,10 @@ class CharacterViewModel @Inject constructor(
         }
     }
 
-    override fun actionDeEquip(gearType: GearType) = withActualState {
+    override fun actionGearDeEquip(gearType: GearType) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val result = EquipmentResponseMapper(patchDeEquipItem(gearType))
+            val result = EquipmentResponseMapper(patchDeEquipGear(gearType))
             heroStateRepository.setNewHeroState(result.heroState)
             if (isActive) {
                 updateState { state ->
@@ -167,7 +196,25 @@ class CharacterViewModel @Inject constructor(
         }
     }
 
-    override fun actionShowInventoryClick(gearType: GearType) = withActualState {
+    override fun actionFoodDeEquip() = withActualState {
+        dialogLoadJob?.cancel()
+        dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
+            val result = EquipmentResponseMapper(patchDeEquipFood())
+            heroStateRepository.setNewHeroState(result.heroState)
+            if (isActive) {
+                updateState { state ->
+                    state.copy(
+                        gears = result.gears,
+                        food = result.food,
+                        stats = result.stats,
+                        dialogEquipmentState = null
+                    )
+                }
+            }
+        }
+    }
+
+    override fun actionShowGearInventoryClick(gearType: GearType) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + inventoryCeh) {
             updateState { state ->
@@ -195,10 +242,46 @@ class CharacterViewModel @Inject constructor(
         }
     }
 
+    override fun actionShowFoodInventoryClick() = withActualState {
+        dialogLoadJob?.cancel()
+        dialogLoadJob = launch(Dispatchers.IO + inventoryCeh) {
+            updateState { state ->
+                val equippedFood = if (state.dialogEquipmentState is DialogEquipmentState.FoodShowEquipped)
+                    state.dialogEquipmentState.equippedFood else null
+
+                state.copy(
+                    dialogEquipmentState = DialogEquipmentState.FoodInventory(
+                        equippedFood = equippedFood,
+                        inventoryList = persistentListOf(),
+                        isLoading = true,
+                    )
+                )
+            }
+            val inventoryList = FoodToEquipResponseMapper(getFoodToEquip())
+            updateState { state ->
+                if (state.dialogEquipmentState is DialogEquipmentState.FoodInventory)
+                    state.copy(
+                        dialogEquipmentState = state.dialogEquipmentState.copy(
+                            inventoryList = inventoryList,
+                            isLoading = false
+                        )
+                    ) else state
+            }
+        }
+    }
+
     override fun actionShowInventoryReload() = withActualState { state ->
         state.dialogEquipmentState?.let { dialogEquipmentData ->
-            if (dialogEquipmentData is DialogEquipmentState.GearShowEquipped) {
-                actionShowInventoryClick(dialogEquipmentData.equippedGear.gearId.gearType)
+            when (dialogEquipmentData) {
+                is DialogEquipmentState.GearShowEquipped -> {
+                    actionShowGearInventoryClick(dialogEquipmentData.equippedGear.gearId.gearType)
+                }
+
+                is DialogEquipmentState.FoodShowEquipped -> {
+                    actionShowFoodInventoryClick()
+                }
+
+                else -> Unit
             }
         }
     }
@@ -220,6 +303,23 @@ class CharacterViewModel @Inject constructor(
                     state.copy(
                         dialogEquipmentState = DialogEquipmentState.GearShowEquipped(
                             equippedGear = dialogState.equippedGear,
+                        )
+                    )
+                }
+
+                dialogState is DialogEquipmentState.FoodComparison -> {
+                    state.copy(
+                        dialogEquipmentState = DialogEquipmentState.FoodInventory(
+                            equippedFood = dialogState.equippedFood,
+                            inventoryList = dialogState.inventoryList,
+                        )
+                    )
+                }
+
+                dialogState is DialogEquipmentState.FoodInventory && dialogState.equippedFood != null -> {
+                    state.copy(
+                        dialogEquipmentState = DialogEquipmentState.FoodShowEquipped(
+                            equippedFood = dialogState.equippedFood,
                         )
                     )
                 }

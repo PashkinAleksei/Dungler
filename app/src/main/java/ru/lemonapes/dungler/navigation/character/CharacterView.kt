@@ -27,9 +27,9 @@ import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.domain_models.StatId
+import ru.lemonapes.dungler.navigation.character.item_comparison_dialog.DialogEquipmentChanging
 import ru.lemonapes.dungler.ui.StatItem
 import ru.lemonapes.dungler.ui.StateCheck
-import ru.lemonapes.dungler.ui.item_comparison_dialog.EquipmentChangingDialog
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 
@@ -38,12 +38,11 @@ fun CharacterView(
     modifier: Modifier = Modifier,
     state: CharacterViewState,
     listener: CharacterListener,
-    equipmentChangingDialogListener: EquipmentChangingDialogListener,
 ) {
     StateCheck(
         modifier = modifier,
         state = state,
-        listener = listener
+        listener = listener.stateListener
     ) {
         Column(
             modifier = modifier
@@ -93,9 +92,9 @@ fun CharacterView(
                 }
             }
             state.dialogEquipmentState?.let { dialogState ->
-                EquipmentChangingDialog(
+                DialogEquipmentChanging(
                     dialogEquipmentState = dialogState,
-                    listener = equipmentChangingDialogListener
+                    listener = listener.equipmentChangingDialogListener
                 )
             }
         }
@@ -179,15 +178,13 @@ private fun LazyGridScope.bootsItem(
 
 private fun LazyGridScope.foodItem(
     food: Food?,
-    onGearClick: (food: Food) -> Unit,
+    onFoodClick: () -> Unit,
 ) {
     gearItem(
         modifier = Modifier.padding(16.dp),
         image = food?.id?.image ?: R.drawable.food_disabled
     ) {
-        food?.let {
-            onGearClick(food)
-        }
+        onFoodClick()
     }
 }
 
@@ -219,8 +216,7 @@ private fun CharacterViewPreview() {
     DunglerTheme(darkTheme = true) {
         CharacterView(
             state = CharacterViewState.MOCK,
-            listener = CharacterListener.EMPTY,
-            equipmentChangingDialogListener = EquipmentChangingDialogListener.EMPTY,
+            listener = CharacterListener.MOCK,
         )
     }
 }
