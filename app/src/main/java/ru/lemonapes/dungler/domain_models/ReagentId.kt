@@ -22,4 +22,7 @@ enum class ReagentId(
 
     @SerialName("apple")
     APPLE(R.string.apple_name, R.drawable.apple),
+
+    @SerialName("rat_leg")
+    RAT_LEG(R.string.rat_leg_name, R.drawable.rat_leg),
 }

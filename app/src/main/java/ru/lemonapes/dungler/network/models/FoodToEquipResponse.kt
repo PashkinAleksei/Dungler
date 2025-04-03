@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FoodToEquipResponse(
-    val food: List<ServerFood>,
+    val food: List<ServerFood>? = null,
 ) 

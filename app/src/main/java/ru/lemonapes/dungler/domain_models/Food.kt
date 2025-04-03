@@ -16,7 +16,7 @@ data class Food(
             )
         val MOCK_2
             get() = Food(
-                id = FoodId.MONSTER_LEG,
+                id = FoodId.FRIED_MONSTER_LEG,
                 healthRegenAmount = 5,
                 count = 15,
                 isEquipped = false

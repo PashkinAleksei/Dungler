@@ -42,8 +42,8 @@
     <string name="crocolisk_name">Кроколиск</string>
 
     <string name="apple_salad_name">Яблочный салат</string>
-    <string name="monster_leg_name">Лапка монстра</string>
-    <string name="monster_leg_food_name">Жаренная лапка монстра</string>
+    <string name="rat_leg_name">Лапка крысы</string>
+    <string name="fried_monster_leg_name">Жаренная лапка монстра</string>
     <string name="linen_cloth_name">Льняная ткань</string>
     <string name="copper_name">Медная руда</string>
     <string name="topaz_name">Топаз</string>

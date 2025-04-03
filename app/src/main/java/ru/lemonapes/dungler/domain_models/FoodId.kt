@@ -14,6 +14,6 @@ enum class FoodId(
     @SerialName("apple_salad")
     APPLE_SALAD(R.string.apple_salad_name, R.drawable.apple_salad),
 
-    @SerialName("monster_leg")
-    MONSTER_LEG(R.string.monster_leg_food_name, R.drawable.monster_leg),
+    @SerialName("fried_monster_leg")
+    FRIED_MONSTER_LEG(R.string.fried_monster_leg_name, R.drawable.fried_monster_leg),
 }
