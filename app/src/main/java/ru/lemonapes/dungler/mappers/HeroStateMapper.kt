@@ -42,6 +42,10 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
                         enemyPureDamage = it.enemyAttackData?.enemyPureDamage ?: 0,
                     )
 
+                    ActionType.EATING_EFFECT -> Action.EatingEffectAction(
+                        healAmount = it.eatingEffectData?.healAmount ?: 0,
+                    )
+
                     ActionType.NEXT_HALL -> Action.NextHallAction
                     ActionType.TAKE_LOOT -> Action.TakeLootAction
                     ActionType.HERO_IS_DEAD -> Action.HeroIsDeadAction

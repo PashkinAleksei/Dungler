@@ -46,6 +46,18 @@ data class HeroState(
                         }
                     }
                 }
+                is Action.EatingEffectAction -> {
+                    newHealth = health?.let { cHp ->
+                        totalHealth?.let { tHp ->
+                            val regeneratedHealth = cHp + action.healAmount
+                            if (regeneratedHealth < tHp) {
+                                regeneratedHealth
+                            } else {
+                                tHp
+                            }
+                        }
+                    }
+                }
 
                 is Action.HeroIsDeadAction -> {
                     newHealth = 1
@@ -129,6 +141,10 @@ sealed class Action {
     data class EnemyAttackAction(
         val enemyIndex: Int,
         val enemyPureDamage: Int,
+    ) : Action()
+
+    data class EatingEffectAction(
+        val healAmount: Int,
     ) : Action()
 
     data object NextHallAction : Action()

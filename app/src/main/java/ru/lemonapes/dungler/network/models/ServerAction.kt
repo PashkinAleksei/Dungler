@@ -9,6 +9,7 @@ data class ServerAction(
     @SerialName("heal_effect_data") val healEffectData: HealEffectData? = null,
     @SerialName("hero_attack_data") val heroAttackData: HeroAttackData? = null,
     @SerialName("enemy_attack_data") val enemyAttackData: EnemyAttackData? = null,
+    @SerialName("eating_effect_data") val eatingEffectData: EatingEffectData? = null,
 )
 
 @Serializable
@@ -25,5 +26,10 @@ data class EnemyAttackData(
 
 @Serializable
 data class HealEffectData(
+    @SerialName("heal_amount") val healAmount: Int,
+)
+
+@Serializable
+data class EatingEffectData(
     @SerialName("heal_amount") val healAmount: Int,
 )
