@@ -14,6 +14,7 @@ data class HeroState(
     val totalExperience: Int? = null,
     val isLoading: Boolean = true,
     val dungeonState: DungeonState? = null,
+    val isEating: Boolean = false,
     val actions: ImmutableList<Action> = persistentListOf(),
     val nextCalcTime: Long = 0,
 ) {
@@ -46,6 +47,7 @@ data class HeroState(
                         }
                     }
                 }
+
                 is Action.EatingEffectAction -> {
                     newHealth = health?.let { cHp ->
                         totalHealth?.let { tHp ->
@@ -100,6 +102,7 @@ data class HeroState(
             nextCalcTime = nextCalcTime + ACTION_TICK_TIME,
             dungeonState = newDungeonState,
             actions = newActions.toPersistentList(),
+            isEating = newActions.firstOrNull() is Action.EatingEffectAction
         ).calculateActionsRecursiveAndGet()
     }
 
@@ -115,6 +118,17 @@ data class HeroState(
                 totalExperience = 250,
                 isLoading = false,
                 dungeonState = null,
+            )
+        val EATING_MOCK
+            get() = HeroState(
+                level = 3,
+                health = 123,
+                totalHealth = 200,
+                experience = 140,
+                totalExperience = 250,
+                isLoading = false,
+                isEating = true,
+                dungeonState = DungeonState(),
             )
         const val ACTION_TICK_TIME = 2000L
         const val ACTION_CHECK_TICK_TIME = 400L

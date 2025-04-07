@@ -17,6 +17,7 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
             experience = response.experience,
             totalExperience = response.totalExperience,
             isLoading = false,
+            isEating = response.actions.firstOrNull()?.type == ActionType.EATING_EFFECT,
             dungeonState = response.hallNumber?.let { hallNumber ->
                 DungeonState(
                     hallNumber = hallNumber,
