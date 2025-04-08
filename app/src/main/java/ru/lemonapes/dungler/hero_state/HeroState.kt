@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import ru.lemonapes.dungler.domain_models.Enemy
+import ru.lemonapes.dungler.domain_models.Food
 
 data class HeroState(
     val level: Int? = null,
@@ -15,6 +16,7 @@ data class HeroState(
     val isLoading: Boolean = true,
     val dungeonState: DungeonState? = null,
     val isEating: Boolean = false,
+    val equippedFood: Food? = null,
     val actions: ImmutableList<Action> = persistentListOf(),
     val nextCalcTime: Long = 0,
 ) {
@@ -118,6 +120,7 @@ data class HeroState(
                 totalExperience = 250,
                 isLoading = false,
                 dungeonState = null,
+                equippedFood = Food.MOCK_1,
             )
         val EATING_MOCK
             get() = HeroState(
@@ -130,7 +133,7 @@ data class HeroState(
                 isEating = true,
                 dungeonState = DungeonState(),
             )
-        const val ACTION_TICK_TIME = 2000L
+        const val ACTION_TICK_TIME = 1500L
         const val ACTION_CHECK_TICK_TIME = 400L
     }
 }

@@ -19,6 +19,14 @@
     <string name="craft_panel_title_level">. Уровень %s</string>
 
     <string name="unknown_item_name">Неопознанный предмет</string>
+    <string name="empty_slot_helm">Слот для шлема</string>
+    <string name="empty_slot_shoulders">Слот для плеч</string>
+    <string name="empty_slot_chest">Слот для нагрудника</string>
+    <string name="empty_slot_gloves">Слот для перчаток</string>
+    <string name="empty_slot_legs">Слот для штанов</string>
+    <string name="empty_slot_boots">Слот для ботинок</string>
+    <string name="empty_slot_weapon">Слот для оружия</string>
+    <string name="empty_slot_food">Слот для еды</string>
     <string name="green_knight_helm_name">Шлем зеленого рыцаря</string>
     <string name="green_knight_shoulders_name">Наплечники зеленого рыцаря</string>
     <string name="green_knight_chest_name">Нагрудник зеленого рыцаря</string>
@@ -34,6 +42,7 @@
     <string name="dungeon_exit">Выход из подземелья</string>
     <string name="loot_label">Есть добыча</string>
     <string name="eating_process_label">Перекус</string>
+    <string name="equipped_food">Экипированная еда</string>
 
     <string name="unknown_enemy_name">Неопознанный предмет</string>
     <string name="giant_rat_name">Гигантская крыса</string>

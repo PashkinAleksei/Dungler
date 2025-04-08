@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
@@ -62,7 +63,8 @@ fun InventoryView(
                                 .padding(2.dp)
                                 .background(LocalThemeColors.current.imageBackground),
                             painter = painterResource(gear.image),
-                            counter = gear.level
+                            counter = gear.level,
+                            contentDescription = stringResource(gear.gearId.gearName),
                         )
                     }
                 }
@@ -80,7 +82,8 @@ fun InventoryView(
                                 .padding(2.dp)
                                 .background(LocalThemeColors.current.imageBackground),
                             painter = painterResource(reagentId.image),
-                            counter = count
+                            counter = count,
+                            contentDescription = stringResource(reagentId.reagentName),
                         )
                     }
                 }
@@ -98,7 +101,8 @@ fun InventoryView(
                                 .padding(2.dp)
                                 .background(LocalThemeColors.current.imageBackground),
                             painter = painterResource(food.id.image),
-                            counter = food.count
+                            counter = food.count,
+                            contentDescription = stringResource(food.id.foodName),
                         )
                     }
                 }
@@ -115,7 +119,7 @@ fun BagViewPreview() {
             state = InventoryState(
                 gears = persistentListOf(Gear.MOCK_1),
                 food = persistentListOf(Food.MOCK_1),
-                reagents = persistentMapOf(ReagentId.LINEN_CLOTH to 99),
+                reagents = persistentMapOf(ReagentId.APPLE to 99),
                 isLoading = false,
             ),
             listener = InventoryListener.EMPTY

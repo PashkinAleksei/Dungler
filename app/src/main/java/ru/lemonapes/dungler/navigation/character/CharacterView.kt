@@ -1,6 +1,7 @@
 package ru.lemonapes.dungler.navigation.character
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,6 +31,7 @@ import ru.lemonapes.dungler.domain_models.StatId
 import ru.lemonapes.dungler.navigation.character.item_comparison_dialog.DialogEquipmentChanging
 import ru.lemonapes.dungler.ui.StatItem
 import ru.lemonapes.dungler.ui.StateCheck
+import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 
@@ -105,7 +107,10 @@ private fun LazyGridScope.helmItem(
     helm: Gear?,
     onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
 ) {
-    gearItem(image = helm?.image ?: R.drawable.helm_disabled) {
+    gearItem(
+        image = helm?.image ?: R.drawable.helm_disabled,
+        gearName = helm?.gearId?.gearName ?: R.string.empty_slot_helm
+    ) {
         onGearClick(GearType.HELM, helm)
     }
 }
@@ -115,8 +120,8 @@ private fun LazyGridScope.shouldersItem(
     onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
 ) {
     gearItem(
-        image =
-        shoulders?.image ?: R.drawable.shoulders_disabled
+        image = shoulders?.image ?: R.drawable.shoulders_disabled,
+        gearName = shoulders?.gearId?.gearName ?: R.string.empty_slot_shoulders
     ) {
         onGearClick(GearType.SHOULDERS, shoulders)
     }
@@ -127,8 +132,8 @@ private fun LazyGridScope.chestItem(
     onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
 ) {
     gearItem(
-        image =
-        chest?.image ?: R.drawable.chest_disabled
+        image = chest?.image ?: R.drawable.chest_disabled,
+        gearName = chest?.gearId?.gearName ?: R.string.empty_slot_chest
     ) {
         onGearClick(GearType.CHEST, chest)
     }
@@ -138,7 +143,10 @@ private fun LazyGridScope.glovesItem(
     gloves: Gear?,
     onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
 ) {
-    gearItem(image = gloves?.image ?: R.drawable.gloves_disabled) {
+    gearItem(
+        image = gloves?.image ?: R.drawable.gloves_disabled,
+        gearName = gloves?.gearId?.gearName ?: R.string.empty_slot_gloves
+    ) {
         onGearClick(
             GearType.GLOVES,
             gloves
@@ -150,7 +158,10 @@ private fun LazyGridScope.weaponItem(
     weapon: Gear?,
     onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
 ) {
-    gearItem(image = weapon?.image ?: R.drawable.sword_disabled) {
+    gearItem(
+        image = weapon?.image ?: R.drawable.sword_disabled,
+        gearName = weapon?.gearId?.gearName ?: R.string.empty_slot_weapon
+    ) {
         onGearClick(
             GearType.WEAPON,
             weapon
@@ -162,7 +173,10 @@ private fun LazyGridScope.legsItem(
     legs: Gear?,
     onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
 ) {
-    gearItem(image = legs?.image ?: R.drawable.pants_disabled) {
+    gearItem(
+        image = legs?.image ?: R.drawable.pants_disabled,
+        gearName = legs?.gearId?.gearName ?: R.string.empty_slot_legs
+    ) {
         onGearClick(GearType.LEGS, legs)
     }
 }
@@ -171,7 +185,10 @@ private fun LazyGridScope.bootsItem(
     boots: Gear?,
     onGearClick: (gearType: GearType, gear: Gear?) -> Unit,
 ) {
-    gearItem(image = boots?.image ?: R.drawable.boots_disabled) {
+    gearItem(
+        image = boots?.image ?: R.drawable.boots_disabled,
+        gearName = boots?.gearId?.gearName ?: R.string.empty_slot_boots
+    ) {
         onGearClick(GearType.BOOTS, boots)
     }
 }
@@ -180,11 +197,19 @@ private fun LazyGridScope.foodItem(
     food: Food?,
     onFoodClick: () -> Unit,
 ) {
-    gearItem(
-        modifier = Modifier.padding(16.dp),
-        image = food?.id?.image ?: R.drawable.food_disabled
-    ) {
-        onFoodClick()
+    item {
+        val image = food?.id?.image ?: R.drawable.food_disabled
+        ImageWithCounter(
+            modifier = Modifier
+                .padding(22.dp)
+                .background(LocalThemeColors.current.imageBackground)
+                .border(2.dp, LocalThemeColors.current.bordersColor)
+                .padding(4.dp)
+                .clickable(onClick = onFoodClick),
+            painter = painterResource(image),
+            counter = food?.count ?: 0,
+            contentDescription = stringResource(food?.id?.foodName ?: R.string.empty_slot_food),
+        )
     }
 }
 
@@ -194,7 +219,9 @@ private fun LazyGridScope.spacerItem() {
 
 private fun LazyGridScope.gearItem(
     modifier: Modifier = Modifier,
-    @DrawableRes image: Int, onClick: () -> Unit,
+    @DrawableRes image: Int,
+    @StringRes gearName: Int,
+    onClick: () -> Unit,
 ) {
     item {
         Image(
@@ -205,7 +232,7 @@ private fun LazyGridScope.gearItem(
                 .padding(4.dp)
                 .clickable { onClick() },
             painter = painterResource(image),
-            contentDescription = stringResource(id = R.string.reagent_icon_description),
+            contentDescription = stringResource(gearName),
         )
     }
 }
