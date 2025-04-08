@@ -30,6 +30,7 @@ data class HeroState(
 
         val enemies = dungeonState?.enemies ?: persistentListOf()
         var newHealth = health
+        var newEquippedFood = equippedFood
         var newDungeonState = dungeonState
 
         val newActions = actions.toMutableList()
@@ -60,6 +61,11 @@ data class HeroState(
                                 tHp
                             }
                         }
+                    }
+                    newEquippedFood = if (action.reduceFood) {
+                        equippedFood?.copy(count = equippedFood.count - 1)
+                    } else {
+                        equippedFood
                     }
                 }
 
@@ -104,6 +110,7 @@ data class HeroState(
             nextCalcTime = nextCalcTime + ACTION_TICK_TIME,
             dungeonState = newDungeonState,
             actions = newActions.toPersistentList(),
+            equippedFood = newEquippedFood,
             isEating = newActions.firstOrNull() is Action.EatingEffectAction
         ).calculateActionsRecursiveAndGet()
     }
@@ -162,6 +169,7 @@ sealed class Action {
 
     data class EatingEffectAction(
         val healAmount: Int,
+        val reduceFood: Boolean,
     ) : Action()
 
     data object NextHallAction : Action()

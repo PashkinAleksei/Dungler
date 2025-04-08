@@ -46,6 +46,7 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
 
                     ActionType.EATING_EFFECT -> Action.EatingEffectAction(
                         healAmount = it.eatingEffectData?.healAmount ?: 0,
+                        reduceFood = it.eatingEffectData?.reduceFood ?: false,
                     )
 
                     ActionType.NEXT_HALL -> Action.NextHallAction

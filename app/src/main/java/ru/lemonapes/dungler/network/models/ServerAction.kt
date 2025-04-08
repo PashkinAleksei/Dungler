@@ -32,4 +32,5 @@ data class HealEffectData(
 @Serializable
 data class EatingEffectData(
     @SerialName("heal_amount") val healAmount: Int,
+    @SerialName("reduce_food") val reduceFood: Boolean,
 )
