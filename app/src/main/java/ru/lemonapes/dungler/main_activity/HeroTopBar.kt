@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,8 +26,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RadialGradientShader
+import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -78,23 +84,27 @@ private fun Buttons(
     topBarListener: TopBarListener,
     topBarButtonActive: TopBarButtonActive?,
 ) {
-    when (topBarButtonActive) {
-        TopBarButtonActive.EQUIPMENT, TopBarButtonActive.SPELLS -> {
-            val equipmentBorderColor: Color
-            val spellsBorderColor: Color
-            if (topBarButtonActive == TopBarButtonActive.EQUIPMENT) {
-                equipmentBorderColor = LocalThemeColors.current.primaryTextColor
-                spellsBorderColor = LocalThemeColors.current.secondaryTextColor
-            } else {
-                equipmentBorderColor = LocalThemeColors.current.secondaryTextColor
-                spellsBorderColor = LocalThemeColors.current.primaryTextColor
-            }
+    Row(Modifier.width(120.dp)) {
+        if (topBarButtonActive != null) {
+            val equipmentSelected = topBarButtonActive == TopBarButtonActive.EQUIPMENT
+            val spellsSelected = topBarButtonActive == TopBarButtonActive.SPELLS
+            val equipmentBorderColor: Color =
+                if (equipmentSelected) {
+                    LocalThemeColors.current.primaryTextColor
+                } else {
+                    LocalThemeColors.current.secondaryTextColor
+                }
+            val spellsBorderColor: Color =
+                if (spellsSelected) {
+                    LocalThemeColors.current.primaryTextColor
+                } else {
+                    LocalThemeColors.current.secondaryTextColor
+                }
             Box(
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .border(1.dp, equipmentBorderColor, RoundedCornerShape(12.dp))
                     .minimumInteractiveComponentSize()
-                    .size(40.dp)
                     .clickable(
                         onClick = topBarListener.toEquipment,
                         interactionSource = remember { MutableInteractionSource() },
@@ -104,8 +114,11 @@ private fun Buttons(
                         )
                     ),
             ) {
+                if (equipmentSelected) ButtonSelectionBox()
                 Image(
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier
+                        .size(40.dp)
+                        .align(Alignment.Center),
                     painter = painterResource(R.drawable.green_knight_chest_10),
                     contentDescription = stringResource(R.string.equipment_screen)
                 )
@@ -125,6 +138,7 @@ private fun Buttons(
                         )
                     ),
             ) {
+                if (spellsSelected) ButtonSelectionBox()
                 Image(
                     modifier = Modifier
                         .align(Alignment.Center)
@@ -134,10 +148,33 @@ private fun Buttons(
                 )
             }
         }
+    }
+}
 
-        else -> {
-            Spacer(Modifier.width(102.dp))
-        }
+@Composable
+private fun BoxScope.ButtonSelectionBox() {
+    Box(
+        modifier = Modifier
+            .size(48.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .fillMaxSize()
+            .align(Alignment.Center)
+            .gradientSelection(LocalThemeColors.current.primaryTextColor)
+    )
+}
+
+private fun Modifier.gradientSelection(color: Color): Modifier {
+    return drawBehind {
+        val radius = size.minDimension * 0.6f
+        val centerOffset = Offset(x = size.width / 2f, y = size.height / 2f)
+        val shader = RadialGradientShader(
+            colors = listOf(color, Color.Transparent),
+            center = centerOffset,
+            radius = radius,
+            tileMode = TileMode.Clamp
+        )
+        val brush = ShaderBrush(shader)
+        drawRect(brush = brush)
     }
 }
 
