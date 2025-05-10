@@ -10,19 +10,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import ru.lemonapes.dungler.navigation.Screens
+import ru.lemonapes.dungler.navigation.RootScreens
 
 data class BottomBarRoute<T : Any>(val route: T, val icon: Int)
 
 val topLevelRoutes = listOf(
-    BottomBarRoute(Screens.CharacterRoot, R.drawable.ic_helm),
-    BottomBarRoute(Screens.InventoryRoot, R.drawable.ic_backpack),
-    BottomBarRoute(Screens.CraftRoot, R.drawable.ic_blacksmith),
-    BottomBarRoute(Screens.DungeonListRoot, R.drawable.ic_cave),
+    BottomBarRoute(RootScreens.CharacterRoot, R.drawable.ic_helm),
+    BottomBarRoute(RootScreens.InventoryRoot, R.drawable.ic_backpack),
+    BottomBarRoute(RootScreens.CraftRoot, R.drawable.ic_blacksmith),
+    BottomBarRoute(RootScreens.DungeonListRoot, R.drawable.ic_cave),
 )
 
 @Composable
@@ -31,7 +32,6 @@ fun BottomBar(navController: NavController) {
         tonalElevation = 8.dp,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
         topLevelRoutes.forEach { topLevelRoute ->
             NavigationBarItem(
                 icon = {
@@ -43,9 +43,7 @@ fun BottomBar(navController: NavController) {
                         contentDescription = topLevelRoute.route.label,
                     )
                 },
-                selected = currentDestination?.hierarchy?.any {
-                    it.hasRoute(topLevelRoute.route::class)
-                } == true,
+                selected = navBackStackEntry?.isScreenActive(topLevelRoute.route) == true,
                 onClick = {
                     navController.navigate(topLevelRoute.route) {
                         popUpTo(navController.graph.startDestinationRoute ?: "") {
@@ -57,5 +55,12 @@ fun BottomBar(navController: NavController) {
                 }
             )
         }
+    }
+}
+
+@Composable
+private fun NavBackStackEntry.isScreenActive(screen: RootScreens): Boolean {
+    return destination.hierarchy.any {
+        it.hasRoute(screen::class)
     }
 }

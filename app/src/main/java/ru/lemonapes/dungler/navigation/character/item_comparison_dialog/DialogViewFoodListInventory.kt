@@ -9,7 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.domain_models.Food
-import ru.lemonapes.dungler.navigation.character.EquipmentChangingDialogListener
+import ru.lemonapes.dungler.navigation.character.equipment.EquipmentChangingDialogListener
 import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors

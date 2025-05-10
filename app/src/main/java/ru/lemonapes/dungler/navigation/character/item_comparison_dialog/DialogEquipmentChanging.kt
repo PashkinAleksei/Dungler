@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ru.lemonapes.dungler.R
-import ru.lemonapes.dungler.navigation.character.EquipmentChangingDialogListener
+import ru.lemonapes.dungler.navigation.character.equipment.EquipmentChangingDialogListener
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 
 @Composable

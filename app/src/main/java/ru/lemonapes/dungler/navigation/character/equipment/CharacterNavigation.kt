@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character
+package ru.lemonapes.dungler.navigation.character.equipment
 
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel

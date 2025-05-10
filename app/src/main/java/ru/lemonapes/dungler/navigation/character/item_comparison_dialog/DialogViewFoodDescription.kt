@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Food
-import ru.lemonapes.dungler.navigation.character.FoodChangingDialogListener
+import ru.lemonapes.dungler.navigation.character.equipment.FoodChangingDialogListener
 import ru.lemonapes.dungler.ui.StatItem
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.theme.DunglerTheme

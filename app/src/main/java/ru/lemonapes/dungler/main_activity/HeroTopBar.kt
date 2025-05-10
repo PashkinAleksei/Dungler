@@ -1,6 +1,10 @@
 package ru.lemonapes.dungler.main_activity
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,15 +18,21 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Surface
+import androidx.compose.material3.minimumInteractiveComponentSize
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
@@ -32,19 +42,112 @@ import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 @Composable
 fun HeroTopBar(
     modifier: Modifier = Modifier,
+    topBarListener: TopBarListener,
     heroState: HeroState,
+    activeButton: TopBarButtonActive?,
 ) {
     Row(
-        modifier = modifier.padding(horizontal = 8.dp),
+        //modifier = modifier.padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        heroState.LevelSurface()
+        heroState.HeroStateBar(modifier = Modifier.weight(1f))
+        Buttons(topBarListener, activeButton)
+    }
+}
+
+@Composable
+private fun HeroState.HeroStateBar(
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        LevelSurface()
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            heroState.HealthBar()
+            HealthBar()
             Spacer(modifier = Modifier.height(1.dp))
-            heroState.ExperienceBar()
+            ExperienceBar()
         }
+    }
+}
+
+@Composable
+private fun Buttons(
+    topBarListener: TopBarListener,
+    topBarButtonActive: TopBarButtonActive?,
+) {
+    when (topBarButtonActive) {
+        TopBarButtonActive.EQUIPMENT, TopBarButtonActive.SPELLS -> {
+            val equipmentBorderColor: Color
+            val spellsBorderColor: Color
+            if (topBarButtonActive == TopBarButtonActive.EQUIPMENT) {
+                equipmentBorderColor = LocalThemeColors.current.primaryTextColor
+                spellsBorderColor = LocalThemeColors.current.secondaryTextColor
+            } else {
+                equipmentBorderColor = LocalThemeColors.current.secondaryTextColor
+                spellsBorderColor = LocalThemeColors.current.primaryTextColor
+            }
+            Box(
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .border(1.dp, equipmentBorderColor, RoundedCornerShape(12.dp))
+                    .minimumInteractiveComponentSize()
+                    .size(40.dp)
+                    .clickable(
+                        onClick = topBarListener.toEquipment,
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(
+                            bounded = false,
+                            radius = 25.dp
+                        )
+                    ),
+            ) {
+                Image(
+                    modifier = Modifier.align(Alignment.Center),
+                    painter = painterResource(R.drawable.green_knight_chest_10),
+                    contentDescription = stringResource(R.string.equipment_screen)
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .padding(start = 6.dp, end = 6.dp)
+                    .border(1.dp, spellsBorderColor, RoundedCornerShape(12.dp))
+                    .minimumInteractiveComponentSize()
+                    .size(40.dp)
+                    .clickable(
+                        onClick = topBarListener.toSpells,
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(
+                            bounded = false,
+                            radius = 25.dp
+                        )
+                    ),
+            ) {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(vertical = 4.dp),
+                    painter = painterResource(R.drawable.beril),
+                    contentDescription = stringResource(R.string.spell_equipment_screen)
+                )
+            }
+        }
+
+        else -> {
+            Spacer(Modifier.width(102.dp))
+        }
+    }
+}
+
+class TopBarListener(
+    val toEquipment: () -> Unit,
+    val toSpells: () -> Unit,
+) {
+    companion object {
+        val EMPTY
+            get() = TopBarListener({}, {})
     }
 }
 
@@ -162,10 +265,18 @@ private fun HeroState.ExperienceBar(
     }
 }
 
+enum class TopBarButtonActive {
+    EQUIPMENT, SPELLS
+}
+
 @Preview
 @Composable
 fun HeroTopBarPreview() {
     DunglerTheme(darkTheme = true) {
-        HeroTopBar(heroState = HeroState.MOCK)
+        HeroTopBar(
+            heroState = HeroState.MOCK,
+            topBarListener = TopBarListener.EMPTY,
+            activeButton = TopBarButtonActive.EQUIPMENT,
+        )
     }
 }

@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character
+package ru.lemonapes.dungler.navigation.character.equipment
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

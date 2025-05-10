@@ -3,36 +3,40 @@ package ru.lemonapes.dungler.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Screens(val label: String) {
-    @Serializable
-    data object CharacterRoot : Screens("CharacterRoot")
+sealed class Screens(open val label: String) {
 
     @Serializable
     data object Equipment : Screens("Equipment")
 
     @Serializable
-    data object Spells : Screens("Spells")
-
-    @Serializable
-    data object InventoryRoot : Screens("InventoryRoot")
+    data object EquipmentSpells : Screens("EquipmentSpells")
 
     @Serializable
     data object Inventory : Screens("Inventory")
-
-    @Serializable
-    data object CraftRoot : Screens("CraftRoot")
     @Serializable
     data object Craft : Screens("Craft")
-
-    @Serializable
-    data object DungeonListRoot : Screens("DungeonListRoot")
 
     @Serializable
     data object DungeonList : Screens("DungeonList")
 
     @Serializable
-    data object DungeonRoot : Screens("DungeonRoot")
+    data object Dungeon : Screens("Dungeon")
+}
+
+@Serializable
+sealed class RootScreens(open val label: String) {
+    @Serializable
+    data object CharacterRoot : RootScreens("CharacterRoot")
 
     @Serializable
-    data object Dungeon : Screens("Dungeon")
+    data object InventoryRoot : RootScreens("InventoryRoot")
+
+    @Serializable
+    data object CraftRoot : RootScreens("CraftRoot")
+
+    @Serializable
+    data object DungeonListRoot : RootScreens("DungeonListRoot")
+
+    @Serializable
+    data object DungeonRoot : RootScreens("DungeonRoot")
 }

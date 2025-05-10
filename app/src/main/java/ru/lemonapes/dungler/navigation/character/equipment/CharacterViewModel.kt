@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character
+package ru.lemonapes.dungler.navigation.character.equipment
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf

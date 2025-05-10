@@ -9,17 +9,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import ru.lemonapes.dungler.BottomBar
 import ru.lemonapes.dungler.hero_state.HeroState
+import ru.lemonapes.dungler.navigation.RootScreens
 import ru.lemonapes.dungler.navigation.Screens
-import ru.lemonapes.dungler.navigation.character.characterNavigation
+import ru.lemonapes.dungler.navigation.character.equipment.characterNavigation
+import ru.lemonapes.dungler.navigation.character.spell_equipment.spellEquipmentNavigation
 import ru.lemonapes.dungler.navigation.craft.craftNavigation
 import ru.lemonapes.dungler.navigation.dungeon.dungeonNavigation
 import ru.lemonapes.dungler.navigation.dungeon_list.dungeonListNavigation
@@ -34,6 +40,7 @@ fun MainView(
     navController: NavHostController,
     listener: MainViewListener,
 ) {
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
@@ -46,9 +53,14 @@ fun MainView(
             if (mainActivityState.rootRoute == MainRoute.MAIN) {
                 HeroTopBar(
                     modifier = Modifier
-                        .fillMaxWidth(0.7f)
+                        .fillMaxWidth()
                         .padding(16.dp),
-                    heroState = heroState
+                    heroState = heroState,
+                    topBarListener = TopBarListener(
+                        toEquipment = { navController.navigate(Screens.Equipment) },
+                        toSpells = { navController.navigate(Screens.EquipmentSpells) }
+                    ),
+                    activeButton = navController.getTopBarActiveButton()
                 )
             } else {
                 DungeonTopBar(
@@ -57,6 +69,26 @@ fun MainView(
                 )
             }
             MainViewContent(state = mainActivityState, navController = navController)
+        }
+    }
+}
+
+@Composable
+private fun NavController.getTopBarActiveButton(): TopBarButtonActive? {
+    val navBackStackEntry by currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast('.')
+    val currentRouteLastPart = remember(currentRoute) { currentRoute?.substringAfterLast('.') }
+    return when (currentRouteLastPart) {
+        Screens.Equipment.toString() -> {
+            TopBarButtonActive.EQUIPMENT
+        }
+
+        Screens.EquipmentSpells.toString() -> {
+            TopBarButtonActive.SPELLS
+        }
+
+        else -> {
+            null
         }
     }
 }
@@ -75,27 +107,28 @@ private fun MainViewContent(
                 enterTransition = { fadeIn(animationSpec = tween(200)) },
                 exitTransition = { fadeOut(animationSpec = tween(200)) },
             ) {
-                navigation<Screens.CharacterRoot>(startDestination = Screens.Equipment) {
+                navigation<RootScreens.CharacterRoot>(startDestination = Screens.Equipment) {
                     characterNavigation()
+                    spellEquipmentNavigation()
                 }
-                navigation<Screens.CraftRoot>(startDestination = Screens.Craft) {
+                navigation<RootScreens.CraftRoot>(startDestination = Screens.Craft) {
                     craftNavigation()
                 }
-                navigation<Screens.InventoryRoot>(startDestination = Screens.Inventory) {
+                navigation<RootScreens.InventoryRoot>(startDestination = Screens.Inventory) {
                     inventoryNavigation()
                 }
-                navigation<Screens.DungeonListRoot>(startDestination = Screens.DungeonList) {
+                navigation<RootScreens.DungeonListRoot>(startDestination = Screens.DungeonList) {
                     dungeonListNavigation()
                 }
             }
 
         MainRoute.DUNGEON -> NavHost(
             navController = navController,
-            startDestination = Screens.DungeonRoot,
+            startDestination = RootScreens.DungeonRoot,
             enterTransition = { fadeIn(animationSpec = tween(200)) },
             exitTransition = { fadeOut(animationSpec = tween(200)) },
         ) {
-            navigation<Screens.DungeonRoot>(startDestination = Screens.Dungeon) {
+            navigation<RootScreens.DungeonRoot>(startDestination = Screens.Dungeon) {
                 dungeonNavigation()
             }
         }

@@ -37,6 +37,8 @@
     <string name="green_knight_sword_name">Меч зеленого рыцаря</string>
 
     <string name="character_tab">Персонаж</string>
+    <string name="equipment_screen">Экипировка</string>
+    <string name="spell_equipment_screen">Экипированные заклинания</string>
     <string name="inventory_tab">Инвентарь</string>
     <string name="craft_tab">Ремесло</string>
     <string name="dungeon_tab">Подземелья</string>
