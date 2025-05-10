@@ -3,8 +3,6 @@ package ru.lemonapes.dungler.main_activity
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,11 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import ru.lemonapes.dungler.BottomBar
 import ru.lemonapes.dungler.hero_state.HeroState
@@ -35,7 +33,6 @@ fun MainView(
     mainActivityState: MainActivityState,
     navController: NavHostController,
     listener: MainViewListener,
-    content: @Composable () -> Unit,
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -59,13 +56,13 @@ fun MainView(
                     onExitClick = listener.onDungeonExitClick
                 )
             }
-            content()
+            MainViewContent(state = mainActivityState, navController = navController)
         }
     }
 }
 
 @Composable
-fun MainViewContent(
+private fun MainViewContent(
     modifier: Modifier = Modifier,
     state: MainActivityState,
     navController: NavHostController,
@@ -74,23 +71,33 @@ fun MainViewContent(
         MainRoute.MAIN ->
             NavHost(
                 navController = navController,
-                startDestination = Screens.Character,
+                startDestination = state.mainStartRoute,
                 enterTransition = { fadeIn(animationSpec = tween(200)) },
                 exitTransition = { fadeOut(animationSpec = tween(200)) },
             ) {
-                characterNavigation()
-                craftNavigation()
-                inventoryNavigation()
-                dungeonListNavigation()
+                navigation<Screens.CharacterRoot>(startDestination = Screens.Equipment) {
+                    characterNavigation()
+                }
+                navigation<Screens.CraftRoot>(startDestination = Screens.Craft) {
+                    craftNavigation()
+                }
+                navigation<Screens.InventoryRoot>(startDestination = Screens.Inventory) {
+                    inventoryNavigation()
+                }
+                navigation<Screens.DungeonListRoot>(startDestination = Screens.DungeonList) {
+                    dungeonListNavigation()
+                }
             }
 
         MainRoute.DUNGEON -> NavHost(
             navController = navController,
-            startDestination = Screens.Dungeon,
+            startDestination = Screens.DungeonRoot,
             enterTransition = { fadeIn(animationSpec = tween(200)) },
             exitTransition = { fadeOut(animationSpec = tween(200)) },
         ) {
-            dungeonNavigation()
+            navigation<Screens.DungeonRoot>(startDestination = Screens.Dungeon) {
+                dungeonNavigation()
+            }
         }
     }
 }
@@ -104,12 +111,6 @@ fun MainViewPreview() {
             mainActivityState = MainActivityState.EMPTY,
             navController = rememberNavController(),
             listener = MainViewListener.EMPTY
-        ) {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(Color.Gray)
-            )
-        }
+        )
     }
-} 
+}

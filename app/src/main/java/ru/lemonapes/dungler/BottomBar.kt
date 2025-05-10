@@ -16,13 +16,13 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.lemonapes.dungler.navigation.Screens
 
-data class TopLevelRoute<T : Any>(val route: T, val icon: Int)
+data class BottomBarRoute<T : Any>(val route: T, val icon: Int)
 
 val topLevelRoutes = listOf(
-    TopLevelRoute(Screens.Character, R.drawable.ic_helm),
-    TopLevelRoute(Screens.Inventory, R.drawable.ic_backpack),
-    TopLevelRoute(Screens.Craft, R.drawable.ic_blacksmith),
-    TopLevelRoute(Screens.DungeonList, R.drawable.ic_cave),
+    BottomBarRoute(Screens.CharacterRoot, R.drawable.ic_helm),
+    BottomBarRoute(Screens.InventoryRoot, R.drawable.ic_backpack),
+    BottomBarRoute(Screens.CraftRoot, R.drawable.ic_blacksmith),
+    BottomBarRoute(Screens.DungeonListRoot, R.drawable.ic_cave),
 )
 
 @Composable

@@ -5,6 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.mappers.HeroStateResponseMapper
+import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.network.endpoints.setHeroHomeLocation
 import ru.lemonapes.dungler.parent_view_model.ParentViewModel
 import ru.lemonapes.dungler.parent_view_model.State
@@ -16,6 +17,7 @@ data class MainActivityState(
     override val isLoading: Boolean = false,
     override val error: Throwable? = null,
     val rootRoute: MainRoute = MainRoute.MAIN,
+    val mainStartRoute: Screens = Screens.CharacterRoot,
 ) : State {
     companion object {
         val EMPTY = MainActivityState()
@@ -41,7 +43,7 @@ class MainViewModel @Inject constructor(
             heroStateRepository.heroStateFlow.collect { heroState ->
                 updateState { state ->
                     if (heroState.dungeonState != null) {
-                        state.copy(rootRoute = MainRoute.DUNGEON)
+                        state.copy(rootRoute = MainRoute.DUNGEON, mainStartRoute = Screens.DungeonListRoot)
                     } else {
                         state.copy(rootRoute = MainRoute.MAIN)
                     }

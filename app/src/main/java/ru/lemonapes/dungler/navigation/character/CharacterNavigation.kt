@@ -13,7 +13,7 @@ import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.StateListener
 
 fun NavGraphBuilder.characterNavigation() {
-    composable<Screens.Character> {
+    composable<Screens.Equipment> {
         val model: CharacterViewModel = hiltViewModel()
         val state = model.observeState().collectAsState().value
         ActionLoadingOnStop(model)

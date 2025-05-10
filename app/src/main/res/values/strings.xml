@@ -36,6 +36,11 @@
     <string name="green_knight_boots_name">Сапоги зеленого рыцаря</string>
     <string name="green_knight_sword_name">Меч зеленого рыцаря</string>
 
+    <string name="character_tab">Персонаж</string>
+    <string name="inventory_tab">Инвентарь</string>
+    <string name="craft_tab">Ремесло</string>
+    <string name="dungeon_tab">Подземелья</string>
+
     <string name="hero">Герой</string>
     <string name="enemy">Противник</string>
     <string name="corpse">(Труп)</string>

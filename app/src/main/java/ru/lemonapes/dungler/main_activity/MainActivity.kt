@@ -36,9 +36,7 @@ class MainActivity : ComponentActivity() {
                     listener = MainViewListener(
                         onDungeonExitClick = mainViewModel::actionDungeonExit
                     )
-                ) {
-                    MainViewContent(state = state, navController = navController)
-                }
+                )
             }
         }
     }
