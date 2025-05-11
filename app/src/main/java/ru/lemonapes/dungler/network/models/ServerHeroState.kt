@@ -2,6 +2,7 @@ package ru.lemonapes.dungler.network.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import ru.lemonapes.dungler.domain_models.SpellId
 
 @Serializable
 data class ServerHeroStateResponse(
@@ -21,9 +22,16 @@ data class ServerHeroState(
     @SerialName("actions") val actions: List<ServerAction> = emptyList(),
     @SerialName("equipped_food") val equippedFood: ServerFood? = null,
     @SerialName("enemies") val enemies: List<ServerEnemy> = emptyList(),
+    @SerialName("spell_equipment") val spellEquipment: ServerSpellEquipment? = null,
 
     // @SerialName("enemies") val Enemies: List<Enemy> = emptyList(),
     // @SerialName("actions") val Actions: List<Actions> = emptyList(),
+)
+
+@Serializable
+data class ServerSpellEquipment(
+    @SerialName("spell_one") val spellOne: SpellId? = null,
+    @SerialName("spell_two") val spellTwo: SpellId? = null,
 )
 
 @Serializable

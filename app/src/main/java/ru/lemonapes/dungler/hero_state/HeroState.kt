@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import ru.lemonapes.dungler.domain_models.Enemy
 import ru.lemonapes.dungler.domain_models.Food
+import ru.lemonapes.dungler.domain_models.SpellEquipment
 
 data class HeroState(
     val level: Int? = null,
@@ -17,6 +18,7 @@ data class HeroState(
     val dungeonState: DungeonState? = null,
     val isEating: Boolean = false,
     val equippedFood: Food? = null,
+    val spellEquipment: SpellEquipment = SpellEquipment.EMPTY,
     val actions: ImmutableList<Action> = persistentListOf(),
     val nextCalcTime: Long = 0,
 ) {

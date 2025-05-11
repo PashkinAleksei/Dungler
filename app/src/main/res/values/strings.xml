@@ -66,6 +66,10 @@
     <string name="topaz_name">Топаз</string>
     <string name="apple_name">Яблоко</string>
 
+    <string name="heroic_strike_name">Героический удар</string>
+    <string name="whirlwind_name">Вихрь</string>
+    <string name="swiping_strikes_name">Размашистые удары</string>
+
     <string name="stat_strength">Сила</string>
     <string name="stat_stamina">Выносливость</string>
     <string name="stat_agility">Ловкость</string>

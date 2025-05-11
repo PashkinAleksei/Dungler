@@ -2,14 +2,16 @@ package ru.lemonapes.dungler.mappers
 
 import android.icu.util.Calendar
 import kotlinx.collections.immutable.toPersistentList
+import ru.lemonapes.dungler.domain_models.SpellEquipment
 import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.DungeonState
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.hero_state.HeroState.Companion.ACTION_TICK_TIME
 import ru.lemonapes.dungler.network.models.ActionType
+import ru.lemonapes.dungler.network.models.ServerHeroState
 
-object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -> HeroState {
-    override fun invoke(response: ru.lemonapes.dungler.network.models.ServerHeroState): HeroState {
+object HeroStateMapper : (ServerHeroState) -> HeroState {
+    override fun invoke(response: ServerHeroState): HeroState {
         return HeroState(
             level = response.level,
             health = response.health,
@@ -19,6 +21,12 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
             isLoading = false,
             isEating = response.actions.firstOrNull()?.type == ActionType.EATING_EFFECT,
             equippedFood = response.equippedFood?.let { FoodMapper(it) },
+            spellEquipment = response.spellEquipment?.let { equip ->
+                SpellEquipment(
+                    spellOne = equip.spellOne,
+                    spellTwo = equip.spellTwo
+                )
+            } ?: SpellEquipment.EMPTY,
             dungeonState = response.hallNumber?.let { hallNumber ->
                 DungeonState(
                     hallNumber = hallNumber,
@@ -30,24 +38,25 @@ object HeroStateMapper : (ru.lemonapes.dungler.network.models.ServerHeroState) -
             actions = response.actions.map {
                 when (it.type) {
                     ActionType.HEAL_EFFECT ->
-                        Action.HealAction(
-                            healAmount = it.healEffectData?.healAmount ?: 0,
+                        Action.HealAction(healAmount = it.healEffectData?.healAmount ?: 0)
+
+                    ActionType.HERO_ATTACK ->
+                        Action.HeroAttackAction(
+                            targetIndex = it.heroAttackData?.targetIndex ?: 0,
+                            heroPureDamage = it.heroAttackData?.heroPureDamage ?: 0
                         )
 
-                    ActionType.HERO_ATTACK -> Action.HeroAttackAction(
-                        targetIndex = it.heroAttackData?.targetIndex ?: 0,
-                        heroPureDamage = it.heroAttackData?.heroPureDamage ?: 0,
-                    )
+                    ActionType.ENEMY_ATTACK ->
+                        Action.EnemyAttackAction(
+                            enemyIndex = it.enemyAttackData?.enemyIndex ?: 0,
+                            enemyPureDamage = it.enemyAttackData?.enemyPureDamage ?: 0
+                        )
 
-                    ActionType.ENEMY_ATTACK -> Action.EnemyAttackAction(
-                        enemyIndex = it.enemyAttackData?.enemyIndex ?: 0,
-                        enemyPureDamage = it.enemyAttackData?.enemyPureDamage ?: 0,
-                    )
-
-                    ActionType.EATING_EFFECT -> Action.EatingEffectAction(
-                        healAmount = it.eatingEffectData?.healAmount ?: 0,
-                        reduceFood = it.eatingEffectData?.reduceFood ?: false,
-                    )
+                    ActionType.EATING_EFFECT ->
+                        Action.EatingEffectAction(
+                            healAmount = it.eatingEffectData?.healAmount ?: 0,
+                            reduceFood = it.eatingEffectData?.reduceFood ?: false
+                        )
 
                     ActionType.NEXT_HALL -> Action.NextHallAction
                     ActionType.TAKE_LOOT -> Action.TakeLootAction
