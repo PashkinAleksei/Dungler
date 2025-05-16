@@ -68,6 +68,7 @@
 
     //Skills
     <string name="heroic_strike_name">Героический удар</string>
+    <string name="heroic_strike_description">Сильная атака с увеличенным физическим уроном</string>
     <string name="whirlwind_name">Вихрь</string>
     <string name="whirlwind_description">Оружейный вихрь, поражающий всех находящихся поблизости врагов.</string>
     <string name="swiping_strikes_name">Размашистые удары</string>

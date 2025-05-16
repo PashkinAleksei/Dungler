@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.domain_models.SkillId
+import ru.lemonapes.dungler.navigation.character.SkillSlot
 import ru.lemonapes.dungler.ui.StateCheck
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
@@ -29,6 +30,7 @@ fun SkillsEquipmentView(
     modifier: Modifier = Modifier,
     state: SkillsEquipmentViewState,
     listener: SkillsEquipmentListener,
+    dialogDescriptionData: DialogDescriptionData? = null,
 ) {
     StateCheck(
         modifier = modifier,
@@ -37,10 +39,23 @@ fun SkillsEquipmentView(
     ) {
         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.weight(1f))
-            SkillView(state.skillsEquipment?.skillOne, listener.onSkillClick)
+            SkillView(state.skillsEquipment?.skillOne) {
+                listener.onSkillClick(
+                    SkillSlot.SKILL_SLOT_ONE,
+                    state.skillsEquipment?.skillOne
+                )
+            }
             Spacer(Modifier.weight(1f))
-            SkillView(state.skillsEquipment?.skillTwo, listener.onSkillClick)
+            SkillView(state.skillsEquipment?.skillTwo) {
+                listener.onSkillClick(
+                    SkillSlot.SKILL_SLOT_TWO,
+                    state.skillsEquipment?.skillTwo
+                )
+            }
             Spacer(Modifier.weight(2f))
+        }
+        if (dialogDescriptionData != null) {
+            DialogSkillDescription(dialogDescriptionData, listener)
         }
     }
 }
@@ -72,6 +87,7 @@ private fun CharacterViewPreview() {
     DunglerTheme(darkTheme = true) {
         SkillsEquipmentView(
             state = SkillsEquipmentViewState.MOCK,
+            dialogDescriptionData = null,
             listener = SkillsEquipmentListener.MOCK,
         )
     }

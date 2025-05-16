@@ -20,14 +20,11 @@ class SkillsEquipmentViewModel @Inject constructor(
 ) : ParentViewModel<SkillsEquipmentViewState>(SkillsEquipmentViewState.EMPTY, heroStateRepository),
     SkillsEquipmentAction {
 
-    val heroStateFlow = heroStateRepository.heroStateFlow
-
     init {
         viewModelScope.launch {
             heroStateRepository.heroStateFlow.collect { heroState ->
                 updateState { currentState ->
                     currentState.copy(
-                        isLoading = heroState.isLoading,
                         skillsEquipment = heroState.skillsEquipment
                     )
                 }

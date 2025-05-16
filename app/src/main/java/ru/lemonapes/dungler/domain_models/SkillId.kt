@@ -9,11 +9,12 @@ import ru.lemonapes.dungler.R
 @Serializable
 enum class SkillId(
     @StringRes val skillName: Int,
+    @StringRes val skillDescription: Int,
     @DrawableRes val image: Int,
 ) {
     @SerialName("heroic_strike")
-    HEROIC_STRIKE(R.string.heroic_strike_name, R.drawable.heroic_strike),
+    HEROIC_STRIKE(R.string.heroic_strike_name, R.string.heroic_strike_description, R.drawable.heroic_strike),
 
     @SerialName("whirlwind")
-    WHIRLWIND(R.string.whirlwind_name, R.drawable.whirlwind),
+    WHIRLWIND(R.string.whirlwind_name, R.string.whirlwind_description, R.drawable.whirlwind),
 }

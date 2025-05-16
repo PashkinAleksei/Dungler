@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,7 +52,9 @@ fun DialogViewFoodDescription(
                 contentDescription = stringResource(id = R.string.reagent_icon_description),
             )
             UIText(
-                modifier = Modifier.padding(start = 12.dp, top = 4.dp),
+                modifier = Modifier
+                    .padding(start = 12.dp, top = 4.dp, bottom = 6.dp)
+                    .align(Alignment.CenterVertically),
                 text = stringResource(food.id.foodName),
                 textStyle = LocalThemeTypographies.current.regular18
             )

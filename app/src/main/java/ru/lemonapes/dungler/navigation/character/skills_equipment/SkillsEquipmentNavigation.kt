@@ -1,24 +1,44 @@
 package ru.lemonapes.dungler.navigation.character.skills_equipment
 
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import ru.lemonapes.dungler.domain_models.SkillId
 import ru.lemonapes.dungler.navigation.Screens
+import ru.lemonapes.dungler.navigation.character.SkillSlot
 import ru.lemonapes.dungler.ui.ActionLoadingOnStop
 import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.StateListener
 
-fun NavGraphBuilder.skillsEquipmentNavigation() {
+fun NavGraphBuilder.skillsEquipmentNavigation(navController: NavController) {
     composable<Screens.EquipmentSkills> {
         val model: SkillsEquipmentViewModel = hiltViewModel()
         val state = model.observeState().collectAsState().value
         ActionLoadingOnStop(model)
         ActionOnStart(model::actionStart)
+        var dialogDescriptionData by remember { mutableStateOf<DialogDescriptionData?>(null) }
         SkillsEquipmentView(
             state = state,
+            dialogDescriptionData = dialogDescriptionData,
             listener = SkillsEquipmentListener(
-                onSkillClick = {},
+                onSkillClick = { skillSlot, skill ->
+                    skill?.let {
+                        dialogDescriptionData = DialogDescriptionData(skillSlot, skill)
+                    } ?: navController.navigate(Screens.SkillList)//skillSlot
+                },
+                onDialogDismiss = {
+                    dialogDescriptionData = null
+                },
+                onChangeSkillClick = { skillSlot ->
+                    dialogDescriptionData = null
+                    navController.navigate(Screens.SkillList)//skillSlot
+                },
                 stateListener = StateListener(
                     onRetryClick = {
                         model.actionStart()
@@ -30,13 +50,17 @@ fun NavGraphBuilder.skillsEquipmentNavigation() {
 }
 
 class SkillsEquipmentListener(
-    val onSkillClick: () -> Unit,
+    val onSkillClick: (SkillSlot, SkillId?) -> Unit,
+    val onDialogDismiss: () -> Unit,
+    val onChangeSkillClick: (SkillSlot) -> Unit,
     val stateListener: StateListener,
 ) {
     companion object {
         val MOCK
             get() = SkillsEquipmentListener(
-                onSkillClick = {},
+                onSkillClick = { _, _ -> },
+                onDialogDismiss = {},
+                onChangeSkillClick = {},
                 stateListener = StateListener.MOCK,
             )
     }
