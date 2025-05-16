@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character.spell_equipment
+package ru.lemonapes.dungler.navigation.character.skills_equipment
 
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -9,16 +9,16 @@ import ru.lemonapes.dungler.ui.ActionLoadingOnStop
 import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.StateListener
 
-fun NavGraphBuilder.spellEquipmentNavigation() {
-    composable<Screens.EquipmentSpells> {
-        val model: SpellEquipmentViewModel = hiltViewModel()
+fun NavGraphBuilder.skillsEquipmentNavigation() {
+    composable<Screens.EquipmentSkills> {
+        val model: SkillsEquipmentViewModel = hiltViewModel()
         val state = model.observeState().collectAsState().value
         ActionLoadingOnStop(model)
         ActionOnStart(model::actionStart)
-        SpellEquipmentView(
+        SkillsEquipmentView(
             state = state,
-            listener = SpellEquipmentListener(
-                onSpellClick = {},
+            listener = SkillsEquipmentListener(
+                onSkillClick = {},
                 stateListener = StateListener(
                     onRetryClick = {
                         model.actionStart()
@@ -29,14 +29,14 @@ fun NavGraphBuilder.spellEquipmentNavigation() {
     }
 }
 
-class SpellEquipmentListener(
-    val onSpellClick: () -> Unit,
+class SkillsEquipmentListener(
+    val onSkillClick: () -> Unit,
     val stateListener: StateListener,
 ) {
     companion object {
         val MOCK
-            get() = SpellEquipmentListener(
-                onSpellClick = {},
+            get() = SkillsEquipmentListener(
+                onSkillClick = {},
                 stateListener = StateListener.MOCK,
             )
     }

@@ -87,15 +87,15 @@ private fun Buttons(
     Row(Modifier.width(120.dp)) {
         if (topBarButtonActive != null) {
             val equipmentSelected = topBarButtonActive == TopBarButtonActive.EQUIPMENT
-            val spellsSelected = topBarButtonActive == TopBarButtonActive.SPELLS
+            val skillsSelected = topBarButtonActive == TopBarButtonActive.SKILLS
             val equipmentBorderColor: Color =
                 if (equipmentSelected) {
                     LocalThemeColors.current.primaryTextColor
                 } else {
                     LocalThemeColors.current.secondaryTextColor
                 }
-            val spellsBorderColor: Color =
-                if (spellsSelected) {
+            val skillsBorderColor: Color =
+                if (skillsSelected) {
                     LocalThemeColors.current.primaryTextColor
                 } else {
                     LocalThemeColors.current.secondaryTextColor
@@ -126,11 +126,11 @@ private fun Buttons(
             Box(
                 modifier = Modifier
                     .padding(start = 6.dp, end = 6.dp)
-                    .border(1.dp, spellsBorderColor, RoundedCornerShape(12.dp))
+                    .border(1.dp, skillsBorderColor, RoundedCornerShape(12.dp))
                     .minimumInteractiveComponentSize()
                     .size(40.dp)
                     .clickable(
-                        onClick = topBarListener.toSpells,
+                        onClick = topBarListener.toSkills,
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple(
                             bounded = false,
@@ -138,13 +138,13 @@ private fun Buttons(
                         )
                     ),
             ) {
-                if (spellsSelected) ButtonSelectionBox()
+                if (skillsSelected) ButtonSelectionBox()
                 Image(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(vertical = 4.dp),
                     painter = painterResource(R.drawable.beril),
-                    contentDescription = stringResource(R.string.spell_equipment_screen)
+                    contentDescription = stringResource(R.string.skill_equipment_screen)
                 )
             }
         }
@@ -180,7 +180,7 @@ private fun Modifier.gradientSelection(color: Color): Modifier {
 
 class TopBarListener(
     val toEquipment: () -> Unit,
-    val toSpells: () -> Unit,
+    val toSkills: () -> Unit,
 ) {
     companion object {
         val EMPTY
@@ -303,7 +303,7 @@ private fun HeroState.ExperienceBar(
 }
 
 enum class TopBarButtonActive {
-    EQUIPMENT, SPELLS
+    EQUIPMENT, SKILLS
 }
 
 @Preview

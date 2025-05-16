@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 import ru.lemonapes.dungler.R
 
 @Serializable
-enum class SpellId(
-    @StringRes val spellName: Int,
+enum class SkillId(
+    @StringRes val skillName: Int,
     @DrawableRes val image: Int,
 ) {
     @SerialName("heroic_strike")

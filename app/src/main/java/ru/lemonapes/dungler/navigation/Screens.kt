@@ -9,7 +9,7 @@ sealed class Screens(open val label: String) {
     data object Equipment : Screens("Equipment")
 
     @Serializable
-    data object EquipmentSpells : Screens("EquipmentSpells")
+    data object EquipmentSkills : Screens("EquipmentSkills")
 
     @Serializable
     data object Inventory : Screens("Inventory")

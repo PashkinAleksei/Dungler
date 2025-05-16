@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character.spell_equipment
+package ru.lemonapes.dungler.navigation.character.skills_equipment
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,13 +11,14 @@ import ru.lemonapes.dungler.parent_view_model.ViewModelAction
 import ru.lemonapes.dungler.repositories.HeroStateRepository
 import javax.inject.Inject
 
-interface SpellEquipmentAction : ViewModelAction {
+interface SkillsEquipmentAction : ViewModelAction {
 }
 
 @HiltViewModel
-class SpellEquipmentViewModel @Inject constructor(
+class SkillsEquipmentViewModel @Inject constructor(
     heroStateRepository: HeroStateRepository,
-) : ParentViewModel<SpellEquipmentViewState>(SpellEquipmentViewState.EMPTY, heroStateRepository), SpellEquipmentAction {
+) : ParentViewModel<SkillsEquipmentViewState>(SkillsEquipmentViewState.EMPTY, heroStateRepository),
+    SkillsEquipmentAction {
 
     val heroStateFlow = heroStateRepository.heroStateFlow
 
@@ -27,7 +28,7 @@ class SpellEquipmentViewModel @Inject constructor(
                 updateState { currentState ->
                     currentState.copy(
                         isLoading = heroState.isLoading,
-                        spellEquipment = heroState.spellEquipment
+                        skillsEquipment = heroState.skillsEquipment
                     )
                 }
             }

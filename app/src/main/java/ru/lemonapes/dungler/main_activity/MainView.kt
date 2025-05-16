@@ -25,7 +25,7 @@ import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.navigation.RootScreens
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.navigation.character.equipment.characterNavigation
-import ru.lemonapes.dungler.navigation.character.spell_equipment.spellEquipmentNavigation
+import ru.lemonapes.dungler.navigation.character.skills_equipment.skillsEquipmentNavigation
 import ru.lemonapes.dungler.navigation.craft.craftNavigation
 import ru.lemonapes.dungler.navigation.dungeon.dungeonNavigation
 import ru.lemonapes.dungler.navigation.dungeon_list.dungeonListNavigation
@@ -58,7 +58,7 @@ fun MainView(
                     heroState = heroState,
                     topBarListener = TopBarListener(
                         toEquipment = { navController.navigate(Screens.Equipment) },
-                        toSpells = { navController.navigate(Screens.EquipmentSpells) }
+                        toSkills = { navController.navigate(Screens.EquipmentSkills) }
                     ),
                     activeButton = navController.getTopBarActiveButton()
                 )
@@ -83,8 +83,8 @@ private fun NavController.getTopBarActiveButton(): TopBarButtonActive? {
             TopBarButtonActive.EQUIPMENT
         }
 
-        Screens.EquipmentSpells.toString() -> {
-            TopBarButtonActive.SPELLS
+        Screens.EquipmentSkills.toString() -> {
+            TopBarButtonActive.SKILLS
         }
 
         else -> {
@@ -109,7 +109,7 @@ private fun MainViewContent(
             ) {
                 navigation<RootScreens.CharacterRoot>(startDestination = Screens.Equipment) {
                     characterNavigation()
-                    spellEquipmentNavigation()
+                    skillsEquipmentNavigation()
                 }
                 navigation<RootScreens.CraftRoot>(startDestination = Screens.Craft) {
                     craftNavigation()

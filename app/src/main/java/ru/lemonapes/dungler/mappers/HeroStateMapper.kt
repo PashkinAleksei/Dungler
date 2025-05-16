@@ -2,7 +2,7 @@ package ru.lemonapes.dungler.mappers
 
 import android.icu.util.Calendar
 import kotlinx.collections.immutable.toPersistentList
-import ru.lemonapes.dungler.domain_models.SpellEquipment
+import ru.lemonapes.dungler.domain_models.SkillsEquipment
 import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.DungeonState
 import ru.lemonapes.dungler.hero_state.HeroState
@@ -21,12 +21,12 @@ object HeroStateMapper : (ServerHeroState) -> HeroState {
             isLoading = false,
             isEating = response.actions.firstOrNull()?.type == ActionType.EATING_EFFECT,
             equippedFood = response.equippedFood?.let { FoodMapper(it) },
-            spellEquipment = response.spellEquipment?.let { equip ->
-                SpellEquipment(
-                    spellOne = equip.spellOne,
-                    spellTwo = equip.spellTwo
+            skillsEquipment = response.skillsEquipment?.let { equip ->
+                SkillsEquipment(
+                    skillOne = equip.skillOne,
+                    skillTwo = equip.skillTwo
                 )
-            } ?: SpellEquipment.EMPTY,
+            } ?: SkillsEquipment.EMPTY,
             dungeonState = response.hallNumber?.let { hallNumber ->
                 DungeonState(
                     hallNumber = hallNumber,
