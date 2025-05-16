@@ -38,7 +38,7 @@
 
     <string name="character_tab">Персонаж</string>
     <string name="equipment_screen">Экипировка</string>
-    <string name="spell_equipment_screen">Экипированные заклинания</string>
+    <string name="skill_equipment_screen">Экипированные способности</string>
     <string name="inventory_tab">Инвентарь</string>
     <string name="craft_tab">Ремесло</string>
     <string name="dungeon_tab">Подземелья</string>
@@ -66,6 +66,7 @@
     <string name="topaz_name">Топаз</string>
     <string name="apple_name">Яблоко</string>
 
+    //Skills
     <string name="heroic_strike_name">Героический удар</string>
     <string name="whirlwind_name">Вихрь</string>
     <string name="swiping_strikes_name">Размашистые удары</string>
