@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+apply(from = rootProject.file("generateFileAndClassList.gradle.kts"))
+
 android {
     buildFeatures {
         buildConfig = true
@@ -43,6 +45,12 @@ android {
     hilt {
         enableAggregatingTask = false
     }
+    sourceSets {
+        getByName("main") {
+            assets.srcDir("$projectDir/build/generated/assets")
+        }
+    }
+
 }
 
 dependencies {
