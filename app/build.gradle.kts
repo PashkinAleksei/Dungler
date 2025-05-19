@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-apply(from = rootProject.file("generateFileAndClassList.gradle.kts"))
+apply(from = rootProject.file("scripts.gradle.kts"))
 
 android {
     buildFeatures {
