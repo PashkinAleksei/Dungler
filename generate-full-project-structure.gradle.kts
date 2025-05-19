@@ -1,9 +1,9 @@
-tasks.register("generateFullFileAndClassList") {
+tasks.register("generate-full-project-structure") {
     group = "Custom Tasks"
     description =
         "Generates a unified list of all files under src/main/java and files directly in src/main for all Android modules."
 
-    val outputFile = layout.buildDirectory.file("generated/assets/full_file_and_class_list.txt")
+    val outputFile = layout.buildDirectory.file("generated/assets/FullProjectStructure.txt")
 
     doLast {
         val outFile = outputFile.get().asFile

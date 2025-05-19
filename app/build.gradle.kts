@@ -7,7 +7,8 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-apply(from = rootProject.file("scripts.gradle.kts"))
+apply(from = rootProject.file("generate-full-project-structure.gradle.kts"))
+apply(from = rootProject.file("merge-context-files.gradle.kts"))
 
 android {
     buildFeatures {
