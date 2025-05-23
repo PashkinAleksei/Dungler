@@ -4,31 +4,50 @@ tasks.register("merge-context-files") {
     group = "custom"
     description = "Merge files and folders into one file with path markers"
 
+    val outputFile = layout.buildDirectory.file("generated/assets/MergedContextFiles.txt")
+
     val paths = listOf(
-        "app/src",
+        "/Users/alekse.pashkin/AndroidStudioProjects/Dungler/app/src/main/java/ru/lemonapes/dungler/navigation/character/skills",
+        "/Users/alekse.pashkin/AndroidStudioProjects/Dungler/app/src/main/java/ru/lemonapes/dungler/network/endpoints",
+        "/Users/alekse.pashkin/AndroidStudioProjects/Dungler/app/src/main/java/ru/lemonapes/dungler/navigation/character/equipment",
+        "/Users/alekse.pashkin/AndroidStudioProjects/Dungler/app/src/main/java/ru/lemonapes/dungler/navigation/Screens.kt",
+        "/Users/alekse.pashkin/AndroidStudioProjects/Dungler/app/src/main/java/ru/lemonapes/dungler/network/endpoints/GetSkills.kt",
+        "/Users/alekse.pashkin/AndroidStudioProjects/Dungler/app/src/main/java/ru/lemonapes/dungler/network/endpoints/PatchDeEquipFood.kt",
+        "/Users/alekse.pashkin/AndroidStudioProjects/Dungler/app/src/main/java/ru/lemonapes/dungler/network/endpoints/PatchEquipFood.kt",
+        "/Users/alekse.pashkin/AndroidStudioProjects/Dungler/app/src/main/java/ru/lemonapes/dungler/network/endpoints/GetEquipment.kt",
         //"",
     )
 
-    val outputFile = layout.buildDirectory.file("generated/assets/MergedContextFiles.txt")
-    val excludeDirSet = hashSetOf(
-        file("src/main/res/drawable").absolutePath,
-        file("src/main/res/raw").absolutePath,
-        file("src/main/res/mipmap").absolutePath,
-        file("src/main/res/font").absolutePath,
-        file("src/main/res/xml").absolutePath,
+    val excludePaths = hashSetOf(
+        "res/drawable",
+        "res/raw",
+        "res/mipmap",
+        "res/font",
+        "res/xml",
+    )
+    val excludePathSegments = hashSetOf(
+        "build",
+        "androidTest",
+        "detekt-baseline.xml",
+        "lint-baseline.xml",
     )
 
     fun writeContent(file: File, writer: java.io.BufferedWriter, base: String) {
         if (file.isDirectory) {
-            val absolutePath = file.absolutePath
-            if (file.absolutePath in excludeDirSet) return
+            if (file.path.split("/").any {
+                    it in excludePathSegments || it.firstOrNull() == '.'
+                }) return
 
-            writer.write("//// DIR $base ////\n")
+            for (ep in excludePaths) {
+                if (file.path.contains(ep)) return
+            }
+
+            //writer.write("//// DIR $base ////\n")
             file.listFiles()?.sortedBy { it.name }?.forEach { child ->
                 writeContent(child, writer, "$base/${child.name}")
             }
         } else if (
-            file.isFile &&
+            file.isFile && file.name.first() != '.' &&
             (file.name.endsWith(".xml") || file.name.endsWith(".kt") || file.name.endsWith(".java"))
         ) {
             writer.write("//// FILE $base ////\n")
@@ -42,14 +61,13 @@ tasks.register("merge-context-files") {
         val outFile = outputFile.get().asFile
         outFile.parentFile.mkdirs()
         outFile.bufferedWriter(Charsets.UTF_8).use { writer ->
-            for (relative in paths) {
-                val removedAppSegment = relative.substringAfter("/")
-                val fileOrDir = file(removedAppSegment)
+            for (path in paths) {
+                val fileOrDir = File(path)
                 println("file dir $fileOrDir")
                 if (fileOrDir.exists()) {
-                    writeContent(fileOrDir, writer, relative)
+                    writeContent(fileOrDir, writer, path)
                 } else {
-                    writer.write("//// $relative ////\n")
+                    writer.write("//// $path ////\n")
                     writer.write("// FILE OR DIR NOT FOUND\n\n")
                 }
             }

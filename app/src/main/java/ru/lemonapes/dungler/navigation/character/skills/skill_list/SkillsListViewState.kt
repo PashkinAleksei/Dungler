@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character.skill_list
+package ru.lemonapes.dungler.navigation.character.skills.skill_list
 
 import ru.lemonapes.dungler.domain_models.SkillId
 import ru.lemonapes.dungler.parent_view_model.State

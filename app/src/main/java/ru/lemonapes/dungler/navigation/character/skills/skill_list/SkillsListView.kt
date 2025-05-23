@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character.skill_list
+package ru.lemonapes.dungler.navigation.character.skills.skill_list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

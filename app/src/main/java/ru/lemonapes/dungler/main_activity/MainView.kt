@@ -25,8 +25,8 @@ import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.navigation.RootScreens
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.navigation.character.equipment.characterNavigation
-import ru.lemonapes.dungler.navigation.character.skill_list.skillsListNavigation
-import ru.lemonapes.dungler.navigation.character.skills_equipment.skillsEquipmentNavigation
+import ru.lemonapes.dungler.navigation.character.skills.skill_list.skillsListNavigation
+import ru.lemonapes.dungler.navigation.character.skills.skills_equipment.skillsEquipmentNavigation
 import ru.lemonapes.dungler.navigation.craft.craftNavigation
 import ru.lemonapes.dungler.navigation.dungeon.dungeonNavigation
 import ru.lemonapes.dungler.navigation.dungeon_list.dungeonListNavigation

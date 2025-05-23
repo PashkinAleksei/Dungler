@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character.skills_equipment
+package ru.lemonapes.dungler.navigation.character.skills.skills_equipment
 
 import ru.lemonapes.dungler.domain_models.SkillId
 import ru.lemonapes.dungler.navigation.character.SkillSlot

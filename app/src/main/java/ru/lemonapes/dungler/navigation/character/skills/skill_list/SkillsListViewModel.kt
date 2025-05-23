@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character.skill_list
+package ru.lemonapes.dungler.navigation.character.skills.skill_list
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
