@@ -2,7 +2,7 @@ package ru.lemonapes.dungler.mappers
 
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
-import ru.lemonapes.dungler.network.models.EquipmentResponse
+import ru.lemonapes.dungler.network.models.responses.EquipmentResponse
 
 object EquipmentResponseMapper : (EquipmentResponse) -> EquipmentMappingResult {
     override fun invoke(response: EquipmentResponse): EquipmentMappingResult {

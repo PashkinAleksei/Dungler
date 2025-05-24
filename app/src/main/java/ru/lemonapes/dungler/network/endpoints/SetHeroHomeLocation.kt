@@ -9,7 +9,7 @@ import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
 import ru.lemonapes.dungler.network.models.ServerHeroStateResponse
-import ru.lemonapes.dungler.network.models.checkNetworkException
+import ru.lemonapes.dungler.network.models.responses.checkNetworkException
 
 suspend fun setHeroHomeLocation(): ServerHeroStateResponse {
     val url = "$ENDPOINT/set_hero_location?hero_id=$HERO_ID"

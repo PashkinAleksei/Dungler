@@ -11,7 +11,7 @@ import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.domain_models.UpgradeGear
 import ru.lemonapes.dungler.hero_state.HeroState
-import ru.lemonapes.dungler.network.models.CraftItemsResponse
+import ru.lemonapes.dungler.network.models.responses.CraftItemsResponse
 
 object CraftItemResponseMapper : (CraftItemsResponse) ->
 CraftItemMapperResponse {

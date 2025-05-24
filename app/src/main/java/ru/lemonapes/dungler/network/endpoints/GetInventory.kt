@@ -5,8 +5,8 @@ import io.ktor.client.request.get
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.InventoryResponse
-import ru.lemonapes.dungler.network.models.checkNetworkException
+import ru.lemonapes.dungler.network.models.responses.InventoryResponse
+import ru.lemonapes.dungler.network.models.responses.checkNetworkException
 
 suspend fun getInventory(): InventoryResponse {
     val url = "$ENDPOINT/inventory?hero_id=$HERO_ID"

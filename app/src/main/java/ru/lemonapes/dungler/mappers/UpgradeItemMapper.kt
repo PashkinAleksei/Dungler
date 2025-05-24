@@ -4,7 +4,7 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.GearId
 import ru.lemonapes.dungler.domain_models.UpgradeGear
-import ru.lemonapes.dungler.network.models.ServerUpgradeItem
+import ru.lemonapes.dungler.network.models.responses.ServerUpgradeItem
 
 object UpgradeItemMapper : (ServerUpgradeItem) -> UpgradeGear {
     override fun invoke(item: ServerUpgradeItem): UpgradeGear {

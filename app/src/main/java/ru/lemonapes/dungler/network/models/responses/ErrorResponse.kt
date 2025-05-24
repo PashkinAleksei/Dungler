@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.network.models
+package ru.lemonapes.dungler.network.models.responses
 
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse

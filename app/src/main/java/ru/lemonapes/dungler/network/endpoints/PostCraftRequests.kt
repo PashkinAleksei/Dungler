@@ -10,8 +10,8 @@ import ru.lemonapes.dungler.domain_models.GearId
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.CraftItemsResponse
-import ru.lemonapes.dungler.network.models.checkNetworkException
+import ru.lemonapes.dungler.network.models.responses.CraftItemsResponse
+import ru.lemonapes.dungler.network.models.responses.checkNetworkException
 
 private const val GEAR_ID_PARAM = "gear_id"
 private const val FOOD_ID_PARAM = "food_id"

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import ru.lemonapes.dungler.network.NetworkException
-import ru.lemonapes.dungler.network.models.ResponseErrorCode
+import ru.lemonapes.dungler.network.models.responses.ResponseErrorCode
 import ru.lemonapes.dungler.repositories.HeroStateRepository
 
 interface State {

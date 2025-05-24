@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.ReagentId
-import ru.lemonapes.dungler.network.models.InventoryResponse
+import ru.lemonapes.dungler.network.models.responses.InventoryResponse
 
 object InventoryResponseMapper :
         (InventoryResponse) -> Triple<ImmutableList<Gear>, ImmutableList<Food>, ImmutableMap<ReagentId, Int>> {

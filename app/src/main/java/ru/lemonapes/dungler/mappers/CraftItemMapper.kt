@@ -4,7 +4,7 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.GearId
-import ru.lemonapes.dungler.network.models.ServerCreateItem
+import ru.lemonapes.dungler.network.models.responses.ServerCreateItem
 
 object CraftItemMapper : (ServerCreateItem) -> CreateGear {
     override fun invoke(craftItem: ServerCreateItem): CreateGear {

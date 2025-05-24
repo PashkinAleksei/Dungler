@@ -8,8 +8,8 @@ import io.ktor.http.contentType
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.EquipmentResponse
-import ru.lemonapes.dungler.network.models.checkNetworkException
+import ru.lemonapes.dungler.network.models.responses.EquipmentResponse
+import ru.lemonapes.dungler.network.models.responses.checkNetworkException
 
 suspend fun patchDeEquipFood(): EquipmentResponse {
     val url = "$ENDPOINT/equipment_food?hero_id=$HERO_ID"

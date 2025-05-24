@@ -1,9 +1,10 @@
 package ru.lemonapes.dungler.navigation
 
 import kotlinx.serialization.Serializable
+import ru.lemonapes.dungler.navigation.character.SkillSlot
 
 @Serializable
-sealed class Screens(open val label: String) {
+sealed class Screens(val label: String) {
 
     @Serializable
     data object Equipment : Screens("Equipment")
@@ -12,10 +13,11 @@ sealed class Screens(open val label: String) {
     data object EquipmentSkills : Screens("EquipmentSkills")
 
     @Serializable
-    data object SkillList : Screens("SkillList")
+    data class SkillList(val skillSlot: SkillSlot) : Screens("SkillList")
 
     @Serializable
     data object Inventory : Screens("Inventory")
+
     @Serializable
     data object Craft : Screens("Craft")
 
@@ -27,7 +29,7 @@ sealed class Screens(open val label: String) {
 }
 
 @Serializable
-sealed class RootScreens(open val label: String) {
+sealed class RootScreens(val label: String) {
     @Serializable
     data object CharacterRoot : RootScreens("CharacterRoot")
 

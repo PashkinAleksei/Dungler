@@ -51,12 +51,12 @@ fun SkillsListView(
 }
 
 @Composable
-private fun SkillView(skill: SkillId, onClick: () -> Unit) {
+private fun SkillView(skill: SkillId, onClick: (SkillId) -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
-            .clickable(onClick = onClick)
+            .clickable(onClick = { onClick(skill) })
     ) {
         Image(
             modifier = Modifier

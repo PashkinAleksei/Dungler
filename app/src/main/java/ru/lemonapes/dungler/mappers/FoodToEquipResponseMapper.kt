@@ -4,7 +4,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import ru.lemonapes.dungler.domain_models.Food
-import ru.lemonapes.dungler.network.models.FoodToEquipResponse
+import ru.lemonapes.dungler.network.models.responses.FoodToEquipResponse
 
 object FoodToEquipResponseMapper : (FoodToEquipResponse) -> ImmutableList<Food> {
     override fun invoke(response: FoodToEquipResponse) =

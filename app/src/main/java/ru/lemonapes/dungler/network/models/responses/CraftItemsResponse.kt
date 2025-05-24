@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.network.models
+package ru.lemonapes.dungler.network.models.responses
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,6 +6,7 @@ import ru.lemonapes.dungler.domain_models.FoodId
 import ru.lemonapes.dungler.domain_models.GearId
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.domain_models.StatId
+import ru.lemonapes.dungler.network.models.ServerHeroState
 
 @Serializable
 data class CraftItemsResponse(

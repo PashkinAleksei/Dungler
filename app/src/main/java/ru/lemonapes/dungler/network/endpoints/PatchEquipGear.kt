@@ -9,8 +9,8 @@ import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.EquipmentResponse
-import ru.lemonapes.dungler.network.models.checkNetworkException
+import ru.lemonapes.dungler.network.models.responses.EquipmentResponse
+import ru.lemonapes.dungler.network.models.responses.checkNetworkException
 
 suspend fun patchEquipGear(gear: Gear): EquipmentResponse {
     val url = "$ENDPOINT/equipment_gear?hero_id=$HERO_ID"

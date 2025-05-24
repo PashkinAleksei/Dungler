@@ -30,14 +30,16 @@ fun NavGraphBuilder.skillsEquipmentNavigation(navController: NavController) {
                 onSkillClick = { skillSlot, skill ->
                     skill?.let {
                         dialogDescriptionData = DialogDescriptionData(skillSlot, skill)
-                    } ?: navController.navigate(Screens.SkillList)//skillSlot
+                    } ?: run {
+                        navController.navigate(Screens.SkillList(skillSlot))
+                    }
                 },
                 onDialogDismiss = {
                     dialogDescriptionData = null
                 },
                 onChangeSkillClick = { skillSlot ->
                     dialogDescriptionData = null
-                    navController.navigate(Screens.SkillList)//skillSlot
+                    navController.navigate(Screens.SkillList(skillSlot))
                 },
                 stateListener = StateListener(
                     onRetryClick = {

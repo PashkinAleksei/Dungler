@@ -5,8 +5,8 @@ import io.ktor.client.request.get
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.CraftItemsResponse
-import ru.lemonapes.dungler.network.models.checkNetworkException
+import ru.lemonapes.dungler.network.models.responses.CraftItemsResponse
+import ru.lemonapes.dungler.network.models.responses.checkNetworkException
 
 suspend fun getCraftItems(): CraftItemsResponse {
     val url = "$ENDPOINT/craft_items?hero_id=$HERO_ID"
