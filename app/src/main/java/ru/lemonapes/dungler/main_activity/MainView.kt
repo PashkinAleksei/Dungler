@@ -41,17 +41,21 @@ fun MainView(
     navController: NavHostController,
     listener: MainViewListener,
 ) {
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val hideBars = currentRoute
+        ?.substringAfterLast('.')
+        ?.contains(Screens.SkillList::class.java.toString().substringAfterLast('$')) == true
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
-            if (mainActivityState.rootRoute == MainRoute.MAIN) {
+            if (mainActivityState.rootRoute == MainRoute.MAIN && !hideBars) {
                 BottomBar(navController)
             }
         }
     ) { innerPadding ->
         Column(Modifier.padding(innerPadding)) {
-            if (mainActivityState.rootRoute == MainRoute.MAIN) {
+            if (mainActivityState.rootRoute == MainRoute.MAIN && !hideBars) {
                 HeroTopBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -63,7 +67,7 @@ fun MainView(
                     ),
                     activeButton = navController.getTopBarActiveButton()
                 )
-            } else {
+            } else if (!hideBars) {
                 DungeonTopBar(
                     modifier = Modifier,
                     onExitClick = listener.onDungeonExitClick

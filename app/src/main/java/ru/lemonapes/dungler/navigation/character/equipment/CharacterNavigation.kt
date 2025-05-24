@@ -3,17 +3,17 @@ package ru.lemonapes.dungler.navigation.character.equipment
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.Gear
 import ru.lemonapes.dungler.domain_models.GearType
 import ru.lemonapes.dungler.navigation.Screens
+import ru.lemonapes.dungler.navigation.composableWithBars
 import ru.lemonapes.dungler.ui.ActionLoadingOnStop
 import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.StateListener
 
 fun NavGraphBuilder.characterNavigation() {
-    composable<Screens.Equipment> {
+    composableWithBars<Screens.Equipment> {
         val model: CharacterViewModel = hiltViewModel()
         val state = model.observeState().collectAsState().value
         ActionLoadingOnStop(model)
