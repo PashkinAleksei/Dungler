@@ -53,7 +53,7 @@ fun HeroTopBar(
     activeButton: TopBarButtonActive?,
 ) {
     Row(
-        //modifier = modifier.padding(horizontal = 8.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         heroState.HeroStateBar(modifier = Modifier.weight(1f))

@@ -4,9 +4,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +25,8 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import ru.lemonapes.dungler.BottomBar
 import ru.lemonapes.dungler.hero_state.HeroState
+import ru.lemonapes.dungler.navigation.LocalBottomBarDelegate
+import ru.lemonapes.dungler.navigation.LocalHeroTopBarDelegate
 import ru.lemonapes.dungler.navigation.RootScreens
 import ru.lemonapes.dungler.navigation.Screens
 import ru.lemonapes.dungler.navigation.character.equipment.characterNavigation
@@ -33,6 +38,7 @@ import ru.lemonapes.dungler.navigation.dungeon_list.dungeonListNavigation
 import ru.lemonapes.dungler.navigation.inventory.inventoryNavigation
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MainView(
     modifier: Modifier = Modifier,
@@ -41,38 +47,41 @@ fun MainView(
     navController: NavHostController,
     listener: MainViewListener,
 ) {
-    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val hideBars = currentRoute
-        ?.substringAfterLast('.')
-        ?.contains(Screens.SkillList::class.java.toString().substringAfterLast('$')) == true
+    val isHeroTopBarVisible = LocalHeroTopBarDelegate.current.heroTopBarVisible.value
+    val isBottomBarVisible = LocalBottomBarDelegate.current.bottomBarVisible.value
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
-            if (mainActivityState.rootRoute == MainRoute.MAIN && !hideBars) {
+            if (mainActivityState.rootRoute == MainRoute.MAIN && isBottomBarVisible) {
                 BottomBar(navController)
             }
-        }
+        },
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
-        Column(Modifier.padding(innerPadding)) {
-            if (mainActivityState.rootRoute == MainRoute.MAIN && !hideBars) {
-                HeroTopBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    heroState = heroState,
-                    topBarListener = TopBarListener(
-                        toEquipment = { navController.navigate(Screens.Equipment) },
-                        toSkills = { navController.navigate(Screens.EquipmentSkills) }
-                    ),
-                    activeButton = navController.getTopBarActiveButton()
-                )
-            } else if (!hideBars) {
-                DungeonTopBar(
-                    modifier = Modifier,
-                    onExitClick = listener.onDungeonExitClick
-                )
-            }
+        Column(
+            Modifier
+                .padding(innerPadding)
+        ) {
+            if (mainActivityState.rootRoute == MainRoute.MAIN) {
+                if (isHeroTopBarVisible) {
+                    HeroTopBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
+                            .padding(horizontal = 16.dp),
+                        heroState = heroState,
+                        topBarListener = TopBarListener(
+                            toEquipment = { navController.navigate(Screens.Equipment) },
+                            toSkills = { navController.navigate(Screens.EquipmentSkills) }
+                        ),
+                        activeButton = navController.getTopBarActiveButton()
+                    )
+                }
+            } else DungeonTopBar(
+                modifier = Modifier,
+                onExitClick = listener.onDungeonExitClick
+            )
             MainViewContent(state = mainActivityState, navController = navController)
         }
     }

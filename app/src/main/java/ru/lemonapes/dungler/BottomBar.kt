@@ -1,9 +1,12 @@
 package ru.lemonapes.dungler
 
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +33,7 @@ val topLevelRoutes = listOf(
 fun BottomBar(navController: NavController) {
     NavigationBar(
         tonalElevation = 8.dp,
+        windowInsets = NavigationBarDefaults.windowInsets.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         topLevelRoutes.forEach { topLevelRoute ->
