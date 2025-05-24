@@ -4,9 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.network.NetworkException
 import ru.lemonapes.dungler.network.models.responses.ResponseErrorCode
 import ru.lemonapes.dungler.repositories.HeroStateRepository
@@ -23,6 +27,7 @@ interface ViewModelAction {
 }
 
 interface Store<S : State> {
+    val uiEvents: Flow<UiEvent>
     fun observeState(): StateFlow<S>
     fun updateState(actionBlock: CoroutineScope.(oldState: S) -> S)
     fun withActualState(actionBlock: CoroutineScope.(oldState: S) -> Unit)
@@ -35,6 +40,15 @@ abstract class ParentViewModel<S : State>(
     open val ceh = CoroutineExceptionHandler { _, throwable ->
         throwable.handleResponseError()
         throwable.printStackTrace()
+    }
+
+    private val _uiEventChannel = Channel<UiEvent>(Channel.BUFFERED)
+    override val uiEvents: Flow<UiEvent> = _uiEventChannel.receiveAsFlow()
+
+    protected fun sendUiEvent(event: UiEvent) {
+        viewModelScope.launch {
+            _uiEventChannel.send(event)
+        }
     }
 
     private val _state = MutableStateFlow(initialState)

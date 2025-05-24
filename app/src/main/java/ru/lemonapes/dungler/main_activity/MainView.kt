@@ -111,7 +111,7 @@ private fun MainViewContent(
                 navigation<RootScreens.CharacterRoot>(startDestination = Screens.Equipment) {
                     characterNavigation()
                     skillsEquipmentNavigation(navController)
-                    skillsListNavigation()
+                    skillsListNavigation(navController)
                 }
                 navigation<RootScreens.CraftRoot>(startDestination = Screens.Craft) {
                     craftNavigation()

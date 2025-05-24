@@ -10,6 +10,7 @@ import ru.lemonapes.dungler.navigation.character.SkillSlot
 import ru.lemonapes.dungler.network.endpoints.getSkills
 import ru.lemonapes.dungler.network.endpoints.patchEquipSkill
 import ru.lemonapes.dungler.parent_view_model.ParentViewModel
+import ru.lemonapes.dungler.parent_view_model.UiEvent
 import ru.lemonapes.dungler.parent_view_model.ViewModelAction
 import ru.lemonapes.dungler.repositories.HeroStateRepository
 import javax.inject.Inject
@@ -39,8 +40,7 @@ class SkillsListViewModel @Inject constructor(
                 )
                 val heroState = HeroStateMapper(response.serverHeroState)
                 heroStateRepository.setNewHeroState(heroState)
-
-                //popBackStack
+                sendUiEvent(UiEvent.NavigateBack)
             }
         }
     }
