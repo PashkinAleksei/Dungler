@@ -30,6 +30,7 @@ fun NavGraphBuilder.skillsListNavigation(navController: NavController) {
             state = state,
             listener = SkillsListListener(
                 onSkillClick = { model.onSkillSelected(skillId = it) },
+                onClose = { navController.popBackStack() },
                 stateListener = StateListener(
                     onRetryClick = {
                         model.actionStart()
@@ -42,12 +43,14 @@ fun NavGraphBuilder.skillsListNavigation(navController: NavController) {
 
 class SkillsListListener(
     val onSkillClick: (SkillId) -> Unit,
+    val onClose: () -> Unit,
     val stateListener: StateListener,
 ) {
     companion object {
         val MOCK
             get() = SkillsListListener(
                 onSkillClick = {},
+                onClose = {},
                 stateListener = StateListener.MOCK,
             )
     }

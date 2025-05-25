@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import ru.lemonapes.dungler.navigation.character.SkillSlot
 
 @Serializable
-sealed class Screens(val label: String) {
+sealed class Screens(open val label: String) {
 
     @Serializable
     data object Equipment : Screens("Equipment")
@@ -29,19 +29,29 @@ sealed class Screens(val label: String) {
 }
 
 @Serializable
-sealed class RootScreens(val label: String) {
+sealed class RootScreens : Screens("") {
     @Serializable
-    data object CharacterRoot : RootScreens("CharacterRoot")
+    data object CharacterRoot : RootScreens() {
+        override val label: String = "CharacterRoot"
+    }
 
     @Serializable
-    data object InventoryRoot : RootScreens("InventoryRoot")
+    data object InventoryRoot : RootScreens() {
+        override val label: String = "InventoryRoot"
+    }
 
     @Serializable
-    data object CraftRoot : RootScreens("CraftRoot")
+    data object CraftRoot : RootScreens() {
+        override val label: String = "CraftRoot"
+    }
 
     @Serializable
-    data object DungeonListRoot : RootScreens("DungeonListRoot")
+    data object DungeonListRoot : RootScreens() {
+        override val label: String = "DungeonListRoot"
+    }
 
     @Serializable
-    data object DungeonRoot : RootScreens("DungeonRoot")
+    data object DungeonRoot : RootScreens() {
+        override val label: String = "DungeonRoot"
+    }
 }
