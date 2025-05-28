@@ -9,6 +9,7 @@ plugins {
 
 apply(from = rootProject.file("generate-full-project-structure.gradle.kts"))
 apply(from = rootProject.file("merge-context-files.gradle.kts"))
+apply(from = rootProject.file("accept-result-files.gradle.kts"))
 
 android {
     buildFeatures {
