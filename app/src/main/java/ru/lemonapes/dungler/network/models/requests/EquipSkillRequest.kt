@@ -8,5 +8,5 @@ import ru.lemonapes.dungler.navigation.character.SkillSlot
 @Serializable
 data class EquipSkillRequest(
     val slot: SkillSlot,
-    @SerialName("spell") val skill: SkillId,
+    @SerialName("skill") val skill: SkillId,
 )

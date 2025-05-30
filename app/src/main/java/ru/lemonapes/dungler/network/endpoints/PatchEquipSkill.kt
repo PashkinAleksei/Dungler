@@ -15,7 +15,7 @@ import ru.lemonapes.dungler.network.models.requests.EquipSkillRequest
 import ru.lemonapes.dungler.network.models.responses.checkNetworkException
 
 suspend fun patchEquipSkill(slot: SkillSlot, skill: SkillId): ServerHeroStateResponse {
-    val url = "$ENDPOINT/equipment_spell?hero_id=$HERO_ID"
+    val url = "$ENDPOINT/equipment_skill?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.patch(url) {
         contentType(ContentType.Application.Json)
         setBody(EquipSkillRequest(slot, skill))

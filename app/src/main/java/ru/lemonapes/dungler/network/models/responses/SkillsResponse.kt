@@ -7,6 +7,6 @@ import ru.lemonapes.dungler.network.models.ServerHeroState
 
 @Serializable
 data class SkillsResponse(
-    @SerialName("spells") val skills: List<SkillId>,
+    @SerialName("skills") val skills: List<SkillId>,
     @SerialName("hero_state") val serverHeroState: ServerHeroState,
 )

@@ -22,7 +22,7 @@ data class ServerHeroState(
     @SerialName("actions") val actions: List<ServerAction> = emptyList(),
     @SerialName("equipped_food") val equippedFood: ServerFood? = null,
     @SerialName("enemies") val enemies: List<ServerEnemy> = emptyList(),
-    @SerialName("spell_equipment") val skillsEquipment: ServerSkillsEquipment? = null,
+    @SerialName("skill_equipment") val skillsEquipment: ServerSkillsEquipment? = null,
 
     // @SerialName("enemies") val Enemies: List<Enemy> = emptyList(),
     // @SerialName("actions") val Actions: List<Actions> = emptyList(),
@@ -30,8 +30,8 @@ data class ServerHeroState(
 
 @Serializable
 data class ServerSkillsEquipment(
-    @SerialName("spell_one") val skillOne: SkillId? = null,
-    @SerialName("spell_two") val skillTwo: SkillId? = null,
+    @SerialName("skill_one") val skillOne: SkillId? = null,
+    @SerialName("skill_two") val skillTwo: SkillId? = null,
 )
 
 @Serializable

@@ -9,7 +9,7 @@ import ru.lemonapes.dungler.network.models.responses.SkillsResponse
 import ru.lemonapes.dungler.network.models.responses.checkNetworkException
 
 suspend fun getSkills(): SkillsResponse {
-    val url = "$ENDPOINT/spells?hero_id=$HERO_ID"
+    val url = "$ENDPOINT/skills?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.get(url)
     response.checkNetworkException()
     return response.body()
