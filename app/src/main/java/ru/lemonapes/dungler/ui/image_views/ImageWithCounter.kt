@@ -2,6 +2,7 @@ package ru.lemonapes.dungler.ui.image_views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,8 +22,9 @@ import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 fun ImageWithCounter(
     modifier: Modifier = Modifier,
     painter: Painter,
-    counter: Int,
+    counter: Int?,
     contentDescription: String,
+    imagePadding: PaddingValues = PaddingValues(),
 ) {
     val textHorizontalPadding = 2
 
@@ -34,26 +36,30 @@ fun ImageWithCounter(
 
     Box(modifier = modifier) {
         Image(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(imagePadding),
             painter = painter,
             contentDescription = contentDescription,
         )
-        Surface(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(2.dp)
-                .defaultMinSize(minWidth = surfaceMinWidth.dp),
-            shape = RoundedCornerShape(8.dp),
-        ) {
-            UIText(
+        counter?.let {
+            Surface(
                 modifier = Modifier
-                    .wrapContentWidth()
-                    .padding(horizontal = textHorizontalPadding.dp)
-                    .padding(vertical = 2.dp),
-                text = "$counter",
-                color = LocalThemeColors.current.primaryTextColor,
-                textStyle = textStyle,
-            )
+                    .align(Alignment.BottomEnd)
+                    .padding(2.dp)
+                    .defaultMinSize(minWidth = surfaceMinWidth.dp),
+                shape = RoundedCornerShape(8.dp),
+            ) {
+                UIText(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .padding(horizontal = textHorizontalPadding.dp)
+                        .padding(vertical = 2.dp),
+                    text = "$counter",
+                    color = LocalThemeColors.current.primaryTextColor,
+                    textStyle = textStyle,
+                )
+            }
         }
     }
 }

@@ -42,7 +42,7 @@ fun HeroState.HeroView(
         Box(
             modifier = Modifier
                 .padding(3.dp)
-                .aspectRatio(1.25f),
+                .aspectRatio(0.75f),
         ) {
             Surface(shape = RoundedCornerShape(8.dp)) {
                 Image(
