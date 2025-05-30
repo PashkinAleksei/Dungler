@@ -82,7 +82,7 @@ fun DungeonView(
                         }
                     }
                 }
-                heroState.HeroRowView(modifier.padding(top = 16.dp, bottom = 16.dp))
+                heroState.HeroRowView(modifier.padding(top = 16.dp, bottom = 32.dp))
             }
         }
     }
