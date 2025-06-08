@@ -22,26 +22,25 @@ data class ServerHeroState(
     @SerialName("actions") val actions: List<ServerAction> = emptyList(),
     @SerialName("equipped_food") val equippedFood: ServerFood? = null,
     @SerialName("enemies") val enemies: List<ServerEnemy> = emptyList(),
-    @SerialName("skill_equipment") val skillsEquipment: ServerSkillsEquipment? = null,
+    @SerialName("skill_equipment") val skillsEquipment: SkillsEquipmentDto? = null,
 
     // @SerialName("enemies") val Enemies: List<Enemy> = emptyList(),
     // @SerialName("actions") val Actions: List<Actions> = emptyList(),
 )
 
 @Serializable
-data class ServerSkillsEquipment(
-    @SerialName("skill_one") val skillOne: SkillId? = null,
-    @SerialName("skill_two") val skillTwo: SkillId? = null,
+data class SkillsEquipmentDto(
+    @SerialName("skill_one") val skillOne: SkillSlotDataDto? = null,
+    @SerialName("skill_two") val skillTwo: SkillSlotDataDto? = null,
+)
+
+@Serializable
+data class SkillSlotDataDto(
+    @SerialName("skill_id") val skillId: SkillId,
+    @SerialName("cooldown") val cooldown: Int,
 )
 
 @Serializable
 enum class ActionType {
-    TAKE_LOOT,
-    NEXT_HALL,
-    HEAL_EFFECT,
-    HERO_IS_DEAD,
-    EATING_EFFECT,
-    HERO_ATTACK,
-    ENEMY_ATTACK,
-    ACTUAL_STATE,
+    TAKE_LOOT, NEXT_HALL, HEAL_EFFECT, HERO_IS_DEAD, EATING_EFFECT, HERO_ATTACK, ENEMY_ATTACK, ACTUAL_STATE,
 }

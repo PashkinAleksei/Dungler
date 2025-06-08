@@ -2,7 +2,6 @@ package ru.lemonapes.dungler.mappers
 
 import android.icu.util.Calendar
 import kotlinx.collections.immutable.toPersistentList
-import ru.lemonapes.dungler.domain_models.SkillsEquipment
 import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.DungeonState
 import ru.lemonapes.dungler.hero_state.HeroState
@@ -12,6 +11,7 @@ import ru.lemonapes.dungler.network.models.ServerHeroState
 
 object HeroStateMapper : (ServerHeroState) -> HeroState {
     override fun invoke(response: ServerHeroState): HeroState {
+
         return HeroState(
             level = response.level,
             health = response.health,
@@ -21,12 +21,7 @@ object HeroStateMapper : (ServerHeroState) -> HeroState {
             isLoading = false,
             isEating = response.actions.firstOrNull()?.type == ActionType.EATING_EFFECT,
             equippedFood = response.equippedFood?.let { FoodMapper(it) },
-            skillsEquipment = response.skillsEquipment?.let { equip ->
-                SkillsEquipment(
-                    skillOne = equip.skillOne,
-                    skillTwo = equip.skillTwo
-                )
-            } ?: SkillsEquipment.EMPTY,
+            skillsEquipment = SkillsEquipmentMapper(response.skillsEquipment),
             dungeonState = response.hallNumber?.let { hallNumber ->
                 DungeonState(
                     hallNumber = hallNumber,

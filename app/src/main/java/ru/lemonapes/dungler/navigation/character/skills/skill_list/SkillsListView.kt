@@ -74,7 +74,7 @@ fun SkillsListView(
                     .padding(horizontal = 16.dp)
             ) {
                 items(state.skillList) { skill ->
-                    SkillView(skill, listener.onSkillClick)
+                    SkillView(skill.skillId, listener.onSkillClick)
                 }
             }
         }

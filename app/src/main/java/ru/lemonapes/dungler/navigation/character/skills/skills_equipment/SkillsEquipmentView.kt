@@ -39,17 +39,19 @@ fun SkillsEquipmentView(
     ) {
         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.weight(1f))
-            SkillView(state.skillsEquipment?.skillOne) {
+            val skillOne = state.skillsEquipment?.skillOne
+            SkillView(skillOne?.skillId) {
                 listener.onSkillClick(
                     SkillSlot.SKILL_SLOT_ONE,
-                    state.skillsEquipment?.skillOne
+                    skillOne?.skillId
                 )
             }
             Spacer(Modifier.weight(1f))
-            SkillView(state.skillsEquipment?.skillTwo) {
+            val skillTwo = state.skillsEquipment?.skillTwo
+            SkillView(skillTwo?.skillId) {
                 listener.onSkillClick(
                     SkillSlot.SKILL_SLOT_TWO,
-                    state.skillsEquipment?.skillTwo
+                    skillTwo?.skillId
                 )
             }
             Spacer(Modifier.weight(2f))
@@ -65,6 +67,7 @@ private fun SkillView(skill: SkillId?, onClick: () -> Unit) {
     Box(
         Modifier
             .fillMaxWidth(0.5f)
+            .aspectRatio(1f)
             .border(4.dp, LocalThemeColors.current.bordersColor, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)

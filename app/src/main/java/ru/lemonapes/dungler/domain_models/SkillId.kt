@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import ru.lemonapes.dungler.R
 
 @Serializable
+//Todo: create DTO; fields should be in domain, enum should be in DTO
 enum class SkillId(
     @StringRes val skillName: Int,
     @StringRes val skillDescription: Int,
