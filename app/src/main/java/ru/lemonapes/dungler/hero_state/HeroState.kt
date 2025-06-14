@@ -18,7 +18,7 @@ data class HeroState(
     val dungeonState: DungeonState? = null,
     val isEating: Boolean = false,
     val equippedFood: Food? = null,
-    val skillsEquipment: SkillsEquipment = SkillsEquipment.EMPTY,
+    val skillsEquipment: SkillsEquipment = SkillsEquipment.MOCK,
     val actions: ImmutableList<Action> = persistentListOf(),
     val nextCalcTime: Long = 0,
 ) {

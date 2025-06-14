@@ -2,6 +2,7 @@ package ru.lemonapes.dungler.navigation.dungeon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -86,7 +87,10 @@ fun DungeonView(
                         }
                     }
                 }
-                heroState.HeroRowView(modifier.padding(top = 16.dp, bottom = 32.dp))
+                heroState.HeroRowView(
+                    modifier = modifier.padding(top = 16.dp, bottom = 32.dp),
+                    onSkillClick = listener.onSkillClick
+                )
             }
         }
     }
@@ -170,14 +174,30 @@ private fun SkillView(
 ) {
     Box(modifier = modifier) {
         skillData?.let {
+            val shape = RoundedCornerShape(12.dp)
+            val imageModifier = Modifier
+                .height(IntrinsicSize.Max)
+                .padding(horizontal = 24.dp)
+                .align(Alignment.BottomCenter)
+                .clip(shape)
+                .background(LocalThemeColors.current.imageBackground)
+                .clickable(onClick = onSkillClick)
+                .run {
+                    if (skillData.isActive) {
+                        border(
+                            1.dp,
+                            LocalThemeColors.current.skillActiveColor,
+                            shape
+                        )
+                    } else {
+                        this
+                    }
+                }
+
+
+
             ImageWithCounter(
-                modifier = Modifier
-                    .height(IntrinsicSize.Max)
-                    .padding(horizontal = 24.dp)
-                    .align(Alignment.BottomCenter)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(LocalThemeColors.current.imageBackground)
-                    .clickable(onClick = onSkillClick),
+                modifier = imageModifier,
                 painter = painterResource(skillData.skillId.image),
                 counter = null,
                 contentDescription = stringResource(skillData.skillId.skillName),
