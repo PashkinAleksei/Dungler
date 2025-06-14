@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.domain_models.SkillId
 import ru.lemonapes.dungler.mappers.HeroStateMapper
-import ru.lemonapes.dungler.navigation.character.SkillSlot
+import ru.lemonapes.dungler.navigation.SkillSlot
 import ru.lemonapes.dungler.network.endpoints.getSkills
 import ru.lemonapes.dungler.network.endpoints.patchEquipSkill
 import ru.lemonapes.dungler.parent_view_model.ParentViewModel

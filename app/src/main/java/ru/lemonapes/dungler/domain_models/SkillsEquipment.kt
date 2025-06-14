@@ -1,21 +1,22 @@
 package ru.lemonapes.dungler.domain_models
 
 data class SkillsEquipment(
-    val skillOne: SkillData?,
-    val skillTwo: SkillData?,
+    val skillOne: SelectedSkillData?,
+    val skillTwo: SelectedSkillData?,
 ) {
     companion object {
         val EMPTY
             get() = SkillsEquipment(null, null)
         val MOCK
             get() = SkillsEquipment(
-                SkillData(SkillId.WHIRLWIND, 0),
-                SkillData(SkillId.HEROIC_STRIKE, 0),
+                SelectedSkillData(SkillId.WHIRLWIND, 0, true),
+                SelectedSkillData(SkillId.HEROIC_STRIKE, 0, false),
             )
     }
 }
 
-data class SkillData(
+data class SelectedSkillData(
     val skillId: SkillId,
     val cooldown: Int,
+    val isActive: Boolean,
 )

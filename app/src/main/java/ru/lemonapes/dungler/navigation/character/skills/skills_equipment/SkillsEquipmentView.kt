@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.domain_models.SkillId
-import ru.lemonapes.dungler.navigation.character.SkillSlot
+import ru.lemonapes.dungler.navigation.SkillSlot
 import ru.lemonapes.dungler.ui.StateCheck
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors

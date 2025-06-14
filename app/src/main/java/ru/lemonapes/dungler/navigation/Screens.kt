@@ -1,7 +1,6 @@
 package ru.lemonapes.dungler.navigation
 
 import kotlinx.serialization.Serializable
-import ru.lemonapes.dungler.navigation.character.SkillSlot
 
 @Serializable
 sealed class Screens(open val label: String) {

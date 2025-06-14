@@ -1,4 +1,4 @@
-package ru.lemonapes.dungler.navigation.character
+package ru.lemonapes.dungler.navigation
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -2,6 +2,7 @@ package ru.lemonapes.dungler.navigation.dungeon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Food
+import ru.lemonapes.dungler.domain_models.SelectedSkillData
+import ru.lemonapes.dungler.domain_models.SkillsEquipment
 import ru.lemonapes.dungler.hero_state.HeroState
+import ru.lemonapes.dungler.navigation.SkillSlot
 import ru.lemonapes.dungler.ui.StateCheck
 import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
@@ -89,12 +93,19 @@ fun DungeonView(
 }
 
 @Composable
-private fun HeroState.HeroRowView(modifier: Modifier = Modifier) {
+private fun HeroState.HeroRowView(
+    modifier: Modifier = Modifier,
+    onSkillClick: (SkillSlot) -> Unit,
+) {
     Row(
         modifier = modifier
             .height(IntrinsicSize.Max)
     ) {
-        Spacer(Modifier.weight(0.8f))
+        SkillsView(
+            modifier = Modifier.weight(0.8f),
+            skillsEquipment = skillsEquipment,
+            onSkillClick = onSkillClick
+        )
         HeroView(Modifier.weight(1f))
         FoodView(Modifier.weight(0.8f), equippedFood)
     }
@@ -128,6 +139,59 @@ private fun FoodView(modifier: Modifier = Modifier, equippedFood: Food?) {
             counter = null,
             contentDescription = stringResource(R.string.equipped_food),
             imagePadding = imagePadding
+        )
+    }
+}
+
+@Composable
+private fun SkillsView(
+    modifier: Modifier = Modifier,
+    skillsEquipment: SkillsEquipment,
+    onSkillClick: (SkillSlot) -> Unit,
+) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.SpaceBetween) {
+        SkillView(modifier = Modifier.weight(0.5f),
+            skillData = skillsEquipment.skillOne,
+            onSkillClick = { onSkillClick(SkillSlot.SKILL_SLOT_ONE) }
+        )
+        SkillView(
+            modifier = Modifier.weight(0.5f),
+            skillData = skillsEquipment.skillTwo,
+            onSkillClick = { onSkillClick(SkillSlot.SKILL_SLOT_TWO) }
+        )
+    }
+}
+
+@Composable
+private fun SkillView(
+    modifier: Modifier = Modifier,
+    skillData: SelectedSkillData?,
+    onSkillClick: () -> Unit,
+) {
+    Box(modifier = modifier) {
+        skillData?.let {
+            ImageWithCounter(
+                modifier = Modifier
+                    .height(IntrinsicSize.Max)
+                    .padding(horizontal = 24.dp)
+                    .align(Alignment.BottomCenter)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(LocalThemeColors.current.imageBackground)
+                    .clickable(onClick = onSkillClick),
+                painter = painterResource(skillData.skillId.image),
+                counter = null,
+                contentDescription = stringResource(skillData.skillId.skillName),
+            )
+        } ?: ImageWithCounter(
+            modifier = Modifier
+                .height(IntrinsicSize.Max)
+                .padding(horizontal = 24.dp)
+                .align(Alignment.BottomCenter)
+                .clip(RoundedCornerShape(12.dp))
+                .background(LocalThemeColors.current.imageBackground),
+            painter = painterResource(R.drawable.default_skill),
+            counter = null,
+            contentDescription = stringResource(R.string.skill_empty_slot),
         )
     }
 }

@@ -10,7 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import ru.lemonapes.dungler.domain_models.SkillId
 import ru.lemonapes.dungler.navigation.Screens
-import ru.lemonapes.dungler.navigation.character.SkillSlot
+import ru.lemonapes.dungler.navigation.SkillSlot
 import ru.lemonapes.dungler.navigation.composableWithBars
 import ru.lemonapes.dungler.ui.ActionLoadingOnStop
 import ru.lemonapes.dungler.ui.ActionOnStart

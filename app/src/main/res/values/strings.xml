@@ -50,6 +50,7 @@
     <string name="loot_label">Есть добыча</string>
     <string name="eating_process_label">Перекус</string>
     <string name="equipped_food">Экипированная еда</string>
+    <string name="skill_empty_slot">Слот для способности</string>
 
     <string name="unknown_enemy_name">Неопознанный предмет</string>
     <string name="giant_rat_name">Гигантская крыса</string>

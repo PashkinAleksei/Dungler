@@ -38,6 +38,7 @@ data class SkillsEquipmentDto(
 data class SkillSlotDataDto(
     @SerialName("skill_id") val skillId: SkillId,
     @SerialName("cooldown") val cooldown: Int,
+    @SerialName("is_active") val isActive: Boolean,
 )
 
 @Serializable

@@ -6,7 +6,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import ru.lemonapes.dungler.domain_models.SkillId
-import ru.lemonapes.dungler.navigation.character.SkillSlot
+import ru.lemonapes.dungler.navigation.SkillSlot
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
