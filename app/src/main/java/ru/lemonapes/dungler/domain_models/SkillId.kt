@@ -18,4 +18,7 @@ enum class SkillId(
 
     @SerialName("whirlwind")
     WHIRLWIND(R.string.whirlwind_name, R.string.whirlwind_description, R.drawable.whirlwind),
+
+    @SerialName("swiping_strikes")
+    SWIPING_STRIKES(R.string.swiping_strikes_name, R.string.swiping_strikes_description, R.drawable.swiping_strikes),
 }

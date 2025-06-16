@@ -11,7 +11,6 @@ import ru.lemonapes.dungler.network.models.ServerHeroState
 
 object HeroStateMapper : (ServerHeroState) -> HeroState {
     override fun invoke(response: ServerHeroState): HeroState {
-
         return HeroState(
             level = response.level,
             health = response.health,
@@ -27,7 +26,7 @@ object HeroStateMapper : (ServerHeroState) -> HeroState {
                     hallNumber = hallNumber,
                     districtStringId = response.districtStringId,
                     dungeonStringId = response.dungeonStringId,
-                    enemies = response.enemies.map(EnemyMapper).toPersistentList(),
+                    enemies = response.enemies.map(EnemyMapper).toPersistentList()
                 )
             },
             actions = response.actions.map {
@@ -36,10 +35,17 @@ object HeroStateMapper : (ServerHeroState) -> HeroState {
                         Action.HealAction(healAmount = it.healEffectData?.healAmount ?: 0)
 
                     ActionType.HERO_ATTACK ->
-                        Action.HeroAttackAction(
-                            targetIndex = it.heroAttackData?.targetIndex ?: 0,
-                            heroPureDamage = it.heroAttackData?.heroPureDamage ?: 0
-                        )
+                        when {
+                            it.heroAttackData?.heroCommonAttackData != null -> Action.HeroAttackAction.Common(
+                                damageData = HeroDamageDataMapper(it.heroAttackData.heroCommonAttackData)
+                            )
+
+                            else -> Action.HeroAttackAction.ModifierSwipingStrikes(
+                                damageData = it.heroAttackData?.modifierSwipingStrikesData!!
+                                    .map(HeroDamageDataMapper)
+                                    .toPersistentList()
+                            )
+                        }
 
                     ActionType.ENEMY_ATTACK ->
                         Action.EnemyAttackAction(
@@ -57,6 +63,24 @@ object HeroStateMapper : (ServerHeroState) -> HeroState {
                     ActionType.TAKE_LOOT -> Action.TakeLootAction
                     ActionType.HERO_IS_DEAD -> Action.HeroIsDeadAction
                     ActionType.ACTUAL_STATE -> Action.ActualStateAction
+                    ActionType.SKILL_ACTION ->
+                        when {
+                            it.skillDataDto?.dataHeroicStrike != null -> Action.SkillAction.HeroicStrike(
+                                damageData = HeroDamageDataMapper(it.skillDataDto.dataHeroicStrike)
+                            )
+
+                            it.skillDataDto?.dataSwipingStrikes != null -> Action.SkillAction.SwipingStrikes(
+                                damageData = it.skillDataDto.dataSwipingStrikes
+                                    .map(HeroDamageDataMapper)
+                                    .toPersistentList()
+                            )
+
+                            else -> Action.SkillAction.Whirlwind(
+                                damageData = it.skillDataDto?.dataSwipingStrikes!!
+                                    .map(HeroDamageDataMapper)
+                                    .toPersistentList()
+                            )
+                        }
                 }
             }.toPersistentList(),
             nextCalcTime = Calendar.getInstance().timeInMillis + ACTION_TICK_TIME

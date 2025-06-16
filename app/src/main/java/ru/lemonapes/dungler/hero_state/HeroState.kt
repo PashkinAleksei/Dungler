@@ -34,6 +34,7 @@ data class HeroState(
         var newHealth = health
         var newEquippedFood = equippedFood
         var newDungeonState = dungeonState
+        var newSkillsEquipment = skillsEquipment
 
         val newActions = actions.toMutableList()
         val action = newActions.removeFirstOrNull()
@@ -87,16 +88,34 @@ data class HeroState(
                     }
                 }
 
-                is Action.HeroAttackAction -> {
-                    val newEnemies = enemies.mapIndexed { index, enemy ->
-                        if (index == action.targetIndex) {
-                            val reducedHealth = enemy.health - action.heroPureDamage
-                            enemy.copy(health = if (reducedHealth > 0) reducedHealth else 0)
-                        } else {
-                            enemy
-                        }
-                    }.toPersistentList()
+                //HeroAttackAction
+                is Action.HeroAttackAction.Common -> {
+                    val newEnemies = enemies.applyDamageToEnemies(listOf(action.damageData))
                     newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                }
+
+                is Action.HeroAttackAction.ModifierSwipingStrikes -> {
+                    val newEnemies = enemies.applyDamageToEnemies(action.damageData)
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                }
+
+                //SkillAction
+                is Action.SkillAction.SwipingStrikes -> {
+                    val newEnemies = enemies.applyDamageToEnemies(action.damageData)
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
+                }
+
+                is Action.SkillAction.Whirlwind -> {
+                    val newEnemies = enemies.applyDamageToEnemies(action.damageData)
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
+                }
+
+                is Action.SkillAction.HeroicStrike -> {
+                    val newEnemies = enemies.applyDamageToEnemies(listOf(action.damageData))
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
                 }
 
                 is Action.NextHallAction,
@@ -113,9 +132,21 @@ data class HeroState(
             dungeonState = newDungeonState,
             actions = newActions.toPersistentList(),
             equippedFood = newEquippedFood,
+            skillsEquipment = newSkillsEquipment,
             isEating = newActions.firstOrNull() is Action.EatingEffectAction
         ).calculateActionsRecursiveAndGet()
     }
+
+    private fun List<Enemy>.applyDamageToEnemies(damageDataList: List<HeroDamageData>): ImmutableList<Enemy> =
+        mapIndexed { index, enemy ->
+            val damageData = damageDataList.firstOrNull { it.targetIndex == index }
+            if (damageData != null) {
+                val reducedHealth = enemy.health - damageData.heroPureDamage
+                enemy.copy(health = if (reducedHealth > 0) reducedHealth else 0)
+            } else {
+                enemy
+            }
+        }.toPersistentList()
 
     companion object {
         val EMPTY
@@ -153,32 +184,6 @@ data class DungeonState(
     val dungeonStringId: String? = null,
     val enemies: ImmutableList<Enemy> = persistentListOf(),
 )
-
-sealed class Action {
-    data class HealAction(
-        val healAmount: Int,
-    ) : Action()
-
-    data class HeroAttackAction(
-        val targetIndex: Int,
-        val heroPureDamage: Int,
-    ) : Action()
-
-    data class EnemyAttackAction(
-        val enemyIndex: Int,
-        val enemyPureDamage: Int,
-    ) : Action()
-
-    data class EatingEffectAction(
-        val healAmount: Int,
-        val reduceFood: Boolean,
-    ) : Action()
-
-    data object NextHallAction : Action()
-    data object TakeLootAction : Action()
-    data object HeroIsDeadAction : Action()
-    data object ActualStateAction : Action()
-}
 
 sealed class HeroStateCalculationException(text: String) : Exception(text) {
     data object HeroStateNotInitializedException : HeroStateCalculationException("nextCalcTime is 0") {

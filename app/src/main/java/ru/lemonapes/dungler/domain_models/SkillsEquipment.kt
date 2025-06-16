@@ -4,6 +4,18 @@ data class SkillsEquipment(
     val skillOne: SelectedSkillData?,
     val skillTwo: SelectedSkillData?,
 ) {
+    fun copyWithDeactivateSkill(skillId: SkillId): SkillsEquipment = when {
+        skillOne?.skillId == skillId -> {
+            copy(skillOne = skillOne.copy(isActive = false))
+        }
+
+        skillTwo?.skillId == skillId -> {
+            copy(skillTwo = skillTwo.copy(isActive = false))
+        }
+
+        else -> this
+    }
+
     companion object {
         val EMPTY
             get() = SkillsEquipment(null, null)
