@@ -2,6 +2,7 @@ package ru.lemonapes.dungler.mappers
 
 import android.icu.util.Calendar
 import kotlinx.collections.immutable.toPersistentList
+import ru.lemonapes.dungler.domain_models.SkillId
 import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.DungeonState
 import ru.lemonapes.dungler.hero_state.HeroState
@@ -64,19 +65,19 @@ object HeroStateMapper : (ServerHeroState) -> HeroState {
                     ActionType.HERO_IS_DEAD -> Action.HeroIsDeadAction
                     ActionType.ACTUAL_STATE -> Action.ActualStateAction
                     ActionType.SKILL_ACTION ->
-                        when {
-                            it.skillDataDto?.dataHeroicStrike != null -> Action.SkillAction.HeroicStrike(
-                                damageData = HeroDamageDataMapper(it.skillDataDto.dataHeroicStrike)
+                        when (it.skillDataDto!!.skillId) {
+                            SkillId.HEROIC_STRIKE -> Action.SkillAction.HeroicStrike(
+                                damageData = HeroDamageDataMapper(it.skillDataDto.dataHeroicStrike!!)
                             )
 
-                            it.skillDataDto?.dataSwipingStrikes != null -> Action.SkillAction.SwipingStrikes(
-                                damageData = it.skillDataDto.dataSwipingStrikes
+                            SkillId.SWIPING_STRIKES -> Action.SkillAction.SwipingStrikes(
+                                damageData = it.skillDataDto.dataSwipingStrikes!!
                                     .map(HeroDamageDataMapper)
                                     .toPersistentList()
                             )
 
-                            else -> Action.SkillAction.Whirlwind(
-                                damageData = it.skillDataDto?.dataSwipingStrikes!!
+                            SkillId.WHIRLWIND -> Action.SkillAction.Whirlwind(
+                                damageData = it.skillDataDto.dataSwipingStrikes!!
                                     .map(HeroDamageDataMapper)
                                     .toPersistentList()
                             )
