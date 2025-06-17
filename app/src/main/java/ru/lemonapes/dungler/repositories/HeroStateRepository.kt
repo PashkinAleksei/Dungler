@@ -1,6 +1,9 @@
 package ru.lemonapes.dungler.repositories
 
 import android.icu.util.Calendar
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,10 +16,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.onTimeout
 import kotlinx.coroutines.selects.select
 import ru.lemonapes.dungler.Utils.Companion.log
+import ru.lemonapes.dungler.domain_models.Enemy
 import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.DungeonState
+import ru.lemonapes.dungler.hero_state.HeroDamageData
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.hero_state.HeroState.Companion.ACTION_CHECK_TICK_TIME
+import ru.lemonapes.dungler.hero_state.HeroState.Companion.ACTION_TICK_TIME
 import ru.lemonapes.dungler.mappers.HeroStateResponseMapper
 import ru.lemonapes.dungler.network.endpoints.getHeroState
 import ru.lemonapes.dungler.stores.HeroStateStore
@@ -72,13 +78,13 @@ class HeroStateRepository @Inject constructor(
                 //make new polling after POLLING_INTERVAL,
                 //but have opportunity to make it immediately using resetChannel
                 select {
-                    onTimeout(POLLING_INTERVAL) { }
                     pollingResetChannel?.onReceive { action ->
                         when (action) {
                             ChannelAction.RESET -> {}
                             ChannelAction.DELAY -> delay(POLLING_INTERVAL)
                         }
                     }
+                    onTimeout(POLLING_INTERVAL) { }
                 }
             }
         }
@@ -186,6 +192,136 @@ class HeroStateRepository @Inject constructor(
             }
         }
     }
+
+    private fun HeroState.calculateActionsRecursiveAndGet(): HeroState {
+        if (actions.isEmpty() ||
+            actions.firstOrNull() is Action.ActualStateAction ||
+            Calendar.getInstance().timeInMillis < nextCalcTime
+        ) {
+            return this
+        }
+
+        val enemies = dungeonState?.enemies ?: persistentListOf()
+        var newHealth = health
+        var newEquippedFood = equippedFood
+        var newDungeonState = dungeonState
+        var newSkillsEquipment = skillsEquipment
+
+        val newActions = actions.toMutableList()
+        val action = newActions.removeFirstOrNull()
+
+        log("Cur Ation: $action")
+        action?.let {
+            when (action) {
+                is Action.HealAction -> {
+                    newHealth = health?.let { cHp ->
+                        totalHealth?.let { tHp ->
+                            val regeneratedHealth = cHp + action.healAmount
+                            if (regeneratedHealth < tHp) {
+                                regeneratedHealth
+                            } else {
+                                tHp
+                            }
+                        }
+                    }
+                }
+
+                is Action.EatingEffectAction -> {
+                    newHealth = health?.let { cHp ->
+                        totalHealth?.let { tHp ->
+                            val regeneratedHealth = cHp + action.healAmount
+                            if (regeneratedHealth < tHp) {
+                                regeneratedHealth
+                            } else {
+                                tHp
+                            }
+                        }
+                    }
+                    newEquippedFood = if (action.reduceFood) {
+                        equippedFood?.copy(count = equippedFood.count - 1)
+                    } else {
+                        equippedFood
+                    }
+                }
+
+                is Action.HeroIsDeadAction -> {
+                    newHealth = 1
+                    newDungeonState = null
+                }
+
+                is Action.EnemyAttackAction -> {
+                    newHealth = health?.let { cHp ->
+                        val reducedHealth = cHp - action.enemyPureDamage
+                        if (reducedHealth > 0) {
+                            reducedHealth
+                        } else {
+                            0
+                        }
+                    }
+                }
+
+                //HeroAttackAction
+                is Action.HeroAttackAction.Common -> {
+                    val newEnemies = enemies.applyDamageToEnemies(listOf(action.damageData))
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                }
+
+                is Action.HeroAttackAction.ModifierSwipingStrikes -> {
+                    val newEnemies = enemies.applyDamageToEnemies(action.damageData)
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                }
+
+                //SkillAction
+                is Action.SkillAction.SwipingStrikes -> {
+                    val newEnemies = enemies.applyDamageToEnemies(action.damageData)
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
+                }
+
+                is Action.SkillAction.Whirlwind -> {
+                    val newEnemies = enemies.applyDamageToEnemies(action.damageData)
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
+                }
+
+                is Action.SkillAction.HeroicStrike -> {
+                    val newEnemies = enemies.applyDamageToEnemies(listOf(action.damageData))
+                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
+                }
+
+                is Action.NextHallAction -> {
+                    resetPolling()
+                }
+
+                is Action.TakeLootAction,
+                is Action.ActualStateAction,
+                    -> {
+                    //do nothing
+                }
+            }
+        }
+        return copy(
+            health = newHealth,
+            nextCalcTime = nextCalcTime + ACTION_TICK_TIME,
+            dungeonState = newDungeonState,
+            actions = newActions.toPersistentList(),
+            equippedFood = newEquippedFood,
+            skillsEquipment = newSkillsEquipment,
+            isEating = newActions.firstOrNull() is Action.EatingEffectAction
+        ).calculateActionsRecursiveAndGet()
+    }
+
+    private fun List<Enemy>.applyDamageToEnemies(damageDataList: List<HeroDamageData>): ImmutableList<Enemy> =
+        mapIndexed { index, enemy ->
+            val damageData = damageDataList.firstOrNull { it.targetIndex == index }
+            if (damageData != null) {
+                val reducedHealth = enemy.health - damageData.heroPureDamage
+                enemy.copy(health = if (reducedHealth > 0) reducedHealth else 0)
+            } else {
+                enemy
+            }
+        }.toPersistentList()
 
     //-----------------------------------------------------------------------------------------------------------------
     companion object {

@@ -62,7 +62,7 @@ fun DungeonView(
                     Row(
                         modifier = Modifier
                             .padding(top = 48.dp)
-                            .fillMaxSize(),
+                            .fillMaxWidth(),
                     ) {
                         Spacer(Modifier.weight(1f))
                         Image(
