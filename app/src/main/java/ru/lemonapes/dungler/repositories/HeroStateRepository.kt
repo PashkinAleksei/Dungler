@@ -9,13 +9,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.onTimeout
-import kotlinx.coroutines.selects.select
 import ru.lemonapes.dungler.Utils.Companion.log
+import ru.lemonapes.dungler.di.ApplicationScope
 import ru.lemonapes.dungler.domain_models.Enemy
 import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.DungeonState
@@ -32,6 +30,7 @@ import javax.inject.Singleton
 @Singleton
 class HeroStateRepository @Inject constructor(
     private val heroStateStore: HeroStateStore,
+    @ApplicationScope private val coroutineScope: CoroutineScope,
 ) {
 
     val heroStateFlow
@@ -42,13 +41,11 @@ class HeroStateRepository @Inject constructor(
         throwable.printStackTrace()
     }
 
-    private fun getPollingExceptionHandler(coroutineScope: CoroutineScope) = CoroutineExceptionHandler { _, throwable ->
+    private val pollingExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         log("$throwable")
         throwable.printStackTrace()
-        startPolling(coroutineScope = coroutineScope, isRetry = true)
+        startPolling(DelayOption.RETRY)
     }
-
-    private var pollingResetChannel: Channel<ChannelAction>? = null
 
     @Volatile
     private var isActionCountingActive = true
@@ -60,42 +57,38 @@ class HeroStateRepository @Inject constructor(
     private var polingRetryCounter = 0
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun startPolling(coroutineScope: CoroutineScope, isRetry: Boolean = false) {
+    fun startPolling(delayOption: DelayOption = DelayOption.NORMAL) {
         //log("startPolling coroutineScope")
-        pollingResetChannel = Channel(Channel.CONFLATED)
         pollingJob?.cancel()
-        pollingJob = coroutineScope.launch(Dispatchers.IO + getPollingExceptionHandler(coroutineScope)) {
-            if (isRetry) {
-                polingRetryCounter++
-                if (polingRetryCounter > 3) {
-                    delay(POLLING_RETRY_DELAY)
+        pollingJob = coroutineScope.launch(Dispatchers.IO + pollingExceptionHandler) {
+            when (delayOption) {
+                DelayOption.DELAY -> delay(POLLING_INTERVAL)
+                DelayOption.RETRY -> {
+                    polingRetryCounter++
+                    if (polingRetryCounter > 3) {
+                        delay(POLLING_RETRY_DELAY)
+                    }
+                }
+
+                DelayOption.NORMAL -> {
+                    //Do Nothing
                 }
             }
+
             while (isActive) {
                 fetchHeroState()
                 polingRetryCounter = 0
-
-                //make new polling after POLLING_INTERVAL,
-                //but have opportunity to make it immediately using resetChannel
-                select {
-                    pollingResetChannel?.onReceive { action ->
-                        when (action) {
-                            ChannelAction.RESET -> {}
-                            ChannelAction.DELAY -> delay(POLLING_INTERVAL)
-                        }
-                    }
-                    onTimeout(POLLING_INTERVAL) { }
-                }
+                delay(POLLING_INTERVAL)
             }
         }
     }
 
     private fun resetPolling() {
-        pollingResetChannel?.trySend(ChannelAction.RESET)
+        startPolling()
     }
 
     private fun delayPolling() {
-        pollingResetChannel?.trySend(ChannelAction.DELAY)
+        startPolling(DelayOption.DELAY)
     }
 
     fun stopPolling() {
@@ -108,7 +101,6 @@ class HeroStateRepository @Inject constructor(
         heroStateStore.heroState = HeroStateResponseMapper(getHeroState())
         resumeActionsCalculation()
         log("HeroState fetched ${heroStateStore.heroState}")
-        resumeActionsCalculation()
     }
 
     fun heroInDungeonError() {
@@ -210,7 +202,7 @@ class HeroStateRepository @Inject constructor(
         val newActions = actions.toMutableList()
         val action = newActions.removeFirstOrNull()
 
-        log("Cur Ation: $action")
+        log("Cur Action: $action")
         action?.let {
             when (action) {
                 is Action.HealAction -> {
@@ -329,7 +321,7 @@ class HeroStateRepository @Inject constructor(
         const val POLLING_RETRY_DELAY = 5000L
     }
 
-    private enum class ChannelAction {
-        RESET, DELAY
+    enum class DelayOption {
+        NORMAL, RETRY, DELAY
     }
 }

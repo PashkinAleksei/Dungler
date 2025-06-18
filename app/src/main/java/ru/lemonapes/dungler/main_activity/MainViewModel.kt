@@ -65,7 +65,7 @@ class MainViewModel @Inject constructor(
     }
 
     override fun actionStart() {
-        heroStateRepository.startPolling(viewModelScope)
+        heroStateRepository.startPolling()
         heroStateRepository.startActionsCalculation(viewModelScope)
     }
 
