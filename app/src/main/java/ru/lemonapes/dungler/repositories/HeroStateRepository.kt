@@ -283,6 +283,7 @@ class HeroStateRepository @Inject constructor(
                 }
 
                 is Action.NextHallAction -> {
+                    pauseActionsCalculation()
                     resetPolling()
                 }
 
