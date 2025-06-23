@@ -60,7 +60,7 @@ class MainViewModel @Inject constructor(
     override fun actionDungeonExit() = withActualState {
         launch(Dispatchers.IO + ceh) {
             val heroState = HeroStateResponseMapper(setHeroHomeLocation(), heroStateRepository.lastExecutedAction)
-            heroStateRepository.setNewHeroState(heroState)
+            heroStateRepository.setNewHeroState(heroState.copy(lastExecutedAction = null))
         }
     }
 

@@ -8,9 +8,12 @@ import ru.lemonapes.dungler.domain_models.SkillId
 @Immutable
 sealed interface Action {
     @Immutable
+    interface HomeAction : Action
+
+    @Immutable
     class HomeHealAction(
         val healAmount: Int,
-    ) : Action
+    ) : HomeAction
 
     @Immutable
     sealed interface HeroAttackAction : Action {
@@ -46,8 +49,8 @@ sealed interface Action {
     @Immutable
     object NextHallAction : Action
     object TakeLootAction : Action
-    object HeroIsDeadAction : Action
-    object ActualStateAction : Action
+    object HeroIsDeadAction : HomeAction
+    object ActualStateAction : HomeAction
 
     @Immutable
     sealed interface SkillAction : Action {

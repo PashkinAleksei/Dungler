@@ -303,7 +303,7 @@ class HeroStateRepository @Inject constructor(
             actions = newActions.toPersistentList(),
             equippedFood = newEquippedFood,
             skillsEquipment = newSkillsEquipment,
-            lastExecutedAction = action,
+            lastExecutedAction = if (action is Action.HomeAction) null else action,
             isEating = newActions.firstOrNull() is Action.EatingEffectAction
         ).calculateActionsRecursiveAndGet()
     }
