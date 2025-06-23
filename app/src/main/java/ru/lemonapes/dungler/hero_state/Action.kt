@@ -8,7 +8,7 @@ import ru.lemonapes.dungler.domain_models.SkillId
 @Immutable
 sealed interface Action {
     @Immutable
-    interface HomeAction : Action
+    sealed interface HomeAction : Action
 
     @Immutable
     class HomeHealAction(
