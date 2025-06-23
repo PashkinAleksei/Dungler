@@ -34,7 +34,7 @@ data class HeroState(
                 isLoading = false,
                 dungeonState = null,
                 equippedFood = Food.MOCK_1,
-                lastExecutedAction = Action.HealAction(10)
+                lastExecutedAction = Action.EnemyAttackAction(1, 10)
             )
         val EATING_MOCK
             get() = HeroState(
@@ -50,39 +50,6 @@ data class HeroState(
             )
         const val ACTION_TICK_TIME = 1500L
         const val ACTION_CHECK_TICK_TIME = 400L
-    }
-
-    fun getLastDamageToEnemy(enemyIndex: Int): Int? {
-        return when (lastExecutedAction) {
-            is Action.SingleDamage -> {
-                val damageData = lastExecutedAction.damageData
-                damageData.heroPureDamage.takeIf { damageData.targetIndex == enemyIndex }
-            }
-
-            is Action.MassiveDamage -> {
-                lastExecutedAction.damageData.firstOrNull { it.targetIndex == enemyIndex }?.heroPureDamage
-            }
-
-            else -> null
-        }
-    }
-
-    fun getLastHeroHPChange(): Int? {
-        return when (lastExecutedAction) {
-            is Action.EnemyAttackAction -> {
-                -lastExecutedAction.enemyPureDamage
-            }
-
-            is Action.HealAction -> {
-                lastExecutedAction.healAmount
-            }
-
-            is Action.EatingEffectAction -> {
-                lastExecutedAction.healAmount
-            }
-
-            else -> null
-        }
     }
 }
 

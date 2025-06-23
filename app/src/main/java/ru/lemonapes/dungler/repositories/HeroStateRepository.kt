@@ -207,7 +207,7 @@ class HeroStateRepository @Inject constructor(
         log("Cur Action: $action")
         action?.let {
             when (action) {
-                is Action.HealAction -> {
+                is Action.HomeHealAction -> {
                     newHealth = health?.let { cHp ->
                         totalHealth?.let { tHp ->
                             val regeneratedHealth = cHp + action.healAmount

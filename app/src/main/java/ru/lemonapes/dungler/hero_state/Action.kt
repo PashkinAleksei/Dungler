@@ -1,4 +1,3 @@
-
 package ru.lemonapes.dungler.hero_state
 
 import androidx.compose.runtime.Immutable
@@ -9,7 +8,7 @@ import ru.lemonapes.dungler.domain_models.SkillId
 @Immutable
 sealed interface Action {
     @Immutable
-    class HealAction(
+    class HomeHealAction(
         val healAmount: Int,
     ) : Action
 
@@ -26,6 +25,10 @@ sealed interface Action {
         class ModifierSwipingStrikes(
             override val damageData: ImmutableList<HeroDamageData>,
         ) : HeroAttackAction, MassiveDamage
+
+        companion object {
+            val MOCK get() = Common(HeroDamageData.MOCK)
+        }
     }
 
     @Immutable
@@ -74,13 +77,29 @@ sealed interface Action {
     }
 
     @Immutable
-    sealed interface SingleDamage {
+    sealed interface SingleDamage : Action {
         val damageData: HeroDamageData
     }
 
     @Immutable
-    sealed interface MassiveDamage {
+    sealed interface MassiveDamage : Action {
         val damageData: ImmutableList<HeroDamageData>
+    }
+
+    fun getLastDamageToEnemy(enemyIndex: Int): Int? =
+        when (this) {
+            is SingleDamage -> damageData.heroPureDamage.takeIf { damageData.targetIndex == enemyIndex }?.run { -this }
+            is MassiveDamage -> damageData.firstOrNull { it.targetIndex == enemyIndex }?.heroPureDamage?.run { -this }
+            else -> null
+        }
+
+
+    fun getLastHeroHPChange(): Int? {
+        return when (this) {
+            is EnemyAttackAction -> -enemyPureDamage
+            is EatingEffectAction -> healAmount
+            else -> null
+        }
     }
 }
 

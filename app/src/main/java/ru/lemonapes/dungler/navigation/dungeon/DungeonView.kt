@@ -82,7 +82,11 @@ fun DungeonView(
                     ) {
                         state.enemies?.let { enemies ->
                             itemsIndexed(enemies) { index, enemy ->
-                                EnemyView(enemy = enemy, damageToEnemy = heroState.getLastDamageToEnemy(index))
+                                EnemyView(
+                                    enemy = enemy,
+                                    lastExecutedAction = heroState.lastExecutedAction,
+                                    enemyIndex = index
+                                )
                             }
                         }
                     }

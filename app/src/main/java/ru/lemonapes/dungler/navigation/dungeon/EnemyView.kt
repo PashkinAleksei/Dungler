@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,7 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Enemy
+import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.ui.UIText
+import ru.lemonapes.dungler.ui.Utils
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
@@ -39,7 +42,8 @@ import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 @Composable
 fun EnemyView(
     enemy: Enemy,
-    damageToEnemy: Int?,
+    enemyIndex: Int,
+    lastExecutedAction: Action?,
     modifier: Modifier = Modifier,
 ) {
     Card(modifier, shape = RoundedCornerShape(12.dp)) {
@@ -89,15 +93,14 @@ fun EnemyView(
                     }
                     enemy.HealthBar()
                 }
-                damageToEnemy?.let {
-                    val damageText = "-$it"
-                    UIText(
+                lastExecutedAction?.getLastDamageToEnemy(enemyIndex)?.let { hpChangeValue ->
+                    val fadeAlpha = Utils.getFadeAlpha(lastExecutedAction)
+                    DamageImageView(
                         modifier = Modifier
-                            .align(Alignment.Center),
-                        text = damageText,
-                        color = LocalThemeColors.current.damageColor,
-                        textStyle = LocalThemeTypographies.current.regular28,
-                        maxLines = 1
+                            .align(Alignment.Center)
+                            .graphicsLayer { this.alpha = fadeAlpha },
+                        hpChangeValue = hpChangeValue,
+                        textStyle = LocalThemeTypographies.current.bold20
                     )
                 }
             }
@@ -213,6 +216,10 @@ private fun Enemy.HealthBar(
 @Composable
 fun EnemyViewPreview() {
     DunglerTheme(darkTheme = true) {
-        EnemyView(enemy = Enemy.DEAD_MOCK, damageToEnemy = 23)
+        EnemyView(
+            enemy = Enemy.DEAD_MOCK,
+            lastExecutedAction = Action.HeroAttackAction.MOCK,
+            enemyIndex = 1
+        )
     }
 }

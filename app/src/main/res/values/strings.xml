@@ -49,6 +49,7 @@
     <string name="dungeon_exit">Выход из подземелья</string>
     <string name="loot_label">Есть добыча</string>
     <string name="eating_process_label">Перекус</string>
+    <string name="damage_view_damage">Урон</string>
     <string name="equipped_food">Экипированная еда</string>
     <string name="skill_empty_slot">Слот для способности</string>
 

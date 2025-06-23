@@ -34,7 +34,7 @@ object HeroStateMapper : (HeroStateDto, Action?) -> HeroState {
             actions = response.actions.map {
                 when (it.type) {
                     ActionType.HEAL_EFFECT ->
-                        Action.HealAction(healAmount = it.healEffectData?.healAmount ?: 0)
+                        Action.HomeHealAction(healAmount = it.healEffectData?.healAmount ?: 0)
 
                     ActionType.HERO_ATTACK ->
                         when {

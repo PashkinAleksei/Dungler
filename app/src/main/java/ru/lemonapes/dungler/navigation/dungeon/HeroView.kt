@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.ui.UIText
+import ru.lemonapes.dungler.ui.Utils
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
@@ -71,18 +73,18 @@ fun HeroState.HeroView(
                     }
                     Spacer(Modifier.height(6.dp))
                 }
-                getLastHeroHPChange()?.let {
-                    val damageText = if (it > 0) "+$it" else "$it"
-                    val color = if (it < 0) LocalThemeColors.current.damageColor else LocalThemeColors.current.healColor
-                    UIText(
+
+                lastExecutedAction?.getLastHeroHPChange()?.let { hpChangeValue ->
+                    val fadeAlpha = Utils.getFadeAlpha(lastExecutedAction)
+                    DamageImageView(
                         modifier = Modifier
-                            .align(Alignment.Center),
-                        text = damageText,
-                        color = color,
-                        textStyle = LocalThemeTypographies.current.regular28,
-                        maxLines = 1
+                            .align(Alignment.Center)
+                            .graphicsLayer { this.alpha = fadeAlpha },
+                        hpChangeValue = hpChangeValue,
+                        textStyle = LocalThemeTypographies.current.bold24
                     )
                 }
+
             }
         }
     }
