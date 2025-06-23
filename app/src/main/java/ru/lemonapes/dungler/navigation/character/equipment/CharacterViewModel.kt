@@ -69,7 +69,7 @@ class CharacterViewModel @Inject constructor(
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
-            val result = EquipmentResponseMapper(getEquipment())
+            val result = EquipmentResponseMapper(getEquipment(), heroStateRepository.lastExecutedAction)
             heroStateRepository.setNewHeroState(result.heroState)
 
             updateState { state ->
@@ -145,7 +145,7 @@ class CharacterViewModel @Inject constructor(
     override fun actionEquip(gear: Gear) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val result = EquipmentResponseMapper(patchEquipGear(gear))
+            val result = EquipmentResponseMapper(patchEquipGear(gear), heroStateRepository.lastExecutedAction)
             heroStateRepository.setNewHeroState(result.heroState)
             if (isActive) {
                 updateState { state ->
@@ -163,7 +163,7 @@ class CharacterViewModel @Inject constructor(
     override fun actionFoodEquip(food: Food) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val result = EquipmentResponseMapper(patchEquipFood(food.id))
+            val result = EquipmentResponseMapper(patchEquipFood(food.id), heroStateRepository.lastExecutedAction)
             heroStateRepository.setNewHeroState(result.heroState)
             if (isActive) {
                 updateState { state ->
@@ -181,7 +181,7 @@ class CharacterViewModel @Inject constructor(
     override fun actionGearDeEquip(gearType: GearType) = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val result = EquipmentResponseMapper(patchDeEquipGear(gearType))
+            val result = EquipmentResponseMapper(patchDeEquipGear(gearType), heroStateRepository.lastExecutedAction)
             heroStateRepository.setNewHeroState(result.heroState)
             if (isActive) {
                 updateState { state ->
@@ -199,7 +199,7 @@ class CharacterViewModel @Inject constructor(
     override fun actionFoodDeEquip() = withActualState {
         dialogLoadJob?.cancel()
         dialogLoadJob = launch(Dispatchers.IO + dialogCeh) {
-            val result = EquipmentResponseMapper(patchDeEquipFood())
+            val result = EquipmentResponseMapper(patchDeEquipFood(), heroStateRepository.lastExecutedAction)
             heroStateRepository.setNewHeroState(result.heroState)
             if (isActive) {
                 updateState { state ->

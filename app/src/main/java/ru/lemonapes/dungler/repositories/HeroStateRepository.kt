@@ -83,6 +83,8 @@ class HeroStateRepository @Inject constructor(
         }
     }
 
+    val lastExecutedAction get() = heroStateFlow.value.lastExecutedAction
+
     private fun resetPolling() {
         startPolling()
     }
@@ -98,7 +100,7 @@ class HeroStateRepository @Inject constructor(
 
     private suspend fun fetchHeroState() {
         //log("start fetching HeroState")
-        heroStateStore.heroState = HeroStateResponseMapper(getHeroState())
+        heroStateStore.heroState = HeroStateResponseMapper(getHeroState(), lastExecutedAction)
         resumeActionsCalculation()
         log("HeroState fetched ${heroStateStore.heroState}")
     }
@@ -301,6 +303,7 @@ class HeroStateRepository @Inject constructor(
             actions = newActions.toPersistentList(),
             equippedFood = newEquippedFood,
             skillsEquipment = newSkillsEquipment,
+            lastExecutedAction = action,
             isEating = newActions.firstOrNull() is Action.EatingEffectAction
         ).calculateActionsRecursiveAndGet()
     }

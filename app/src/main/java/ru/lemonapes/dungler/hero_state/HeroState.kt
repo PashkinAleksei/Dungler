@@ -18,6 +18,7 @@ data class HeroState(
     val equippedFood: Food? = null,
     val skillsEquipment: SkillsEquipment = SkillsEquipment.MOCK,
     val actions: ImmutableList<Action> = persistentListOf(),
+    val lastExecutedAction: Action? = null,
     val nextCalcTime: Long = 0,
 ) {
     companion object {
@@ -33,6 +34,7 @@ data class HeroState(
                 isLoading = false,
                 dungeonState = null,
                 equippedFood = Food.MOCK_1,
+                lastExecutedAction = Action.HealAction(10)
             )
         val EATING_MOCK
             get() = HeroState(
@@ -43,10 +45,36 @@ data class HeroState(
                 totalExperience = 250,
                 isLoading = false,
                 isEating = true,
+                lastExecutedAction = Action.EatingEffectAction(10, true),
                 dungeonState = DungeonState(),
             )
         const val ACTION_TICK_TIME = 1500L
         const val ACTION_CHECK_TICK_TIME = 400L
+    }
+
+    fun getLastDamageToEnemy(enemyIndex: Int): Int? {
+        return when (lastExecutedAction) {
+            is Action.SingleDamage -> {
+                val damageData = lastExecutedAction.damageData
+                damageData.heroPureDamage.takeIf { damageData.targetIndex == enemyIndex }
+            }
+
+            is Action.MassiveDamage -> {
+                lastExecutedAction.damageData.firstOrNull { it.targetIndex == enemyIndex }?.heroPureDamage
+            }
+
+            else -> null
+        }
+    }
+
+    fun getLastDamageToHero(): Int? {
+        return when (lastExecutedAction) {
+            is Action.EnemyAttackAction -> {
+                lastExecutedAction.enemyPureDamage
+            }
+
+            else -> null
+        }
     }
 }
 

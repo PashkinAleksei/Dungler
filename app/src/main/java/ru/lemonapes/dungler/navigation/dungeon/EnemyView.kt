@@ -39,6 +39,7 @@ import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
 @Composable
 fun EnemyView(
     enemy: Enemy,
+    damageToEnemy: Int?,
     modifier: Modifier = Modifier,
 ) {
     Card(modifier, shape = RoundedCornerShape(12.dp)) {
@@ -88,6 +89,15 @@ fun EnemyView(
                     }
                     enemy.HealthBar()
                 }
+                val damageText = damageToEnemy?.let { "-$it" } ?: ""
+                UIText(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    text = damageText,
+                    color = Color.Red,
+                    textStyle = LocalThemeTypographies.current.regular28,
+                    maxLines = 1
+                )
             }
         }
     }
@@ -201,6 +211,6 @@ private fun Enemy.HealthBar(
 @Composable
 fun EnemyViewPreview() {
     DunglerTheme(darkTheme = true) {
-        EnemyView(enemy = Enemy.DEAD_MOCK)
+        EnemyView(enemy = Enemy.DEAD_MOCK, damageToEnemy = 23)
     }
 }

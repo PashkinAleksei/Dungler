@@ -7,11 +7,11 @@ import ru.lemonapes.dungler.network.models.actions.ActionDto
 
 @Serializable
 data class ServerHeroStateResponse(
-    @SerialName("hero_state") val serverHeroState: ServerHeroState,
+    @SerialName("hero_state") val serverHeroState: HeroStateDto,
 )
 
 @Serializable
-data class ServerHeroState(
+data class HeroStateDto(
     @SerialName("level") val level: Int? = null,
     @SerialName("health") val health: Int? = null,
     @SerialName("total_health") val totalHealth: Int? = null,

@@ -33,7 +33,10 @@ class DungeonListViewModel @Inject constructor(
                 state.copy(enterDungeonInProcess = true)
             }
             launch(Dispatchers.IO + ceh) {
-                val heroState = HeroStateResponseMapper(setHeroLocation(dungeonId))
+                val heroState = HeroStateResponseMapper(
+                    response = setHeroLocation(dungeonId),
+                    lastExecutedAction = heroStateRepository.lastExecutedAction,
+                )
                 heroStateRepository.setNewHeroState(heroState)
                 updateState {
                     state.copy(enterDungeonInProcess = false)

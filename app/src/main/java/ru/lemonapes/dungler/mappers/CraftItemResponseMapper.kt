@@ -10,18 +10,19 @@ import ru.lemonapes.dungler.domain_models.CreateFood
 import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.domain_models.UpgradeGear
+import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.network.models.responses.CraftItemsResponse
 
-object CraftItemResponseMapper : (CraftItemsResponse) ->
+object CraftItemResponseMapper : (CraftItemsResponse, Action?) ->
 CraftItemMapperResponse {
-    override fun invoke(response: CraftItemsResponse) =
+    override fun invoke(response: CraftItemsResponse, lastExecutedAction: Action?) =
         CraftItemMapperResponse(
             createItems = response.createItems?.map(CraftItemMapper)?.toPersistentList() ?: persistentListOf(),
             createFood = response.foodItems?.map(CreateFoodMapper)?.toPersistentList() ?: persistentListOf(),
             upgradeItems = response.upgradeItems?.map(UpgradeItemMapper)?.toPersistentList() ?: persistentListOf(),
             reagents = response.reagents?.toPersistentMap() ?: persistentMapOf(),
-            heroState = HeroStateMapper(response.serverHeroState),
+            heroState = HeroStateMapper(response.serverHeroState, lastExecutedAction),
         )
 }
 

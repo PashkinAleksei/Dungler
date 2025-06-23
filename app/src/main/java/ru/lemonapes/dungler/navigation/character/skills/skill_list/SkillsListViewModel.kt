@@ -31,6 +31,7 @@ class SkillsListViewModel @Inject constructor(
     }
 
     override fun onSkillSelected(skillId: SkillId) {
+        val lastExecutedAction = heroStateRepository.lastExecutedAction
         viewModelScope.launch(Dispatchers.IO + ceh) {
             skillSlot?.let { skillSlot ->
                 actionSetLoading()
@@ -38,7 +39,7 @@ class SkillsListViewModel @Inject constructor(
                     slot = skillSlot,
                     skill = skillId
                 )
-                val heroState = HeroStateMapper(response.serverHeroState)
+                val heroState = HeroStateMapper(response.serverHeroState, lastExecutedAction)
                 heroStateRepository.setNewHeroState(heroState)
                 sendUiEvent(UiEvent.NavigateBack)
             }
@@ -48,7 +49,8 @@ class SkillsListViewModel @Inject constructor(
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
-            val result = ru.lemonapes.dungler.mappers.SkillsResponseMapper(getSkills())
+            val lastExecutedAction = heroStateRepository.lastExecutedAction
+            val result = ru.lemonapes.dungler.mappers.SkillsResponseMapper(getSkills(), lastExecutedAction)
             heroStateRepository.setNewHeroState(result.heroState)
 
             updateState { state ->

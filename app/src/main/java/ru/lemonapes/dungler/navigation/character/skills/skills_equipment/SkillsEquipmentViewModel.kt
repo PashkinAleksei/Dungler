@@ -36,7 +36,7 @@ class SkillsEquipmentViewModel @Inject constructor(
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
             val result = getHeroState()
-            val heroState = HeroStateMapper(result.serverHeroState)
+            val heroState = HeroStateMapper(result.serverHeroState, heroStateRepository.lastExecutedAction)
             heroStateRepository.setNewHeroState(heroState)
 
             updateState { state ->

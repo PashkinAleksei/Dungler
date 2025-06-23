@@ -13,11 +13,11 @@ sealed interface Action {
 
         data class Common(
             override val damageData: HeroDamageData,
-        ) : HeroAttackAction
+        ) : HeroAttackAction, SingleDamage
 
         data class ModifierSwipingStrikes(
             override val damageData: ImmutableList<HeroDamageData>,
-        ) : HeroAttackAction
+        ) : HeroAttackAction, MassiveDamage
     }
 
     data class EnemyAttackAction(
@@ -41,21 +41,29 @@ sealed interface Action {
 
         data class HeroicStrike(
             override val damageData: HeroDamageData,
-        ) : SkillAction {
+        ) : SkillAction, SingleDamage {
             override val skillId = SkillId.HEROIC_STRIKE
         }
 
         data class SwipingStrikes(
             override val damageData: ImmutableList<HeroDamageData>,
-        ) : SkillAction {
+        ) : SkillAction, MassiveDamage {
             override val skillId = SkillId.SWIPING_STRIKES
         }
 
         data class Whirlwind(
             override val damageData: ImmutableList<HeroDamageData>,
-        ) : SkillAction {
+        ) : SkillAction, MassiveDamage {
             override val skillId = SkillId.WHIRLWIND
         }
+    }
+
+    sealed interface SingleDamage {
+        val damageData: HeroDamageData
+    }
+
+    sealed interface MassiveDamage {
+        val damageData: ImmutableList<HeroDamageData>
     }
 }
 

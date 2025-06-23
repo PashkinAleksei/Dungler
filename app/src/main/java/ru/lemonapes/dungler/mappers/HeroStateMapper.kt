@@ -8,10 +8,11 @@ import ru.lemonapes.dungler.hero_state.DungeonState
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.hero_state.HeroState.Companion.ACTION_TICK_TIME
 import ru.lemonapes.dungler.network.models.ActionType
-import ru.lemonapes.dungler.network.models.ServerHeroState
+import ru.lemonapes.dungler.network.models.HeroStateDto
+import ru.lemonapes.dungler.network.models.ServerHeroStateResponse
 
-object HeroStateMapper : (ServerHeroState) -> HeroState {
-    override fun invoke(response: ServerHeroState): HeroState {
+object HeroStateMapper : (HeroStateDto, Action?) -> HeroState {
+    override fun invoke(response: HeroStateDto, lastExecutedAction: Action?): HeroState {
         return HeroState(
             level = response.level,
             health = response.health,
@@ -84,13 +85,14 @@ object HeroStateMapper : (ServerHeroState) -> HeroState {
                         }
                 }
             }.toPersistentList(),
+            lastExecutedAction = lastExecutedAction,
             nextCalcTime = Calendar.getInstance().timeInMillis + ACTION_TICK_TIME
         )
     }
 }
 
-object HeroStateResponseMapper : (ru.lemonapes.dungler.network.models.ServerHeroStateResponse) -> HeroState {
-    override fun invoke(response: ru.lemonapes.dungler.network.models.ServerHeroStateResponse): HeroState {
-        return HeroStateMapper(response.serverHeroState)
+object HeroStateResponseMapper : (ServerHeroStateResponse, Action?) -> HeroState {
+    override fun invoke(response: ServerHeroStateResponse, lastExecutedAction: Action?): HeroState {
+        return HeroStateMapper(response.serverHeroState, lastExecutedAction)
     }
 }

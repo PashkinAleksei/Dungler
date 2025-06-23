@@ -32,7 +32,10 @@ class CraftViewModel @Inject constructor(
     override fun actionStart() = withActualState {
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
-            val (createItems, createFood, upgradeItems, reagents, heroState) = CraftItemResponseMapper(getCraftItems())
+            val (createItems, createFood, upgradeItems, reagents, heroState) = CraftItemResponseMapper(
+                response = getCraftItems(),
+                lastExecutedAction = heroStateRepository.lastExecutedAction,
+            )
             heroStateRepository.setNewHeroState(heroState)
 
             updateState { state ->
@@ -50,9 +53,8 @@ class CraftViewModel @Inject constructor(
     override fun actionCreateItem(gearId: GearId) = withActualState {
         launch(Dispatchers.IO + ceh) {
             val (createItems, createFood, upgradeItems, reagents, heroState) = CraftItemResponseMapper(
-                postCreateItem(
-                    gearId = gearId
-                )
+                response = postCreateItem(gearId),
+                lastExecutedAction = heroStateRepository.lastExecutedAction
             )
             heroStateRepository.setNewHeroState(heroState)
 
@@ -70,9 +72,8 @@ class CraftViewModel @Inject constructor(
     override fun actionCreateFood(food: CreateFood) = withActualState {
         launch(Dispatchers.IO + ceh) {
             val (createItems, createFood, upgradeItems, reagents, heroState) = CraftItemResponseMapper(
-                postCreateFood(
-                    foodId = food.foodId
-                )
+                response = postCreateFood(food.foodId),
+                lastExecutedAction = heroStateRepository.lastExecutedAction,
             )
             heroStateRepository.setNewHeroState(heroState)
 
@@ -90,9 +91,8 @@ class CraftViewModel @Inject constructor(
     override fun actionUpgradeItem(gearId: GearId) = withActualState {
         launch(Dispatchers.IO + ceh) {
             val (createItems, createFood, upgradeItems, reagents, heroState) = CraftItemResponseMapper(
-                postUpgradeItem(
-                    gearId = gearId
-                )
+                response = postUpgradeItem(gearId),
+                lastExecutedAction = heroStateRepository.lastExecutedAction,
             )
             heroStateRepository.setNewHeroState(heroState)
 

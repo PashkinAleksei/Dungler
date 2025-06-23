@@ -71,6 +71,15 @@ fun HeroState.HeroView(
                     }
                     Spacer(Modifier.height(6.dp))
                 }
+                val damageText = getLastDamageToHero()?.let { "-$it" } ?: ""
+                UIText(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    text = damageText,
+                    color = Color.Red,
+                    textStyle = LocalThemeTypographies.current.regular28,
+                    maxLines = 1
+                )
             }
         }
     }

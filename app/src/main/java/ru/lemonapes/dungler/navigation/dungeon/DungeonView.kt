@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -81,8 +81,8 @@ fun DungeonView(
                         verticalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
                         state.enemies?.let { enemies ->
-                            items(enemies) { enemy ->
-                                EnemyView(enemy = enemy)
+                            itemsIndexed(enemies) { index, enemy ->
+                                EnemyView(enemy = enemy, damageToEnemy = heroState.getLastDamageToEnemy(index))
                             }
                         }
                     }

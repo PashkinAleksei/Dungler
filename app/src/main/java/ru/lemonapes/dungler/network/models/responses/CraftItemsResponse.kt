@@ -6,7 +6,7 @@ import ru.lemonapes.dungler.domain_models.FoodId
 import ru.lemonapes.dungler.domain_models.GearId
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.domain_models.StatId
-import ru.lemonapes.dungler.network.models.ServerHeroState
+import ru.lemonapes.dungler.network.models.HeroStateDto
 
 @Serializable
 data class CraftItemsResponse(
@@ -17,7 +17,7 @@ data class CraftItemsResponse(
     @SerialName("upgrade_items")
     val upgradeItems: List<ServerUpgradeItem>? = null,
     val reagents: Map<ReagentId, Int>? = null,
-    @SerialName("hero_state") val serverHeroState: ServerHeroState,
+    @SerialName("hero_state") val serverHeroState: HeroStateDto,
 )
 
 @Serializable
