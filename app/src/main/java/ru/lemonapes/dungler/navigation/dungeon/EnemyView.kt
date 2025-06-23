@@ -89,15 +89,17 @@ fun EnemyView(
                     }
                     enemy.HealthBar()
                 }
-                val damageText = damageToEnemy?.let { "-$it" } ?: ""
-                UIText(
-                    modifier = Modifier
-                        .align(Alignment.Center),
-                    text = damageText,
-                    color = Color.Red,
-                    textStyle = LocalThemeTypographies.current.regular28,
-                    maxLines = 1
-                )
+                damageToEnemy?.let {
+                    val damageText = "-$it"
+                    UIText(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        text = damageText,
+                        color = LocalThemeColors.current.damageColor,
+                        textStyle = LocalThemeTypographies.current.regular28,
+                        maxLines = 1
+                    )
+                }
             }
         }
     }

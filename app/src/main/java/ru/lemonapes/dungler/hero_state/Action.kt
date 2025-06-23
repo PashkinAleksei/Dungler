@@ -1,67 +1,84 @@
+
 package ru.lemonapes.dungler.hero_state
 
+import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import ru.lemonapes.dungler.domain_models.SkillId
 
+@Suppress("ConvertObjectToDataObject")
+@Immutable
 sealed interface Action {
-    data class HealAction(
+    @Immutable
+    class HealAction(
         val healAmount: Int,
     ) : Action
 
+    @Immutable
     sealed interface HeroAttackAction : Action {
         val damageData: Any
 
-        data class Common(
+        @Immutable
+        class Common(
             override val damageData: HeroDamageData,
         ) : HeroAttackAction, SingleDamage
 
-        data class ModifierSwipingStrikes(
+        @Immutable
+        class ModifierSwipingStrikes(
             override val damageData: ImmutableList<HeroDamageData>,
         ) : HeroAttackAction, MassiveDamage
     }
 
-    data class EnemyAttackAction(
+    @Immutable
+    class EnemyAttackAction(
         val enemyIndex: Int,
         val enemyPureDamage: Int,
     ) : Action
 
-    data class EatingEffectAction(
+    @Immutable
+    class EatingEffectAction(
         val healAmount: Int,
         val reduceFood: Boolean,
     ) : Action
 
-    data object NextHallAction : Action
-    data object TakeLootAction : Action
-    data object HeroIsDeadAction : Action
-    data object ActualStateAction : Action
+    @Immutable
+    object NextHallAction : Action
+    object TakeLootAction : Action
+    object HeroIsDeadAction : Action
+    object ActualStateAction : Action
 
+    @Immutable
     sealed interface SkillAction : Action {
         val skillId: SkillId
         val damageData: Any
 
-        data class HeroicStrike(
+        @Immutable
+        class HeroicStrike(
             override val damageData: HeroDamageData,
         ) : SkillAction, SingleDamage {
             override val skillId = SkillId.HEROIC_STRIKE
         }
 
-        data class SwipingStrikes(
+        @Immutable
+        class SwipingStrikes(
             override val damageData: ImmutableList<HeroDamageData>,
         ) : SkillAction, MassiveDamage {
             override val skillId = SkillId.SWIPING_STRIKES
         }
 
-        data class Whirlwind(
+        @Immutable
+        class Whirlwind(
             override val damageData: ImmutableList<HeroDamageData>,
         ) : SkillAction, MassiveDamage {
             override val skillId = SkillId.WHIRLWIND
         }
     }
 
+    @Immutable
     sealed interface SingleDamage {
         val damageData: HeroDamageData
     }
 
+    @Immutable
     sealed interface MassiveDamage {
         val damageData: ImmutableList<HeroDamageData>
     }

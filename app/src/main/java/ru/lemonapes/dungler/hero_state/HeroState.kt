@@ -67,10 +67,18 @@ data class HeroState(
         }
     }
 
-    fun getLastDamageToHero(): Int? {
+    fun getLastHeroHPChange(): Int? {
         return when (lastExecutedAction) {
             is Action.EnemyAttackAction -> {
-                lastExecutedAction.enemyPureDamage
+                -lastExecutedAction.enemyPureDamage
+            }
+
+            is Action.HealAction -> {
+                lastExecutedAction.healAmount
+            }
+
+            is Action.EatingEffectAction -> {
+                lastExecutedAction.healAmount
             }
 
             else -> null

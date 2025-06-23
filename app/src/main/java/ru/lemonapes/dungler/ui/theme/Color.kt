@@ -25,6 +25,8 @@ data class DungeonColors(
     val surfaceSemiTransparentColor: Color,
     val bordersColor: Color,
     val skillActiveColor: Color,
+    val damageColor: Color,
+    val healColor: Color,
     val imageBackground: Color,
 )
 
@@ -44,6 +46,8 @@ fun getDarkColorPalette() = DungeonColors(
     bordersColor = BordersColorDark,
     imageBackground = ImageBackgroundDark,
     skillActiveColor = SkillActiveColor,
+    damageColor = DamageColor,
+    healColor = HealColor,
 )
 
 fun getLightColorPalette() = DungeonColors(
@@ -62,6 +66,8 @@ fun getLightColorPalette() = DungeonColors(
     bordersColor = BordersColor,
     imageBackground = ImageBackground,
     skillActiveColor = SkillActiveColor,
+    damageColor = DamageColor,
+    healColor = HealColor,
 )
 
 // Константы цветов
@@ -100,6 +106,8 @@ val ImageBackground = Color(0xFF000000)
 val SkillActiveColor = Color(0xFFFFFF00)
 val ImageBackgroundDark = Color(0xFF000000)
 val BordersColor = Color(0xFF636363)
+val DamageColor = Color(0xFFFF0000)
+val HealColor = Color(0xFF00FF00)
 val ItemBagCountText = Color(0xFFFFFFFF)
 val PositiveText = Color(0xFF00FF00)
 val CustomToast = Color(0xD9FFC107)
