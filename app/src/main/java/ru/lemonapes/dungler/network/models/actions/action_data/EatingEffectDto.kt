@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HeroDamageDataDto(
-    @SerialName("hero_pure_damage") val heroPureDamage: Int,
-    @SerialName("target_index") val targetIndex: Int,
+data class EatingEffectDto(
+    @SerialName("heal_amount") val healAmount: Int,
+    @SerialName("reduce_food") val reduceFood: Boolean,
 )

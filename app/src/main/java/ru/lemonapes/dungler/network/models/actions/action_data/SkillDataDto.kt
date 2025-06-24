@@ -7,8 +7,8 @@ import ru.lemonapes.dungler.domain_models.SkillId
 @Serializable
 data class SkillDataDto(
     @SerialName("skill_id") val skillId: SkillId,
-    @SerialName("data_heroic_strike") val dataHeroicStrike: HeroDamageDataDto? = null,
-    @SerialName("data_swiping_strikes") val dataSwipingStrikes: List<HeroDamageDataDto>? = null,
-    @SerialName("data_whirlwind") val dataWhirlwind: List<HeroDamageDataDto>? = null,
+    @SerialName("data_heroic_strike") val dataHeroicStrike: HeroTargetAttackDto? = null,
+    @SerialName("data_swiping_strikes") val dataSwipingStrikes: List<HeroTargetAttackDto>? = null,
+    @SerialName("data_whirlwind") val dataWhirlwind: List<HeroTargetAttackDto>? = null,
     @SerialName("cooldown") val cooldown: Int,
 )

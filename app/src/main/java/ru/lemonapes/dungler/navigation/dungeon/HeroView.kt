@@ -32,6 +32,7 @@ import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.Utils
+import ru.lemonapes.dungler.ui.models.getLastHeroHpChange
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
@@ -74,13 +75,13 @@ fun HeroState.HeroView(
                     Spacer(Modifier.height(6.dp))
                 }
 
-                lastExecutedAction?.getLastHeroHPChange()?.let { hpChangeValue ->
+                lastExecutedAction?.getLastHeroHpChange()?.let { hpChangeVO ->
                     val fadeAlpha = Utils.getFadeAlpha(lastExecutedAction)
                     DamageImageView(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .graphicsLayer { this.alpha = fadeAlpha },
-                        hpChangeValue = hpChangeValue,
+                        hpChangeVO = hpChangeVO,
                         textStyle = LocalThemeTypographies.current.bold24
                     )
                 }

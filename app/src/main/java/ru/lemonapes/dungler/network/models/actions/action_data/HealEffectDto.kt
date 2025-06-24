@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EatingEffectDataDto(
+data class HealEffectDto(
     @SerialName("heal_amount") val healAmount: Int,
-    @SerialName("reduce_food") val reduceFood: Boolean,
 )

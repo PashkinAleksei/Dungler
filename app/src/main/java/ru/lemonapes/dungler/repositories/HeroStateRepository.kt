@@ -245,7 +245,7 @@ class HeroStateRepository @Inject constructor(
 
                 is Action.EnemyAttackAction -> {
                     newHealth = health?.let { cHp ->
-                        val reducedHealth = cHp - action.enemyPureDamage
+                        val reducedHealth = cHp - action.pureDamage
                         if (reducedHealth > 0) {
                             reducedHealth
                         } else {

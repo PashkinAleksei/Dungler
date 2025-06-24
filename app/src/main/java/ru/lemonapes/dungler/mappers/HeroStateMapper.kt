@@ -51,14 +51,15 @@ object HeroStateMapper : (HeroStateDto, Action?) -> HeroState {
 
                     ActionType.ENEMY_ATTACK ->
                         Action.EnemyAttackAction(
-                            enemyIndex = it.enemyAttackData?.enemyIndex ?: 0,
-                            enemyPureDamage = it.enemyAttackData?.enemyPureDamage ?: 0
+                            enemyIndex = it.enemyAttackData!!.enemyIndex,
+                            pureDamage = it.enemyAttackData.pureDamage,
+                            attackResult = it.enemyAttackData.attackResult
                         )
 
                     ActionType.EATING_EFFECT ->
                         Action.EatingEffectAction(
-                            healAmount = it.eatingEffectData?.healAmount ?: 0,
-                            reduceFood = it.eatingEffectData?.reduceFood ?: false
+                            healAmount = it.eatingEffectData!!.healAmount,
+                            reduceFood = it.eatingEffectData.reduceFood
                         )
 
                     ActionType.NEXT_HALL -> Action.NextHallAction

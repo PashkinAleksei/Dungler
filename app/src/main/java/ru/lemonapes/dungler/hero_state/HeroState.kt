@@ -2,6 +2,7 @@ package ru.lemonapes.dungler.hero_state
 
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import ru.lemonapes.dungler.domain_models.AttackResult
 import ru.lemonapes.dungler.domain_models.Enemy
 import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.SkillsEquipment
@@ -34,7 +35,7 @@ data class HeroState(
                 isLoading = false,
                 dungeonState = null,
                 equippedFood = Food.MOCK_1,
-                lastExecutedAction = Action.EnemyAttackAction(1, 10)
+                lastExecutedAction = Action.EnemyAttackAction(1, 10, AttackResult.MISS)
             )
         val EATING_MOCK
             get() = HeroState(

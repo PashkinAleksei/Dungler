@@ -35,6 +35,7 @@ import ru.lemonapes.dungler.domain_models.Enemy
 import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.Utils
+import ru.lemonapes.dungler.ui.models.getLastDamageToEnemy
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
 import ru.lemonapes.dungler.ui.theme.typographies.LocalThemeTypographies
@@ -93,13 +94,13 @@ fun EnemyView(
                     }
                     enemy.HealthBar()
                 }
-                lastExecutedAction?.getLastDamageToEnemy(enemyIndex)?.let { hpChangeValue ->
+                lastExecutedAction?.getLastDamageToEnemy(enemyIndex)?.let { attackDataVO ->
                     val fadeAlpha = Utils.getFadeAlpha(lastExecutedAction)
                     DamageImageView(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .graphicsLayer { this.alpha = fadeAlpha },
-                        hpChangeValue = hpChangeValue,
+                        hpChangeVO = attackDataVO,
                         textStyle = LocalThemeTypographies.current.bold20
                     )
                 }
