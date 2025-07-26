@@ -1,14 +1,14 @@
 package ru.lemonapes.dungler.mappers
 
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.CreateFood
-import ru.lemonapes.dungler.network.models.responses.ServerCreateFood
+import ru.lemonapes.dungler.network.models.responses.CreateFoodDto
 
-object CreateFoodMapper : (ServerCreateFood) -> CreateFood {
-    override fun invoke(item: ServerCreateFood) = CreateFood(
+object CreateFoodMapper : (CreateFoodDto) -> CreateFood {
+    override fun invoke(item: CreateFoodDto) = CreateFood(
         foodId = item.foodId,
         healthRegenAmount = item.healthRegenAmount,
-        reagents = item.reagents?.toPersistentMap() ?: persistentMapOf(),
+        healthRegenTicks = item.healthRegenTicks,
+        reagents = item.reagents.toPersistentMap(),
     )
 } 

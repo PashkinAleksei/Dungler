@@ -18,8 +18,6 @@ sealed interface Action {
 
     @Immutable
     sealed interface HeroAttackAction : Action {
-        val damageData: Any
-
         @Immutable
         class Common(
             override val damageData: HeroDamageData,
@@ -27,7 +25,7 @@ sealed interface Action {
 
         @Immutable
         class ModifierSwipingStrikes(
-            override val damageData: ImmutableList<HeroDamageData>,
+            override val damageDataList: ImmutableList<HeroDamageData>,
         ) : HeroAttackAction, MassiveDamage
 
         companion object {
@@ -57,7 +55,6 @@ sealed interface Action {
     @Immutable
     sealed interface SkillAction : Action {
         val skillId: SkillId
-        val damageData: Any
 
         @Immutable
         class HeroicStrike(
@@ -68,14 +65,14 @@ sealed interface Action {
 
         @Immutable
         class SwipingStrikes(
-            override val damageData: ImmutableList<HeroDamageData>,
+            override val damageDataList: ImmutableList<HeroDamageData>,
         ) : SkillAction, MassiveDamage {
             override val skillId = SkillId.SWIPING_STRIKES
         }
 
         @Immutable
         class Whirlwind(
-            override val damageData: ImmutableList<HeroDamageData>,
+            override val damageDataList: ImmutableList<HeroDamageData>,
         ) : SkillAction, MassiveDamage {
             override val skillId = SkillId.WHIRLWIND
         }
@@ -88,7 +85,7 @@ sealed interface Action {
 
     @Immutable
     sealed interface MassiveDamage : Action {
-        val damageData: ImmutableList<HeroDamageData>
+        val damageDataList: ImmutableList<HeroDamageData>
     }
 }
 

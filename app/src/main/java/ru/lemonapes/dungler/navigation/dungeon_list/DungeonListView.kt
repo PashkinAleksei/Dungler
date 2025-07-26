@@ -42,7 +42,7 @@ fun DungeonListView(
             )
 
             Button(
-                onClick = { listener.onEnterDungeonsClick("drainage_channels") },
+                onClick = { listener.onEnterDungeonsClick("DRAINAGE_CHANNELS") },
                 modifier = Modifier.padding(top = 16.dp)
             ) {
                 Text(text = stringResource(id = R.string.enter_the_dungeons))

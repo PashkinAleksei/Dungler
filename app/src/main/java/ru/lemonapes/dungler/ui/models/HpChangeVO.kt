@@ -30,7 +30,7 @@ fun Action.getLastDamageToEnemy(enemyIndex: Int): AttackVO? =
         }
 
         is Action.MassiveDamage -> {
-            damageData.firstOrNull { it.targetIndex == enemyIndex }?.run {
+            damageDataList.firstOrNull { it.targetIndex == enemyIndex }?.run {
                 AttackVO(
                     hpValue = -heroPureDamage,
                     attackResult = attackResult,

@@ -1,8 +1,6 @@
 package ru.lemonapes.dungler.repositories
 
 import android.icu.util.Calendar
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +12,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.Utils.Companion.log
 import ru.lemonapes.dungler.di.ApplicationScope
-import ru.lemonapes.dungler.domain_models.Enemy
 import ru.lemonapes.dungler.hero_state.Action
 import ru.lemonapes.dungler.hero_state.DungeonState
 import ru.lemonapes.dungler.hero_state.HeroDamageData
@@ -195,7 +192,6 @@ class HeroStateRepository @Inject constructor(
             return this
         }
 
-        val enemies = dungeonState?.enemies ?: persistentListOf()
         var newHealth = health
         var newEquippedFood = equippedFood
         var newDungeonState = dungeonState
@@ -256,31 +252,26 @@ class HeroStateRepository @Inject constructor(
 
                 //HeroAttackAction
                 is Action.HeroAttackAction.Common -> {
-                    val newEnemies = enemies.applyDamageToEnemies(listOf(action.damageData))
-                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newDungeonState = dungeonState?.applyDamageToEnemies(listOf(action.damageData))
                 }
 
                 is Action.HeroAttackAction.ModifierSwipingStrikes -> {
-                    val newEnemies = enemies.applyDamageToEnemies(action.damageData)
-                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newDungeonState = dungeonState?.applyDamageToEnemies(action.damageDataList)
                 }
 
                 //SkillAction
                 is Action.SkillAction.SwipingStrikes -> {
-                    val newEnemies = enemies.applyDamageToEnemies(action.damageData)
-                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newDungeonState = dungeonState?.applyDamageToEnemies(action.damageDataList)
                     newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
                 }
 
                 is Action.SkillAction.Whirlwind -> {
-                    val newEnemies = enemies.applyDamageToEnemies(action.damageData)
-                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newDungeonState = dungeonState?.applyDamageToEnemies(action.damageDataList)
                     newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
                 }
 
                 is Action.SkillAction.HeroicStrike -> {
-                    val newEnemies = enemies.applyDamageToEnemies(listOf(action.damageData))
-                    newDungeonState = dungeonState?.copy(enemies = newEnemies)
+                    newDungeonState = dungeonState?.applyDamageToEnemies(listOf(action.damageData))
                     newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
                 }
 
@@ -308,8 +299,8 @@ class HeroStateRepository @Inject constructor(
         ).calculateActionsRecursiveAndGet()
     }
 
-    private fun List<Enemy>.applyDamageToEnemies(damageDataList: List<HeroDamageData>): ImmutableList<Enemy> =
-        mapIndexed { index, enemy ->
+    private fun DungeonState.applyDamageToEnemies(damageDataList: List<HeroDamageData>): DungeonState {
+        val newEnemies = enemies.mapIndexed { index, enemy ->
             val damageData = damageDataList.firstOrNull { it.targetIndex == index }
             if (damageData != null) {
                 val reducedHealth = enemy.health - damageData.heroPureDamage
@@ -318,6 +309,8 @@ class HeroStateRepository @Inject constructor(
                 enemy
             }
         }.toPersistentList()
+        return copy(enemies = newEnemies)
+    }
 
     //-----------------------------------------------------------------------------------------------------------------
     companion object {

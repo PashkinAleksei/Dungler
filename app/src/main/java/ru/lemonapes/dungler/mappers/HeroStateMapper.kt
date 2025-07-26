@@ -43,7 +43,7 @@ object HeroStateMapper : (HeroStateDto, Action?) -> HeroState {
                             )
 
                             else -> Action.HeroAttackAction.ModifierSwipingStrikes(
-                                damageData = it.heroAttackData?.modifierSwipingStrikesData!!
+                                damageDataList = it.heroAttackData?.modifierSwipingStrikesData!!
                                     .map(HeroDamageDataMapper)
                                     .toPersistentList()
                             )
@@ -73,13 +73,13 @@ object HeroStateMapper : (HeroStateDto, Action?) -> HeroState {
                             )
 
                             SkillId.SWIPING_STRIKES -> Action.SkillAction.SwipingStrikes(
-                                damageData = it.skillDataDto.dataSwipingStrikes!!
+                                damageDataList = it.skillDataDto.dataSwipingStrikes!!
                                     .map(HeroDamageDataMapper)
                                     .toPersistentList()
                             )
 
                             SkillId.WHIRLWIND -> Action.SkillAction.Whirlwind(
-                                damageData = it.skillDataDto.dataSwipingStrikes!!
+                                damageDataList = it.skillDataDto.dataSwipingStrikes!!
                                     .map(HeroDamageDataMapper)
                                     .toPersistentList()
                             )

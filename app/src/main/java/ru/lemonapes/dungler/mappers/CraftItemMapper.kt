@@ -4,10 +4,10 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
 import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.GearId
-import ru.lemonapes.dungler.network.models.responses.ServerCreateItem
+import ru.lemonapes.dungler.network.models.responses.CreateItemDto
 
-object CraftItemMapper : (ServerCreateItem) -> CreateGear {
-    override fun invoke(craftItem: ServerCreateItem): CreateGear {
+object CraftItemMapper : (CreateItemDto) -> CreateGear {
+    override fun invoke(craftItem: CreateItemDto): CreateGear {
         val image = craftItem.gearId.imageList.firstOrNull()
             ?: GearId.UNKNOWN_ITEM.imageList.first()
 
