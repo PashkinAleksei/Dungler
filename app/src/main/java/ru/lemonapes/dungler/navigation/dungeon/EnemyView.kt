@@ -32,7 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Enemy
-import ru.lemonapes.dungler.hero_state.Action
+import ru.lemonapes.dungler.domain_models.actions.Action
+import ru.lemonapes.dungler.domain_models.actions.HeroAttackAction
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.Utils
 import ru.lemonapes.dungler.ui.models.getLastDamageToEnemy
@@ -219,7 +220,7 @@ fun EnemyViewPreview() {
     DunglerTheme(darkTheme = true) {
         EnemyView(
             enemy = Enemy.DEAD_MOCK,
-            lastExecutedAction = Action.HeroAttackAction.MOCK,
+            lastExecutedAction = HeroAttackAction.MOCK,
             enemyIndex = 1
         )
     }

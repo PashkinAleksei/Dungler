@@ -10,7 +10,7 @@ import ru.lemonapes.dungler.domain_models.CreateFood
 import ru.lemonapes.dungler.domain_models.CreateGear
 import ru.lemonapes.dungler.domain_models.ReagentId
 import ru.lemonapes.dungler.domain_models.UpgradeGear
-import ru.lemonapes.dungler.hero_state.Action
+import ru.lemonapes.dungler.domain_models.actions.Action
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.network.models.responses.CraftItemsResponse
 

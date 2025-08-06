@@ -2,10 +2,13 @@ package ru.lemonapes.dungler.hero_state
 
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import ru.lemonapes.dungler.domain_models.AttackResult
 import ru.lemonapes.dungler.domain_models.Enemy
 import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.SkillsEquipment
+import ru.lemonapes.dungler.domain_models.actions.Action
+import ru.lemonapes.dungler.domain_models.actions.AttackResult
+import ru.lemonapes.dungler.domain_models.actions.EatingEffectAction
+import ru.lemonapes.dungler.domain_models.actions.EnemyAttackAction
 
 data class HeroState(
     val level: Int? = null,
@@ -15,13 +18,13 @@ data class HeroState(
     val totalExperience: Int? = null,
     val isLoading: Boolean = true,
     val dungeonState: DungeonState? = null,
-    val isEating: Boolean = false,
     val equippedFood: Food? = null,
     val skillsEquipment: SkillsEquipment = SkillsEquipment.MOCK,
     val actions: ImmutableList<Action> = persistentListOf(),
     val lastExecutedAction: Action? = null,
     val nextCalcTime: Long = 0,
 ) {
+
     companion object {
         val EMPTY
             get() = HeroState()
@@ -35,7 +38,7 @@ data class HeroState(
                 isLoading = false,
                 dungeonState = null,
                 equippedFood = Food.MOCK_1,
-                lastExecutedAction = Action.EnemyAttackAction(1, 10, AttackResult.MISS)
+                lastExecutedAction = EnemyAttackAction(1, 10, AttackResult.MISS)
             )
         val EATING_MOCK
             get() = HeroState(
@@ -45,8 +48,7 @@ data class HeroState(
                 experience = 140,
                 totalExperience = 250,
                 isLoading = false,
-                isEating = true,
-                lastExecutedAction = Action.EatingEffectAction(10, true),
+                lastExecutedAction = EatingEffectAction(10, true),
                 dungeonState = DungeonState(),
             )
         const val ACTION_TICK_TIME = 1500L

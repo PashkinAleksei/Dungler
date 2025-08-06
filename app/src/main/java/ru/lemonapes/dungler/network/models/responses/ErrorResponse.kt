@@ -26,6 +26,6 @@ enum class ResponseErrorCode {
 suspend fun HttpResponse.checkNetworkException() {
     if (status != OK) {
         val body = body<ErrorResponse>()
-        throw NetworkException(body.code, body.message)
+        throw NetworkException(status, body.code, body.message)
     }
 }

@@ -1,8 +1,10 @@
 package ru.lemonapes.dungler.ui.models
 
 import androidx.compose.runtime.Immutable
-import ru.lemonapes.dungler.domain_models.AttackResult
-import ru.lemonapes.dungler.hero_state.Action
+import ru.lemonapes.dungler.domain_models.actions.Action
+import ru.lemonapes.dungler.domain_models.actions.AttackResult
+import ru.lemonapes.dungler.domain_models.actions.EatingEffectAction
+import ru.lemonapes.dungler.domain_models.actions.EnemyAttackAction
 
 @Immutable
 sealed interface HpChangeVO {
@@ -20,7 +22,7 @@ data class HealVO(
 
 fun Action.getLastDamageToEnemy(enemyIndex: Int): AttackVO? =
     when (this) {
-        is Action.SingleDamage -> {
+        is Action.HeroSingleDamageAction -> {
             damageData.takeIf { damageData.targetIndex == enemyIndex }?.run {
                 AttackVO(
                     hpValue = -heroPureDamage,
@@ -29,7 +31,7 @@ fun Action.getLastDamageToEnemy(enemyIndex: Int): AttackVO? =
             }
         }
 
-        is Action.MassiveDamage -> {
+        is Action.HeroMassiveDamageAction -> {
             damageDataList.firstOrNull { it.targetIndex == enemyIndex }?.run {
                 AttackVO(
                     hpValue = -heroPureDamage,
@@ -44,8 +46,8 @@ fun Action.getLastDamageToEnemy(enemyIndex: Int): AttackVO? =
 
 fun Action.getLastHeroHpChange(): HpChangeVO? {
     return when (this) {
-        is Action.EnemyAttackAction -> AttackVO(-pureDamage, attackResult)
-        is Action.EatingEffectAction -> HealVO(healAmount)
+        is EnemyAttackAction -> AttackVO(-pureDamage, attackResult)
+        is EatingEffectAction -> HealVO(healAmount)
         else -> null
     }
 }

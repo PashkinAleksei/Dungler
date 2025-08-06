@@ -4,7 +4,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import ru.lemonapes.dungler.navigation.Screens
-import ru.lemonapes.dungler.navigation.SkillSlot
+import ru.lemonapes.dungler.navigation.SkillSlotNum
 import ru.lemonapes.dungler.navigation.composableWithBars
 import ru.lemonapes.dungler.ui.ActionOnStart
 import ru.lemonapes.dungler.ui.StateListener
@@ -33,7 +33,7 @@ fun NavGraphBuilder.dungeonNavigation() {
 }
 
 class DungeonListener(
-    val onSkillClick: (SkillSlot) -> Unit,
+    val onSkillClick: (SkillSlotNum) -> Unit,
     val stateListener: StateListener,
 ) {
     companion object {

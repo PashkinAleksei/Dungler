@@ -10,7 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import ru.lemonapes.dungler.domain_models.SkillId
 import ru.lemonapes.dungler.navigation.Screens
-import ru.lemonapes.dungler.navigation.SkillSlot
+import ru.lemonapes.dungler.navigation.SkillSlotNum
 import ru.lemonapes.dungler.navigation.composableWithBars
 import ru.lemonapes.dungler.ui.ActionLoadingOnStop
 import ru.lemonapes.dungler.ui.ActionOnStart
@@ -52,9 +52,9 @@ fun NavGraphBuilder.skillsEquipmentNavigation(navController: NavController) {
 }
 
 class SkillsEquipmentListener(
-    val onSkillClick: (SkillSlot, SkillId?) -> Unit,
+    val onSkillClick: (SkillSlotNum, SkillId?) -> Unit,
     val onDialogDismiss: () -> Unit,
-    val onChangeSkillClick: (SkillSlot) -> Unit,
+    val onChangeSkillClick: (SkillSlotNum) -> Unit,
     val stateListener: StateListener,
 ) {
     companion object {

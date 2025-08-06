@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.R
-import ru.lemonapes.dungler.domain_models.AttackResult
+import ru.lemonapes.dungler.domain_models.actions.AttackResult
 import ru.lemonapes.dungler.ui.UIText
 import ru.lemonapes.dungler.ui.models.AttackVO
 import ru.lemonapes.dungler.ui.models.HpChangeVO

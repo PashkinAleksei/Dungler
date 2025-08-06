@@ -4,10 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class SkillSlot {
-    @SerialName("one")
-    SKILL_SLOT_ONE,
+enum class SkillSlotNum {
+    @SerialName("SLOT_ONE")
+    SLOT_ONE,
 
-    @SerialName("two")
-    SKILL_SLOT_TWO,
+    @SerialName("SLOT_TWO")
+    SLOT_TWO,
 }

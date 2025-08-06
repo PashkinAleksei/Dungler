@@ -13,6 +13,7 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import ru.lemonapes.dungler.Utils.Companion.log
+import ru.lemonapes.dungler.Utils.Companion.logErr
 import ru.lemonapes.dungler.network.IMAGES_PATH
 import ru.lemonapes.dungler.network.IMAGES_POSTFIX
 
@@ -39,7 +40,7 @@ fun ImageView(
                 log("Success $fullUrl")
             },
             onError = { err->
-                log("ERR $fullUrl $err")
+                logErr("ERR $fullUrl $err")
             }
         )
         Image(

@@ -5,10 +5,10 @@ import io.ktor.client.request.get
 import ru.lemonapes.dungler.network.ENDPOINT
 import ru.lemonapes.dungler.network.HERO_ID
 import ru.lemonapes.dungler.network.HttpClientProvider
-import ru.lemonapes.dungler.network.models.responses.SkillsResponse
+import ru.lemonapes.dungler.network.models.responses.SkillsResponseDto
 import ru.lemonapes.dungler.network.models.responses.checkNetworkException
 
-suspend fun getSkills(): SkillsResponse {
+suspend fun getSkills(): SkillsResponseDto {
     val url = "$ENDPOINT/skills?hero_id=$HERO_ID"
     val response = HttpClientProvider.client.get(url)
     response.checkNetworkException()

@@ -17,6 +17,12 @@ class Utils {
             }
         }
 
+        fun <T> logErr(obj: T?) {
+            if (BuildConfig.DEBUG) {
+                Log.e(TAG, obj.toString())
+            }
+        }
+
         inline fun <T> logWithTimeTrack(func: (() -> T?)) {
             if (BuildConfig.DEBUG) {
                 val res: T?

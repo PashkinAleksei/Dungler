@@ -1,7 +1,15 @@
 package ru.lemonapes.dungler.domain_models
 
-class Skill(
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import javax.annotation.concurrent.Immutable
+
+@Serializable
+@Immutable
+data class Skill(
+    @SerialName("skill_id")
     val skillId: SkillId,
+    @SerialName("cooldown")
     val cooldown: Int,
 ) {
     companion object {

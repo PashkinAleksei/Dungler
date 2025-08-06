@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.lemonapes.dungler.domain_models.SkillId
-import ru.lemonapes.dungler.navigation.SkillSlot
+import ru.lemonapes.dungler.navigation.SkillSlotNum
 import ru.lemonapes.dungler.ui.StateCheck
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
 import ru.lemonapes.dungler.ui.theme.LocalThemeColors
@@ -42,7 +42,7 @@ fun SkillsEquipmentView(
             val skillOne = state.skillsEquipment?.skillOne
             SkillView(skillOne?.skillId) {
                 listener.onSkillClick(
-                    SkillSlot.SKILL_SLOT_ONE,
+                    SkillSlotNum.SLOT_ONE,
                     skillOne?.skillId
                 )
             }
@@ -50,7 +50,7 @@ fun SkillsEquipmentView(
             val skillTwo = state.skillsEquipment?.skillTwo
             SkillView(skillTwo?.skillId) {
                 listener.onSkillClick(
-                    SkillSlot.SKILL_SLOT_TWO,
+                    SkillSlotNum.SLOT_TWO,
                     skillTwo?.skillId
                 )
             }

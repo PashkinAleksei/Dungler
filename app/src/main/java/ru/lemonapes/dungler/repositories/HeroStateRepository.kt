@@ -11,10 +11,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.Utils.Companion.log
+import ru.lemonapes.dungler.Utils.Companion.logErr
 import ru.lemonapes.dungler.di.ApplicationScope
-import ru.lemonapes.dungler.hero_state.Action
+import ru.lemonapes.dungler.domain_models.actions.Action
+import ru.lemonapes.dungler.domain_models.actions.EatingEffectAction
+import ru.lemonapes.dungler.domain_models.actions.EnemyAttackAction
+import ru.lemonapes.dungler.domain_models.actions.HeroAttackAction
+import ru.lemonapes.dungler.domain_models.actions.HeroTargetAttackData
+import ru.lemonapes.dungler.domain_models.actions.HomeHealAction
+import ru.lemonapes.dungler.domain_models.actions.SkillAction
 import ru.lemonapes.dungler.hero_state.DungeonState
-import ru.lemonapes.dungler.hero_state.HeroDamageData
 import ru.lemonapes.dungler.hero_state.HeroState
 import ru.lemonapes.dungler.hero_state.HeroState.Companion.ACTION_CHECK_TICK_TIME
 import ru.lemonapes.dungler.hero_state.HeroState.Companion.ACTION_TICK_TIME
@@ -34,12 +40,12 @@ class HeroStateRepository @Inject constructor(
         get() = heroStateStore.heroStateFlow
 
     private val ceh = CoroutineExceptionHandler { _, throwable ->
-        log("$throwable")
+        logErr("$throwable")
         throwable.printStackTrace()
     }
 
     private val pollingExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        log("$throwable")
+        logErr("$throwable")
         throwable.printStackTrace()
         startPolling(DelayOption.RETRY)
     }
@@ -203,7 +209,7 @@ class HeroStateRepository @Inject constructor(
         log("Cur Action: $action")
         action?.let {
             when (action) {
-                is Action.HomeHealAction -> {
+                is HomeHealAction -> {
                     newHealth = health?.let { cHp ->
                         totalHealth?.let { tHp ->
                             val regeneratedHealth = cHp + action.healAmount
@@ -216,7 +222,7 @@ class HeroStateRepository @Inject constructor(
                     }
                 }
 
-                is Action.EatingEffectAction -> {
+                is EatingEffectAction -> {
                     newHealth = health?.let { cHp ->
                         totalHealth?.let { tHp ->
                             val regeneratedHealth = cHp + action.healAmount
@@ -239,7 +245,7 @@ class HeroStateRepository @Inject constructor(
                     newDungeonState = null
                 }
 
-                is Action.EnemyAttackAction -> {
+                is EnemyAttackAction -> {
                     newHealth = health?.let { cHp ->
                         val reducedHealth = cHp - action.pureDamage
                         if (reducedHealth > 0) {
@@ -251,26 +257,26 @@ class HeroStateRepository @Inject constructor(
                 }
 
                 //HeroAttackAction
-                is Action.HeroAttackAction.Common -> {
+                is HeroAttackAction.Common -> {
                     newDungeonState = dungeonState?.applyDamageToEnemies(listOf(action.damageData))
                 }
 
-                is Action.HeroAttackAction.ModifierSwipingStrikes -> {
+                is HeroAttackAction.ModifierSwipingStrikes -> {
                     newDungeonState = dungeonState?.applyDamageToEnemies(action.damageDataList)
                 }
 
                 //SkillAction
-                is Action.SkillAction.SwipingStrikes -> {
+                is SkillAction.SwipingStrikes -> {
                     newDungeonState = dungeonState?.applyDamageToEnemies(action.damageDataList)
                     newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
                 }
 
-                is Action.SkillAction.Whirlwind -> {
+                is SkillAction.Whirlwind -> {
                     newDungeonState = dungeonState?.applyDamageToEnemies(action.damageDataList)
                     newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
                 }
 
-                is Action.SkillAction.HeroicStrike -> {
+                is SkillAction.HeroicStrike -> {
                     newDungeonState = dungeonState?.applyDamageToEnemies(listOf(action.damageData))
                     newSkillsEquipment = newSkillsEquipment.copyWithDeactivateSkill(action.skillId)
                 }
@@ -294,12 +300,11 @@ class HeroStateRepository @Inject constructor(
             actions = newActions.toPersistentList(),
             equippedFood = newEquippedFood,
             skillsEquipment = newSkillsEquipment,
-            lastExecutedAction = if (action is Action.HomeAction) null else action,
-            isEating = newActions.firstOrNull() is Action.EatingEffectAction
+            lastExecutedAction = action,
         ).calculateActionsRecursiveAndGet()
     }
 
-    private fun DungeonState.applyDamageToEnemies(damageDataList: List<HeroDamageData>): DungeonState {
+    private fun DungeonState.applyDamageToEnemies(damageDataList: List<HeroTargetAttackData>): DungeonState {
         val newEnemies = enemies.mapIndexed { index, enemy ->
             val damageData = damageDataList.firstOrNull { it.targetIndex == index }
             if (damageData != null) {

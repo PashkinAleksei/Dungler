@@ -6,7 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.lemonapes.dungler.domain_models.SkillId
 import ru.lemonapes.dungler.mappers.HeroStateMapper
-import ru.lemonapes.dungler.navigation.SkillSlot
+import ru.lemonapes.dungler.mappers.SkillsResponseMapper
+import ru.lemonapes.dungler.navigation.SkillSlotNum
 import ru.lemonapes.dungler.network.endpoints.getSkills
 import ru.lemonapes.dungler.network.endpoints.patchEquipSkill
 import ru.lemonapes.dungler.parent_view_model.ParentViewModel
@@ -25,8 +26,8 @@ class SkillsListViewModel @Inject constructor(
 ) : ParentViewModel<SkillsListViewState>(SkillsListViewState.EMPTY, heroStateRepository),
     SkillsListAction {
 
-    private var skillSlot: SkillSlot? = null
-    fun setSkillSlot(slot: SkillSlot) {
+    private var skillSlot: SkillSlotNum? = null
+    fun setSkillSlot(slot: SkillSlotNum) {
         skillSlot = slot
     }
 
@@ -50,12 +51,12 @@ class SkillsListViewModel @Inject constructor(
         launch(Dispatchers.IO + ceh) {
             actionSetLoading()
             val lastExecutedAction = heroStateRepository.lastExecutedAction
-            val result = ru.lemonapes.dungler.mappers.SkillsResponseMapper(getSkills(), lastExecutedAction)
-            heroStateRepository.setNewHeroState(result.heroState)
+            val (skills, heroState) = SkillsResponseMapper(getSkills(), lastExecutedAction)
+            heroStateRepository.setNewHeroState(heroState)
 
             updateState { state ->
                 state.copy(
-                    skillList = result.skills,
+                    skillList = skills,
                     isLoading = false,
                 )
             }

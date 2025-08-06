@@ -33,8 +33,9 @@ import ru.lemonapes.dungler.R
 import ru.lemonapes.dungler.domain_models.Food
 import ru.lemonapes.dungler.domain_models.SelectedSkillData
 import ru.lemonapes.dungler.domain_models.SkillsEquipment
+import ru.lemonapes.dungler.domain_models.actions.EatingEffectAction
 import ru.lemonapes.dungler.hero_state.HeroState
-import ru.lemonapes.dungler.navigation.SkillSlot
+import ru.lemonapes.dungler.navigation.SkillSlotNum
 import ru.lemonapes.dungler.ui.StateCheck
 import ru.lemonapes.dungler.ui.image_views.ImageWithCounter
 import ru.lemonapes.dungler.ui.theme.DunglerTheme
@@ -58,7 +59,7 @@ fun DungeonView(
                     .align(Alignment.BottomCenter)
                     .padding(16.dp)
             ) {
-                if (heroState.isEating) {
+                if (heroState.lastExecutedAction is EatingEffectAction) {
                     Row(
                         modifier = Modifier
                             .padding(top = 48.dp)
@@ -103,7 +104,7 @@ fun DungeonView(
 @Composable
 private fun HeroState.HeroRowView(
     modifier: Modifier = Modifier,
-    onSkillClick: (SkillSlot) -> Unit,
+    onSkillClick: (SkillSlotNum) -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -155,17 +156,17 @@ private fun FoodView(modifier: Modifier = Modifier, equippedFood: Food?) {
 private fun SkillsView(
     modifier: Modifier = Modifier,
     skillsEquipment: SkillsEquipment,
-    onSkillClick: (SkillSlot) -> Unit,
+    onSkillClick: (SkillSlotNum) -> Unit,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.SpaceBetween) {
         SkillView(modifier = Modifier.weight(0.5f),
             skillData = skillsEquipment.skillOne,
-            onSkillClick = { onSkillClick(SkillSlot.SKILL_SLOT_ONE) }
+            onSkillClick = { onSkillClick(SkillSlotNum.SLOT_ONE) }
         )
         SkillView(
             modifier = Modifier.weight(0.5f),
             skillData = skillsEquipment.skillTwo,
-            onSkillClick = { onSkillClick(SkillSlot.SKILL_SLOT_TWO) }
+            onSkillClick = { onSkillClick(SkillSlotNum.SLOT_TWO) }
         )
     }
 }
